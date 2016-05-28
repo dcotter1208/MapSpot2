@@ -20,6 +20,7 @@ xcuserdata/
 .DS_Store
 *.DS_Store
 */.DS_Store
+xcshareddata
 
 ## Other
 *.moved-aside
