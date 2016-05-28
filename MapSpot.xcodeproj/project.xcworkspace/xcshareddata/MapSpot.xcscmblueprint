@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "E08C98D1B3F6AF798ACDE0C429B04C3F893E2EDF",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D9D0CCF4566E82CC7C13C89E9BA659C99FE126D2" : 0,
+    "E08C98D1B3F6AF798ACDE0C429B04C3F893E2EDF" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "FBE8DE68-544F-4F61-9883-C63E0A276B14",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D9D0CCF4566E82CC7C13C89E9BA659C99FE126D2" : "",
+    "E08C98D1B3F6AF798ACDE0C429B04C3F893E2EDF" : "MapSpot\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MapSpot",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MapSpot.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:dcotter1208\/LightningRealm.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D9D0CCF4566E82CC7C13C89E9BA659C99FE126D2"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:dcotter1208\/MapSpot2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E08C98D1B3F6AF798ACDE0C429B04C3F893E2EDF"
+    }
+  ]
+}
