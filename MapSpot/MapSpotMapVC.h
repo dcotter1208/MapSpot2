@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 
 @interface MapSpotMapVC : UIViewController
 
-@property(nonatomic, strong) CLLocation *initialLocation;
+@property(nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 

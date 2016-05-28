@@ -29,7 +29,7 @@
 		43280D9F1CF87BF900F726FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		43280DA11CF87BF900F726FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		435544E11CFA2F6C002A4370 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		435544E31CFA3180002A4370 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		435544E31CFA3180002A4370 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,7 +47,6 @@
 		43280D841CF87BF900F726FE = {
 			isa = PBXGroup;
 			children = (
-				435544E31CFA3180002A4370 /* .gitignore */,
 				435544E11CFA2F6C002A4370 /* MapKit.framework */,
 				43280D8F1CF87BF900F726FE /* MapSpot */,
 				43280D8E1CF87BF900F726FE /* Products */,
@@ -72,7 +71,7 @@
 				43280D991CF87BF900F726FE /* Main.storyboard */,
 				43280D9C1CF87BF900F726FE /* Assets.xcassets */,
 				43280D9E1CF87BF900F726FE /* LaunchScreen.storyboard */,
-				43280DA11CF87BF900F726FE /* Info.plist */,
+				435544E31CFA3180002A4370 /* .gitignore */,
 				43280D901CF87BF900F726FE /* Supporting Files */,
 			);
 			path = MapSpot;
@@ -81,6 +80,7 @@
 		43280D901CF87BF900F726FE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				43280DA11CF87BF900F726FE /* Info.plist */,
 				43280D911CF87BF900F726FE /* main.m */,
 			);
 			name = "Supporting Files";
