@@ -20,6 +20,8 @@
 
 @end
 
+MKMapCamera *camera;
+
 @implementation MapSpotMapVC
 
 - (void)viewDidLoad {
@@ -34,7 +36,9 @@
 
 -(void)mapSetup {
     [_mapView setDelegate:self];
-    [_mapView setShowsBuildings:true];
+    [_mapView setShowsPointsOfInterest:false];
+    [_mapView setMapType:MKMapTypeStandard];
+    [_mapView setShowsUserLocation:true];
     [self getUserLocation];
 }
 
@@ -46,17 +50,38 @@
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
         [_locationManager requestWhenInUseAuthorization];
         [_locationManager setDistanceFilter:50];
-        [_mapView setShowsUserLocation:true];
         [_locationManager startUpdatingLocation];
+
     }
 }
 
--(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    MKMapCamera *camera = [MKMapCamera cameraLookingAtCenterCoordinate:userLocation.coordinate fromEyeCoordinate:CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude) eyeAltitude:5000];
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+
+    CLLocation *newLocation = [locations lastObject];
+    CLLocation *oldLocation;
     
-    [_mapView setCamera:camera animated:true];
-                                                                                                                                            
-                                                                                                                                            
+    if (locations.count > 1) {
+        NSUInteger newLocationIndex = [locations indexOfObject:newLocation];
+        oldLocation = [locations objectAtIndex:newLocationIndex];
+    } else {
+        oldLocation = nil;
+    }
+    
+    MKCoordinateRegion userLocation = MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 1500.0, 1500.0);
+    [_mapView setRegion:userLocation animated:YES];
+    
+}
+
+- (IBAction)changeMapStyle:(id)sender {
+    
+    if (_mapView.mapType == MKMapTypeStandard) {
+        [_mapView setMapType:MKMapTypeHybridFlyover];
+        [_mapView setShowsCompass:true];
+    } else {
+        [_mapView setMapType:MKMapTypeStandard];
+
+
+    }
 }
 
 @end
