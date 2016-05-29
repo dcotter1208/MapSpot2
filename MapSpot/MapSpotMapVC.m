@@ -22,6 +22,7 @@
 @end
 
 CLLocation *newLocation, *oldLocation;
+MKCoordinateRegion userLocation;
 
 @implementation MapSpotMapVC
 
@@ -67,7 +68,7 @@ CLLocation *newLocation, *oldLocation;
         oldLocation = nil;
     }
     
-    MKCoordinateRegion userLocation = MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 1500.0, 1500.0);
+    userLocation = MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 1500.0, 1500.0);
     [_mapView setRegion:userLocation animated:YES];
     
 }
@@ -85,9 +86,8 @@ CLLocation *newLocation, *oldLocation;
 }
 
 - (IBAction)goBackToMyLocation:(id)sender {
-    MKCoordinateRegion usersCurrentLocation = MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 1500.0, 1500.0);
 
-    [_mapView setRegion:usersCurrentLocation animated:true];
+    [_mapView setRegion:userLocation animated:true];
     
 }
 
