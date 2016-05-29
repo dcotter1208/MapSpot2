@@ -21,6 +21,8 @@
 
 @end
 
+CLLocation *newLocation, *oldLocation;
+
 @implementation MapSpotMapVC
 
 - (void)viewDidLoad {
@@ -50,13 +52,13 @@
         [_locationManager requestWhenInUseAuthorization];
         [_locationManager setDistanceFilter:50];
         [_locationManager startUpdatingLocation];
+        newLocation = _locationManager.location;
     }
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
 
-    CLLocation *newLocation = [locations lastObject];
-    CLLocation *oldLocation;
+    newLocation = [locations lastObject];
     
     if (locations.count > 1) {
         NSUInteger newLocationIndex = [locations indexOfObject:newLocation];
@@ -80,6 +82,13 @@
         [_mapView setMapType:MKMapTypeStandard];
         _mapStyleNavBarButton.title = @"3D";
     }
+}
+
+- (IBAction)goBackToMyLocation:(id)sender {
+    MKCoordinateRegion usersCurrentLocation = MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 1500.0, 1500.0);
+
+    [_mapView setRegion:usersCurrentLocation animated:true];
+    
 }
 
 @end
