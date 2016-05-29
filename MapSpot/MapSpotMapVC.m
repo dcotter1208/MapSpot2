@@ -17,10 +17,11 @@
 @interface MapSpotMapVC () <MKMapViewDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *mapStyleNavBarButton;
 
 @end
 
-MKMapCamera *camera;
+CLLocation *newLocation, *oldLocation;
 
 @implementation MapSpotMapVC
 
@@ -51,14 +52,13 @@ MKMapCamera *camera;
         [_locationManager requestWhenInUseAuthorization];
         [_locationManager setDistanceFilter:50];
         [_locationManager startUpdatingLocation];
-
+        newLocation = _locationManager.location;
     }
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
 
-    CLLocation *newLocation = [locations lastObject];
-    CLLocation *oldLocation;
+    newLocation = [locations lastObject];
     
     if (locations.count > 1) {
         NSUInteger newLocationIndex = [locations indexOfObject:newLocation];
@@ -77,11 +77,18 @@ MKMapCamera *camera;
     if (_mapView.mapType == MKMapTypeStandard) {
         [_mapView setMapType:MKMapTypeHybridFlyover];
         [_mapView setShowsCompass:true];
+        _mapStyleNavBarButton.title = @"Standard";
     } else {
         [_mapView setMapType:MKMapTypeStandard];
-
-
+        _mapStyleNavBarButton.title = @"3D";
     }
+}
+
+- (IBAction)goBackToMyLocation:(id)sender {
+    MKCoordinateRegion usersCurrentLocation = MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 1500.0, 1500.0);
+
+    [_mapView setRegion:usersCurrentLocation animated:true];
+    
 }
 
 @end

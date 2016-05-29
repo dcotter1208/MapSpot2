@@ -30,6 +30,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Edf-Ja-x4a">
+                        <barButtonItem key="leftBarButtonItem" title="My Location" id="uXo-nf-Inq">
+                            <connections>
+                                <action selector="goBackToMyLocation:" destination="BYZ-38-t0r" id="WHt-bU-Odf"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="3D" id="NL3-d9-cBG">
                             <connections>
                                 <action selector="changeMapStyle:" destination="BYZ-38-t0r" id="VWr-9p-5Vd"/>
@@ -37,6 +42,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="mapStyleNavBarButton" destination="NL3-d9-cBG" id="KlB-Qi-wZ5"/>
                         <outlet property="mapView" destination="HHN-tL-gcW" id="Kwk-NI-Ul3"/>
                     </connections>
                 </viewController>
