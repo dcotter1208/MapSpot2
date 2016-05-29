@@ -19,6 +19,10 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="HHN-tL-gcW">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="iDg-Kt-0cL" appends="YES" id="t0O-1O-cHp"/>
+                                </connections>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -47,6 +51,12 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="iDg-Kt-0cL">
+                    <connections>
+                        <action selector="longPressToGetCoordinates:" destination="BYZ-38-t0r" id="p0L-i7-yGP"/>
+                        <outlet property="delegate" destination="BYZ-38-t0r" id="Ni1-iY-P1h"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1052" y="350"/>
         </scene>
