@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Map Spot MapVC-->
@@ -72,8 +73,40 @@
                     <view key="view" contentMode="scaleToFill" id="xwt-in-GBt">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="SjI-XZ-Bme">
+                                <rect key="frame" x="20" y="72" width="560" height="114"/>
+                                <color key="backgroundColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nL0-dp-NHd">
+                                <rect key="frame" x="251" y="253" width="98" height="93"/>
+                                <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="98" id="aa3-R2-Wkc"/>
+                                </constraints>
+                                <state key="normal" title="Create Spot"/>
+                                <connections>
+                                    <action selector="createSpotButtonPressed:" destination="tKn-pk-HUU" eventType="touchUpInside" id="uSW-qx-H4c"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ynH-ff-dLz" firstAttribute="top" secondItem="nL0-dp-NHd" secondAttribute="bottom" constant="254" id="A0u-Ex-8cT"/>
+                            <constraint firstItem="SjI-XZ-Bme" firstAttribute="top" secondItem="s6y-54-RdT" secondAttribute="bottom" constant="8" symbolic="YES" id="WJU-jo-ZtF"/>
+                            <constraint firstItem="nL0-dp-NHd" firstAttribute="top" secondItem="SjI-XZ-Bme" secondAttribute="bottom" constant="67" id="esI-j1-Npl"/>
+                            <constraint firstItem="SjI-XZ-Bme" firstAttribute="leading" secondItem="xwt-in-GBt" secondAttribute="leadingMargin" id="lxs-B6-cGl"/>
+                            <constraint firstItem="SjI-XZ-Bme" firstAttribute="centerX" secondItem="nL0-dp-NHd" secondAttribute="centerX" id="uTT-OK-zUG"/>
+                            <constraint firstItem="nL0-dp-NHd" firstAttribute="centerY" secondItem="xwt-in-GBt" secondAttribute="centerY" id="vZp-Qt-etX"/>
+                            <constraint firstItem="SjI-XZ-Bme" firstAttribute="trailing" secondItem="xwt-in-GBt" secondAttribute="trailingMargin" id="xPh-PC-T5M"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="messageTF" destination="SjI-XZ-Bme" id="4nc-Tn-DqD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w8A-Mt-Pfo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

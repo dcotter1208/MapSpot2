@@ -9,6 +9,7 @@
 #import "UserSpotCreationVC.h"
 
 @interface UserSpotCreationVC ()
+@property (weak, nonatomic) IBOutlet UITextView *messageTF;
 
 @end
 
@@ -30,5 +31,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)performDelegateForCreateingSpot {
+    NSDate *now = [NSDate date];
+    [self.delegate createSpotWithUser:_spot.user message:_spot.message coordinates:(_coordinatesForCreatedSpot) createdAt:now];
+    NSLog(@"SPOT DELEGATE:: %f, %f", _coordinatesForCreatedSpot.latitude, _coordinatesForCreatedSpot.longitude);
+}
+
+- (IBAction)createSpotButtonPressed:(id)sender {
+    
+    [self performDelegateForCreateingSpot];
+    
+}
 
 @end

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+
 @interface Spot : NSObject
 
 @property(nonatomic, strong) NSString *user;
@@ -18,7 +19,6 @@
 
 -(id)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSDate *)createdAt;
 +(id)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSDate *)createdAt;
-
 
 
 @end

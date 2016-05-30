@@ -38,6 +38,10 @@ CLLocationCoordinate2D longPressCoordinates;
     // Dispose of any resources that can be recreated.
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    
+}
+
 -(void)mapSetup {
     [_mapView setDelegate:self];
     [_mapView setShowsPointsOfInterest:false];
@@ -90,7 +94,6 @@ CLLocationCoordinate2D longPressCoordinates;
     
     CGPoint touchPoint = [sender locationInView:self.mapView];
     longPressCoordinates = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
-    
     [self performSegueWithIdentifier:@"segueToUserSpotCreationVC" sender:self];
     
 }
@@ -98,8 +101,16 @@ CLLocationCoordinate2D longPressCoordinates;
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToUserSpotCreationVC"]) {
         UserSpotCreationVC *destionationVC = (UserSpotCreationVC *)segue.destinationViewController;
+        [destionationVC setDelegate:self];
         [destionationVC setCoordinatesForCreatedSpot:longPressCoordinates];
     }
+}
+
+-(void)createSpotWithUser:(NSString *)user message:(NSString *)message coordinates:(CLLocationCoordinate2D)coordinates createdAt:(NSDate *)createdAt {
+    Spot *spot = [Spot initWithSpotCoordinates:CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude) user:user createdAt:createdAt];
+    spot.message = message;
+    NSLog(@"MAP RECEIVED SPOT:\nUser: %@\n""message: %@\n""coordinates: lat: %f long: %f\n""createdAt: %@\n", spot.user, spot.message, spot.spotCoordinates.latitude, spot.spotCoordinates.longitude, spot.createdAt);
+    
 }
 
 - (IBAction)changeMapStyle:(id)sender {
