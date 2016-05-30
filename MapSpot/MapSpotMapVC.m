@@ -13,6 +13,7 @@
  */
 
 #import "MapSpotMapVC.h"
+#import "UserSpotCreationVC.h"
 
 @interface MapSpotMapVC () <MKMapViewDelegate, CLLocationManagerDelegate>
 
@@ -88,11 +89,17 @@ CLLocationCoordinate2D longPressCoordinates;
 - (IBAction)longPressToGetCoordinates:(UITapGestureRecognizer *)sender {
     
     CGPoint touchPoint = [sender locationInView:self.mapView];
-    longPressCoordinates =
-    [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+    longPressCoordinates = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
     
-    NSLog(@"Location found from Map: %f, %f", longPressCoordinates.latitude, longPressCoordinates.longitude);
+    [self performSegueWithIdentifier:@"segueToUserSpotCreationVC" sender:self];
     
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"segueToUserSpotCreationVC"]) {
+        UserSpotCreationVC *destionationVC = (UserSpotCreationVC *)segue.destinationViewController;
+        [destionationVC setCoordinatesForCreatedSpot:longPressCoordinates];
+    }
 }
 
 - (IBAction)changeMapStyle:(id)sender {
