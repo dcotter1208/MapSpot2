@@ -40,10 +40,6 @@ CLLocationCoordinate2D longPressCoordinates;
     // Dispose of any resources that can be recreated.
 }
 
--(void)viewWillAppear:(BOOL)animated {
-    
-}
-
 -(void)mapSetup {
     [_mapView setDelegate:self];
     [_mapView setShowsPointsOfInterest:false];
@@ -98,10 +94,10 @@ CLLocationCoordinate2D longPressCoordinates;
 }
 
 -(void)createSpotWithUser:(NSString *)user message:(NSString *)message coordinates:(CLLocationCoordinate2D)coordinates createdAt:(NSDate *)createdAt {
+    
     Spot *spot = [Spot initWithSpotCoordinates:CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude) user:user createdAt:createdAt];
     spot.message = message;
     NSLog(@"Message: Message for Annotation: %@", spot.message);
-    
     
     Annotation *annotation = [Annotation initWithAnnotationSpot:spot coordinate:CLLocationCoordinate2DMake(spot.spotCoordinates.latitude, spot.spotCoordinates.longitude)];
     annotation.title = spot.user;
@@ -109,6 +105,7 @@ CLLocationCoordinate2D longPressCoordinates;
     annotation.subtitle = spot.message;
     [_mapView addAnnotation:annotation];
 }
+
 
 -(void)setUpLongPressGesture {
     _longPressGesture.minimumPressDuration = 2;
