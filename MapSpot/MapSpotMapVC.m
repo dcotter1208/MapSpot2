@@ -13,6 +13,7 @@
  */
 
 #import "MapSpotMapVC.h"
+#import "UserSpotCreationVC.h"
 
 @interface MapSpotMapVC () <MKMapViewDelegate, CLLocationManagerDelegate>
 
@@ -23,6 +24,7 @@
 
 CLLocation *newLocation, *oldLocation;
 MKCoordinateRegion userLocation;
+CLLocationCoordinate2D longPressCoordinates;
 
 @implementation MapSpotMapVC
 
@@ -73,6 +75,33 @@ MKCoordinateRegion userLocation;
     
 }
 
+- (void)longpressToGetLocation:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state != UIGestureRecognizerStateBegan)
+        return;
+    
+    CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
+    CLLocationCoordinate2D location =
+    [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+    
+    NSLog(@"Location found from Map: %f %f",location.latitude,location.longitude);
+    
+}
+- (IBAction)longPressToGetCoordinates:(UITapGestureRecognizer *)sender {
+    
+    CGPoint touchPoint = [sender locationInView:self.mapView];
+    longPressCoordinates = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+    
+    [self performSegueWithIdentifier:@"segueToUserSpotCreationVC" sender:self];
+    
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"segueToUserSpotCreationVC"]) {
+        UserSpotCreationVC *destionationVC = (UserSpotCreationVC *)segue.destinationViewController;
+        [destionationVC setCoordinatesForCreatedSpot:longPressCoordinates];
+    }
+}
+
 - (IBAction)changeMapStyle:(id)sender {
     
     if (_mapView.mapType == MKMapTypeStandard) {
@@ -90,5 +119,7 @@ MKCoordinateRegion userLocation;
     [_mapView setRegion:userLocation animated:true];
     
 }
+
+
 
 @end

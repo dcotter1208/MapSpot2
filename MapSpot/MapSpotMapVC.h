@@ -13,6 +13,7 @@
 @interface MapSpotMapVC : UIViewController
 
 @property(nonatomic, strong) CLLocationManager *locationManager;
+@property(nonatomic, strong) NSMutableArray *spots;
 
 @end
 

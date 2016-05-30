@@ -19,6 +19,10 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="HHN-tL-gcW">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="iDg-Kt-0cL" appends="YES" id="t0O-1O-cHp"/>
+                                </connections>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -44,11 +48,36 @@
                     <connections>
                         <outlet property="mapStyleNavBarButton" destination="NL3-d9-cBG" id="KlB-Qi-wZ5"/>
                         <outlet property="mapView" destination="HHN-tL-gcW" id="Kwk-NI-Ul3"/>
+                        <segue destination="tKn-pk-HUU" kind="show" identifier="segueToUserSpotCreationVC" id="LnO-1x-lLn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="iDg-Kt-0cL">
+                    <connections>
+                        <action selector="longPressToGetCoordinates:" destination="BYZ-38-t0r" id="p0L-i7-yGP"/>
+                        <outlet property="delegate" destination="BYZ-38-t0r" id="Ni1-iY-P1h"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1052" y="350"/>
+            <point key="canvasLocation" x="372" y="330"/>
+        </scene>
+        <!--User Spot CreationVC-->
+        <scene sceneID="zIz-qJ-rBz">
+            <objects>
+                <viewController id="tKn-pk-HUU" customClass="UserSpotCreationVC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="s6y-54-RdT"/>
+                        <viewControllerLayoutGuide type="bottom" id="ynH-ff-dLz"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xwt-in-GBt">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="w8A-Mt-Pfo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1045" y="330"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7s4-fm-uRk">
@@ -66,7 +95,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XvZ-VJ-1h4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="240" y="350"/>
+            <point key="canvasLocation" x="-300" y="330"/>
         </scene>
     </scenes>
 </document>
