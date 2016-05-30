@@ -19,6 +19,7 @@
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *mapStyleNavBarButton;
+@property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *longPressGesture;
 
 @end
 
@@ -31,6 +32,7 @@ CLLocationCoordinate2D longPressCoordinates;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self mapSetup];
+    [self setUpLongPressGesture];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,23 +81,12 @@ CLLocationCoordinate2D longPressCoordinates;
     
 }
 
-- (void)longpressToGetLocation:(UIGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer.state != UIGestureRecognizerStateBegan)
-        return;
-    
-    CGPoint touchPoint = [gestureRecognizer locationInView:self.mapView];
-    CLLocationCoordinate2D location =
-    [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
-    
-    NSLog(@"Location found from Map: %f %f",location.latitude,location.longitude);
-    
-}
-- (IBAction)longPressToGetCoordinates:(UITapGestureRecognizer *)sender {
-    
-    CGPoint touchPoint = [sender locationInView:self.mapView];
-    longPressCoordinates = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
-    [self performSegueWithIdentifier:@"segueToUserSpotCreationVC" sender:self];
-    
+- (void)handleLongPressGestures:(UILongPressGestureRecognizer *)sender {
+    if ([sender isEqual:_longPressGesture]) {
+        if (sender.state == UIGestureRecognizerStateBegan) {
+            [self performSegueWithIdentifier:@"segueToUserSpotCreationVC" sender:self];
+        }
+    }
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -109,11 +100,29 @@ CLLocationCoordinate2D longPressCoordinates;
 -(void)createSpotWithUser:(NSString *)user message:(NSString *)message coordinates:(CLLocationCoordinate2D)coordinates createdAt:(NSDate *)createdAt {
     Spot *spot = [Spot initWithSpotCoordinates:CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude) user:user createdAt:createdAt];
     spot.message = message;
-    NSLog(@"MAP RECEIVED SPOT:\nUser: %@\n""message: %@\n""coordinates: lat: %f long: %f\n""createdAt: %@\n", spot.user, spot.message, spot.spotCoordinates.latitude, spot.spotCoordinates.longitude, spot.createdAt);
+    NSLog(@"Message: Message for Annotation: %@", spot.message);
+    
     
     Annotation *annotation = [Annotation initWithAnnotationSpot:spot coordinate:CLLocationCoordinate2DMake(spot.spotCoordinates.latitude, spot.spotCoordinates.longitude)];
-    
+    annotation.title = spot.user;
+    NSLog(@"Message for Annotation: %@", spot.message);
+    annotation.subtitle = spot.message;
     [_mapView addAnnotation:annotation];
+}
+
+-(void)setUpLongPressGesture {
+    _longPressGesture.minimumPressDuration = 2;
+    _longPressGesture.allowableMovement = 100.0f;
+}
+
+- (IBAction)longPressToGetCoordinates:(UILongPressGestureRecognizer *)sender {
+    _longPressGesture = sender;
+
+    CGPoint touchPoint = [sender locationInView:self.mapView];
+    longPressCoordinates = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+    
+    [self handleLongPressGestures:sender];
+    
 }
 
 - (IBAction)changeMapStyle:(id)sender {

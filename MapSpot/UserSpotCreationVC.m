@@ -28,16 +28,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+//**************************************************************************
+//You will delete this.
 -(void)produceTESTSpot {
     NSDate *now = [NSDate date];
     _spot = [Spot initWithSpotCoordinates: CLLocationCoordinate2DMake(_coordinatesForCreatedSpot.latitude, _coordinatesForCreatedSpot.longitude) user:@"donovancotter" createdAt:now];
-    _spot.message = @"Hello! I'm Donovan!";
+    NSLog(@"Spot Message:%@", _spot.message);
     NSLog(@"Spot Coordinates: %f and %f", _spot.spotCoordinates.latitude, _spot.spotCoordinates.longitude);
+//**************************************************************************
 }
 
 -(void)performDelegateForCreateingSpot {
     NSDate *now = [NSDate date];
-    [self.delegate createSpotWithUser:_spot.user message:_spot.message coordinates:(_coordinatesForCreatedSpot) createdAt:now];
+    [self.delegate createSpotWithUser:_spot.user message:_messageTF.text coordinates:(_coordinatesForCreatedSpot) createdAt:now];
     NSLog(@"SPOT DELEGATE:: %f, %f", _coordinatesForCreatedSpot.latitude, _coordinatesForCreatedSpot.longitude);
 }
 
