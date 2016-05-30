@@ -111,6 +111,9 @@ CLLocationCoordinate2D longPressCoordinates;
     spot.message = message;
     NSLog(@"MAP RECEIVED SPOT:\nUser: %@\n""message: %@\n""coordinates: lat: %f long: %f\n""createdAt: %@\n", spot.user, spot.message, spot.spotCoordinates.latitude, spot.spotCoordinates.longitude, spot.createdAt);
     
+    Annotation *annotation = [Annotation initWithAnnotationSpot:spot coordinate:CLLocationCoordinate2DMake(spot.spotCoordinates.latitude, spot.spotCoordinates.longitude)];
+    
+    [_mapView addAnnotation:annotation];
 }
 
 - (IBAction)changeMapStyle:(id)sender {

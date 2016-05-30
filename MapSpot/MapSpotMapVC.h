@@ -10,6 +10,7 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "UserSpotCreationVC.h"
+#import "Annotation.h"
 
 @interface MapSpotMapVC : UIViewController <CreateSpotDelegate>
 

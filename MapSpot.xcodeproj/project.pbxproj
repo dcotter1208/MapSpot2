@@ -17,6 +17,7 @@
 		435544E41CFA3180002A4370 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 435544E31CFA3180002A4370 /* .gitignore */; };
 		43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */; };
 		43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329F1CFB8C1E00631D92 /* Spot.m */; };
+		43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB32A21CFBF9A700631D92 /* Annotation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,8 @@
 		43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSpotCreationVC.m; sourceTree = "<group>"; };
 		43AB329E1CFB8C1E00631D92 /* Spot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Spot.h; sourceTree = "<group>"; };
 		43AB329F1CFB8C1E00631D92 /* Spot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Spot.m; sourceTree = "<group>"; };
+		43AB32A11CFBF9A700631D92 /* Annotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Annotation.h; sourceTree = "<group>"; };
+		43AB32A21CFBF9A700631D92 /* Annotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Annotation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,12 +75,8 @@
 			children = (
 				43280D931CF87BF900F726FE /* AppDelegate.h */,
 				43280D941CF87BF900F726FE /* AppDelegate.m */,
-				43280D961CF87BF900F726FE /* MapSpotMapVC.h */,
-				43280D971CF87BF900F726FE /* MapSpotMapVC.m */,
-				43AB329B1CFACCF300631D92 /* UserSpotCreationVC.h */,
-				43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */,
-				43AB329E1CFB8C1E00631D92 /* Spot.h */,
-				43AB329F1CFB8C1E00631D92 /* Spot.m */,
+				43AB32A51CFBF9BD00631D92 /* ViewController */,
+				43AB32A41CFBF9B100631D92 /* Model */,
 				43280D991CF87BF900F726FE /* Main.storyboard */,
 				43280D9C1CF87BF900F726FE /* Assets.xcassets */,
 				43280D9E1CF87BF900F726FE /* LaunchScreen.storyboard */,
@@ -94,6 +93,28 @@
 				43280D911CF87BF900F726FE /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		43AB32A41CFBF9B100631D92 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				43AB329E1CFB8C1E00631D92 /* Spot.h */,
+				43AB329F1CFB8C1E00631D92 /* Spot.m */,
+				43AB32A11CFBF9A700631D92 /* Annotation.h */,
+				43AB32A21CFBF9A700631D92 /* Annotation.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		43AB32A51CFBF9BD00631D92 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				43280D961CF87BF900F726FE /* MapSpotMapVC.h */,
+				43280D971CF87BF900F726FE /* MapSpotMapVC.m */,
+				43AB329B1CFACCF300631D92 /* UserSpotCreationVC.h */,
+				43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */,
+			);
+			name = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,6 +188,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */,
 				43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */,
 				43280D981CF87BF900F726FE /* MapSpotMapVC.m in Sources */,
 				43280D951CF87BF900F726FE /* AppDelegate.m in Sources */,

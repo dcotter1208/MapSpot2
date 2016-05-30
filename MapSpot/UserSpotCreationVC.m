@@ -18,17 +18,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    NSDate *now = [NSDate date];
+    //This creates a fake spot for testing and will be deleted when the user can input a spot to create.
+    [self produceTESTSpot];
     
-    _spot = [Spot initWithSpotCoordinates: CLLocationCoordinate2DMake(_coordinatesForCreatedSpot.latitude, _coordinatesForCreatedSpot.longitude) user:@"donovancotter" createdAt:now];
-    _spot.message = @"Hello! I'm Donovan!";
-    
-    NSLog(@"Spot Coordinates: %f and %f", _spot.spotCoordinates.latitude, _spot.spotCoordinates.longitude);
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)produceTESTSpot {
+    NSDate *now = [NSDate date];
+    _spot = [Spot initWithSpotCoordinates: CLLocationCoordinate2DMake(_coordinatesForCreatedSpot.latitude, _coordinatesForCreatedSpot.longitude) user:@"donovancotter" createdAt:now];
+    _spot.message = @"Hello! I'm Donovan!";
+    NSLog(@"Spot Coordinates: %f and %f", _spot.spotCoordinates.latitude, _spot.spotCoordinates.longitude);
 }
 
 -(void)performDelegateForCreateingSpot {
