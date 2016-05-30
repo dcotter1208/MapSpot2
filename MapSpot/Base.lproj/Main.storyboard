@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Map Spot MapVC-->
@@ -21,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="iDg-Kt-0cL" appends="YES" id="t0O-1O-cHp"/>
+                                    <outletCollection property="gestureRecognizers" destination="4RU-R8-riZ" appends="YES" id="yY8-t3-8y8"/>
                                 </connections>
                             </mapView>
                         </subviews>
@@ -52,12 +53,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="iDg-Kt-0cL">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="4RU-R8-riZ">
                     <connections>
-                        <action selector="longPressToGetCoordinates:" destination="BYZ-38-t0r" id="p0L-i7-yGP"/>
-                        <outlet property="delegate" destination="BYZ-38-t0r" id="Ni1-iY-P1h"/>
+                        <action selector="longPressToGetCoordinates:" destination="BYZ-38-t0r" id="vhj-et-kEM"/>
                     </connections>
-                </tapGestureRecognizer>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="372" y="330"/>
         </scene>
@@ -72,8 +72,40 @@
                     <view key="view" contentMode="scaleToFill" id="xwt-in-GBt">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="SjI-XZ-Bme">
+                                <rect key="frame" x="20" y="126" width="560" height="97"/>
+                                <color key="backgroundColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nL0-dp-NHd">
+                                <rect key="frame" x="246" y="252" width="108" height="46"/>
+                                <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="108" id="9OX-iU-YY7"/>
+                                    <constraint firstAttribute="height" constant="46" id="jzy-TS-CFS"/>
+                                </constraints>
+                                <state key="normal" title="Create Spot"/>
+                                <connections>
+                                    <action selector="createSpotButtonPressed:" destination="tKn-pk-HUU" eventType="touchUpInside" id="uSW-qx-H4c"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="SjI-XZ-Bme" firstAttribute="trailing" secondItem="xwt-in-GBt" secondAttribute="trailingMargin" id="3sB-1j-lvN"/>
+                            <constraint firstItem="SjI-XZ-Bme" firstAttribute="top" secondItem="s6y-54-RdT" secondAttribute="bottom" constant="62" id="WOc-sI-cuG"/>
+                            <constraint firstItem="ynH-ff-dLz" firstAttribute="top" secondItem="nL0-dp-NHd" secondAttribute="bottom" constant="302" id="bYo-tk-rs9"/>
+                            <constraint firstItem="SjI-XZ-Bme" firstAttribute="leading" secondItem="xwt-in-GBt" secondAttribute="leadingMargin" id="fgv-ks-5LI"/>
+                            <constraint firstItem="nL0-dp-NHd" firstAttribute="top" secondItem="SjI-XZ-Bme" secondAttribute="bottom" constant="29" id="fzK-06-Dw3"/>
+                            <constraint firstItem="SjI-XZ-Bme" firstAttribute="centerX" secondItem="nL0-dp-NHd" secondAttribute="centerX" id="oid-aN-999"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="messageTF" destination="SjI-XZ-Bme" id="XY1-cL-hUI"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w8A-Mt-Pfo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
