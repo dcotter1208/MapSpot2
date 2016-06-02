@@ -18,9 +18,12 @@
 		43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */; };
 		43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329F1CFB8C1E00631D92 /* Spot.m */; };
 		43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB32A21CFBF9A700631D92 /* Annotation.m */; };
+		FE717BA2A2685DF966FD7AD0 /* libPods-MapSpot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E4651FF2387130EC55898D /* libPods-MapSpot.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		11E4651FF2387130EC55898D /* libPods-MapSpot.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapSpot.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1946161770F870D8FC0DA413 /* Pods-MapSpot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapSpot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MapSpot/Pods-MapSpot.debug.xcconfig"; sourceTree = "<group>"; };
 		43280D8D1CF87BF900F726FE /* MapSpot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapSpot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43280D911CF87BF900F726FE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		43280D931CF87BF900F726FE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -39,6 +42,7 @@
 		43AB329F1CFB8C1E00631D92 /* Spot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Spot.m; sourceTree = "<group>"; };
 		43AB32A11CFBF9A700631D92 /* Annotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Annotation.h; sourceTree = "<group>"; };
 		43AB32A21CFBF9A700631D92 /* Annotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Annotation.m; sourceTree = "<group>"; };
+		5BC4E31F1BC35754AC23F30F /* Pods-MapSpot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapSpot.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapSpot/Pods-MapSpot.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +51,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				435544E21CFA2F6C002A4370 /* MapKit.framework in Frameworks */,
+				FE717BA2A2685DF966FD7AD0 /* libPods-MapSpot.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +64,8 @@
 				435544E11CFA2F6C002A4370 /* MapKit.framework */,
 				43280D8F1CF87BF900F726FE /* MapSpot */,
 				43280D8E1CF87BF900F726FE /* Products */,
+				8D1DA3111945723E9E059048 /* Pods */,
+				B6039D873ED445B16F4E13E2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -117,6 +124,23 @@
 			name = ViewController;
 			sourceTree = "<group>";
 		};
+		8D1DA3111945723E9E059048 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1946161770F870D8FC0DA413 /* Pods-MapSpot.debug.xcconfig */,
+				5BC4E31F1BC35754AC23F30F /* Pods-MapSpot.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		B6039D873ED445B16F4E13E2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				11E4651FF2387130EC55898D /* libPods-MapSpot.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -124,9 +148,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43280DA41CF87BF900F726FE /* Build configuration list for PBXNativeTarget "MapSpot" */;
 			buildPhases = (
+				126F33821E5D230DCA7FE500 /* 📦 Check Pods Manifest.lock */,
 				43280D891CF87BF900F726FE /* Sources */,
 				43280D8A1CF87BF900F726FE /* Frameworks */,
 				43280D8B1CF87BF900F726FE /* Resources */,
+				00A98DBBD7356EACEADACCA2 /* 📦 Embed Pods Frameworks */,
+				CA748C15F3203FC7DA74B57A /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -182,6 +209,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		00A98DBBD7356EACEADACCA2 /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MapSpot/Pods-MapSpot-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		126F33821E5D230DCA7FE500 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		CA748C15F3203FC7DA74B57A /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MapSpot/Pods-MapSpot-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		43280D891CF87BF900F726FE /* Sources */ = {
@@ -303,6 +378,7 @@
 		};
 		43280DA51CF87BF900F726FE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1946161770F870D8FC0DA413 /* Pods-MapSpot.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MapSpot/Info.plist;
@@ -314,6 +390,7 @@
 		};
 		43280DA61CF87BF900F726FE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5BC4E31F1BC35754AC23F30F /* Pods-MapSpot.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MapSpot/Info.plist;
