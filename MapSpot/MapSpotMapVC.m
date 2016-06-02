@@ -31,6 +31,7 @@ CLLocationCoordinate2D longPressCoordinates;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self mapSetup];
     [self setUpLongPressGesture];
 }
@@ -43,7 +44,7 @@ CLLocationCoordinate2D longPressCoordinates;
 -(void)mapSetup {
     [_mapView setDelegate:self];
     [_mapView setShowsPointsOfInterest:false];
-    [_mapView setMapType:MKMapTypeStandard];
+    [_mapView setMapType:MKMapTypeHybridFlyover];
     [_mapView setShowsUserLocation:true];
     [self getUserLocation];
 }
@@ -72,7 +73,7 @@ CLLocationCoordinate2D longPressCoordinates;
         oldLocation = nil;
     }
     
-    userLocation = MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 1500.0, 1500.0);
+    userLocation = MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 300.0, 300.0);
     [_mapView setRegion:userLocation animated:YES];
     
 }
@@ -97,11 +98,11 @@ CLLocationCoordinate2D longPressCoordinates;
     
     Spot *spot = [Spot initWithSpotCoordinates:CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude) user:user createdAt:createdAt];
     spot.message = message;
-    NSLog(@"Message: Message for Annotation: %@", spot.message);
+    NSLog(@"Spot: User: %@, Message: %@, CreatedAt: %@", spot.user, spot.message, spot.createdAt);
     
     Annotation *annotation = [Annotation initWithAnnotationSpot:spot coordinate:CLLocationCoordinate2DMake(spot.spotCoordinates.latitude, spot.spotCoordinates.longitude)];
     annotation.title = spot.user;
-    NSLog(@"Message for Annotation: %@", spot.message);
+
     annotation.subtitle = spot.message;
     [_mapView addAnnotation:annotation];
 }
