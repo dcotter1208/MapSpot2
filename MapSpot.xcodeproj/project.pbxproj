@@ -18,6 +18,8 @@
 		43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */; };
 		43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329F1CFB8C1E00631D92 /* Spot.m */; };
 		43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB32A21CFBF9A700631D92 /* Annotation.m */; };
+		43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEB1D0104F00060D1BF /* LoginVC.m */; };
+		43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEE1D0105210060D1BF /* SignUpVC.m */; };
 		FE717BA2A2685DF966FD7AD0 /* libPods-MapSpot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E4651FF2387130EC55898D /* libPods-MapSpot.a */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +44,10 @@
 		43AB329F1CFB8C1E00631D92 /* Spot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Spot.m; sourceTree = "<group>"; };
 		43AB32A11CFBF9A700631D92 /* Annotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Annotation.h; sourceTree = "<group>"; };
 		43AB32A21CFBF9A700631D92 /* Annotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Annotation.m; sourceTree = "<group>"; };
+		43D8DEEA1D0104F00060D1BF /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
+		43D8DEEB1D0104F00060D1BF /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
+		43D8DEED1D0105210060D1BF /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
+		43D8DEEE1D0105210060D1BF /* SignUpVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpVC.m; sourceTree = "<group>"; };
 		5BC4E31F1BC35754AC23F30F /* Pods-MapSpot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapSpot.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapSpot/Pods-MapSpot.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,12 +122,24 @@
 		43AB32A51CFBF9BD00631D92 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				43D8DEF01D0105290060D1BF /* Login */,
 				43280D961CF87BF900F726FE /* MapSpotMapVC.h */,
 				43280D971CF87BF900F726FE /* MapSpotMapVC.m */,
 				43AB329B1CFACCF300631D92 /* UserSpotCreationVC.h */,
 				43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */,
 			);
 			name = ViewController;
+			sourceTree = "<group>";
+		};
+		43D8DEF01D0105290060D1BF /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				43D8DEED1D0105210060D1BF /* SignUpVC.h */,
+				43D8DEEE1D0105210060D1BF /* SignUpVC.m */,
+				43D8DEEA1D0104F00060D1BF /* LoginVC.h */,
+				43D8DEEB1D0104F00060D1BF /* LoginVC.m */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 		8D1DA3111945723E9E059048 /* Pods */ = {
@@ -267,7 +285,9 @@
 				43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */,
 				43280D981CF87BF900F726FE /* MapSpotMapVC.m in Sources */,
 				43280D951CF87BF900F726FE /* AppDelegate.m in Sources */,
+				43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */,
 				43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */,
+				43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */,
 				43280D921CF87BF900F726FE /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
