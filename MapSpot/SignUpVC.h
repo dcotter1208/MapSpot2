@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Firebase.h>
 
 @interface SignUpVC : UIViewController
 

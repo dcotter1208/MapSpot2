@@ -15,6 +15,7 @@
 		43280DA01CF87BF900F726FE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43280D9E1CF87BF900F726FE /* LaunchScreen.storyboard */; };
 		435544E21CFA2F6C002A4370 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435544E11CFA2F6C002A4370 /* MapKit.framework */; };
 		435544E41CFA3180002A4370 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 435544E31CFA3180002A4370 /* .gitignore */; };
+		4374D3181D010ECA00C8FE5B /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4374D3171D010ECA00C8FE5B /* User.m */; };
 		43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */; };
 		43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329F1CFB8C1E00631D92 /* Spot.m */; };
 		43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB32A21CFBF9A700631D92 /* Annotation.m */; };
@@ -38,6 +39,8 @@
 		43280DA11CF87BF900F726FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		435544E11CFA2F6C002A4370 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		435544E31CFA3180002A4370 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
+		4374D3161D010ECA00C8FE5B /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		4374D3171D010ECA00C8FE5B /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		43AB329B1CFACCF300631D92 /* UserSpotCreationVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSpotCreationVC.h; sourceTree = "<group>"; };
 		43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSpotCreationVC.m; sourceTree = "<group>"; };
 		43AB329E1CFB8C1E00631D92 /* Spot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Spot.h; sourceTree = "<group>"; };
@@ -115,6 +118,8 @@
 				43AB329F1CFB8C1E00631D92 /* Spot.m */,
 				43AB32A11CFBF9A700631D92 /* Annotation.h */,
 				43AB32A21CFBF9A700631D92 /* Annotation.m */,
+				4374D3161D010ECA00C8FE5B /* User.h */,
+				4374D3171D010ECA00C8FE5B /* User.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -283,6 +288,7 @@
 			files = (
 				43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */,
 				43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */,
+				4374D3181D010ECA00C8FE5B /* User.m in Sources */,
 				43280D981CF87BF900F726FE /* MapSpotMapVC.m in Sources */,
 				43280D951CF87BF900F726FE /* AppDelegate.m in Sources */,
 				43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */,

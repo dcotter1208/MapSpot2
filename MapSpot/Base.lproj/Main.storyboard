@@ -83,6 +83,9 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ypl-vW-fC2">
                                 <rect key="frame" x="273" y="296" width="55" height="30"/>
                                 <state key="normal" title="Sign Up"/>
+                                <connections>
+                                    <action selector="signUpNewUser:" destination="IIb-ah-QRZ" eventType="touchUpInside" id="iD2-UZ-IJN"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rvl-xA-y9w">
                                 <rect key="frame" x="20" y="127" width="560" height="30"/>
@@ -225,7 +228,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XvZ-VJ-1h4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-300" y="330"/>
+            <point key="canvasLocation" x="-594" y="330"/>
         </scene>
     </scenes>
 </document>
