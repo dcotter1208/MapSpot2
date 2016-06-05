@@ -16,6 +16,7 @@
 		435544E21CFA2F6C002A4370 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435544E11CFA2F6C002A4370 /* MapKit.framework */; };
 		435544E41CFA3180002A4370 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 435544E31CFA3180002A4370 /* .gitignore */; };
 		4374D3181D010ECA00C8FE5B /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4374D3171D010ECA00C8FE5B /* User.m */; };
+		4374D31A1D02001F00C8FE5B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4374D3191D02001F00C8FE5B /* GoogleService-Info.plist */; };
 		43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */; };
 		43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329F1CFB8C1E00631D92 /* Spot.m */; };
 		43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB32A21CFBF9A700631D92 /* Annotation.m */; };
@@ -41,6 +42,7 @@
 		435544E31CFA3180002A4370 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
 		4374D3161D010ECA00C8FE5B /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		4374D3171D010ECA00C8FE5B /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		4374D3191D02001F00C8FE5B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		43AB329B1CFACCF300631D92 /* UserSpotCreationVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSpotCreationVC.h; sourceTree = "<group>"; };
 		43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSpotCreationVC.m; sourceTree = "<group>"; };
 		43AB329E1CFB8C1E00631D92 /* Spot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Spot.h; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 		43280D901CF87BF900F726FE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4374D3191D02001F00C8FE5B /* GoogleService-Info.plist */,
 				43280DA11CF87BF900F726FE /* Info.plist */,
 				43280D911CF87BF900F726FE /* main.m */,
 			);
@@ -226,6 +229,7 @@
 			files = (
 				435544E41CFA3180002A4370 /* .gitignore in Resources */,
 				43280DA01CF87BF900F726FE /* LaunchScreen.storyboard in Resources */,
+				4374D31A1D02001F00C8FE5B /* GoogleService-Info.plist in Resources */,
 				43280D9D1CF87BF900F726FE /* Assets.xcassets in Resources */,
 				43280D9B1CF87BF900F726FE /* Main.storyboard in Resources */,
 			);

@@ -34,6 +34,7 @@ CLLocationCoordinate2D longPressCoordinates;
     
     [self mapSetup];
     [self setUpLongPressGesture];
+    [self checkIfCurrentUserIsLoggedIn];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -111,6 +112,17 @@ CLLocationCoordinate2D longPressCoordinates;
 -(void)setUpLongPressGesture {
     _longPressGesture.minimumPressDuration = 2;
     _longPressGesture.allowableMovement = 100.0f;
+}
+
+-(void)checkIfCurrentUserIsLoggedIn {
+    FIRUser *user = [FIRAuth auth].currentUser;
+    
+    if (user != nil) {
+
+    } else {
+        [self performSegueWithIdentifier:@"segueToLogin" sender:self];
+
+    }
 }
 
 - (IBAction)longPressToGetCoordinates:(UILongPressGestureRecognizer *)sender {

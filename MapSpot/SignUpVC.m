@@ -9,6 +9,10 @@
 #import "SignUpVC.h"
 
 @interface SignUpVC ()
+@property (weak, nonatomic) IBOutlet UITextField *usernameTF;
+@property (weak, nonatomic) IBOutlet UITextField *emailTF;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTF;
+@property (weak, nonatomic) IBOutlet UITextField *passwordConfirmationTF;
 
 @end
 
@@ -24,21 +28,31 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)addUserProfileInfo {
+    
+    
+}
+
 - (IBAction)signUpNewUser:(id)sender {
     
-    Firebase *ref = [[Firebase alloc] initWithUrl:@"https://mapspotios.firebaseio.com"];
-    [ref createUser:@"donovan.cotter@yahoo.com" password:@"password123"
-withValueCompletionBlock:^(NSError *error, NSDictionary *result) {
+    //Use REGEX for user sign up.
     
-    if (error) {
-        NSLog(@"Error: %@", error);
-        // There was an error creating the account
-    } else {
-        NSString *uid = [result objectForKey:@"uid"];
-        NSLog(@"Successfully created user account with uid: %@", uid);
+    //https://firebase.google.com/docs/auth/ios/manage-users#get_the_currently_signed-in_user
+    if ([_passwordTF.text isEqualToString:_passwordConfirmationTF.text]) {
+        [[FIRAuth auth]createUserWithEmail:_emailTF.text password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
+            
+            if (error) {
+                NSLog(@"ERROR: %@", error);
+            } else {
+                
+            }
+            
+        }];
     }
-}];
     
+
+    
+
 }
 
 - (IBAction)dismissView:(id)sender {
