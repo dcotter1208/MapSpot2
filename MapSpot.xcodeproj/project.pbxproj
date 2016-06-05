@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43251A701D047CF100F7E9AD /* FBDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 43251A6F1D047CF100F7E9AD /* FBDataService.m */; };
 		43280D921CF87BF900F726FE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 43280D911CF87BF900F726FE /* main.m */; };
 		43280D951CF87BF900F726FE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 43280D941CF87BF900F726FE /* AppDelegate.m */; };
 		43280D981CF87BF900F726FE /* MapSpotMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43280D971CF87BF900F726FE /* MapSpotMapVC.m */; };
@@ -28,6 +29,8 @@
 /* Begin PBXFileReference section */
 		11E4651FF2387130EC55898D /* libPods-MapSpot.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapSpot.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1946161770F870D8FC0DA413 /* Pods-MapSpot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapSpot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MapSpot/Pods-MapSpot.debug.xcconfig"; sourceTree = "<group>"; };
+		43251A6E1D047CF100F7E9AD /* FBDataService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDataService.h; sourceTree = "<group>"; };
+		43251A6F1D047CF100F7E9AD /* FBDataService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDataService.m; sourceTree = "<group>"; };
 		43280D8D1CF87BF900F726FE /* MapSpot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapSpot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43280D911CF87BF900F726FE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		43280D931CF87BF900F726FE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -123,6 +126,8 @@
 				43AB32A21CFBF9A700631D92 /* Annotation.m */,
 				4374D3161D010ECA00C8FE5B /* User.h */,
 				4374D3171D010ECA00C8FE5B /* User.m */,
+				43251A6E1D047CF100F7E9AD /* FBDataService.h */,
+				43251A6F1D047CF100F7E9AD /* FBDataService.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -299,6 +304,7 @@
 				43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */,
 				43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */,
 				43280D921CF87BF900F726FE /* main.m in Sources */,
+				43251A701D047CF100F7E9AD /* FBDataService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

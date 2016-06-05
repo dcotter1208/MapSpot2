@@ -20,7 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -28,31 +28,31 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)addUserProfileInfo {
-    
-    
+-(void)addUserProfileInfo:(NSString *)userID username:(NSString *)username email:(NSString *)email {
+    FBDataService *fbDataService = [[FBDataService alloc]init];
+    FIRDatabaseReference *userRef = [fbDataService.ref child:@"users"].childByAutoId;
+    NSDictionary *userProfile = @{@"userID": userID, @"username": username, @"email": email};
+    [userRef setValue:userProfile];
+
 }
 
 - (IBAction)signUpNewUser:(id)sender {
     
     //Use REGEX for user sign up.
     
-    //https://firebase.google.com/docs/auth/ios/manage-users#get_the_currently_signed-in_user
+    NSString *username = _usernameTF.text;
+    NSString *email = _emailTF.text;
+    
     if ([_passwordTF.text isEqualToString:_passwordConfirmationTF.text]) {
-        [[FIRAuth auth]createUserWithEmail:_emailTF.text password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
+        [[FIRAuth auth]createUserWithEmail:email password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
             
             if (error) {
                 NSLog(@"ERROR: %@", error);
             } else {
-                
+                [self addUserProfileInfo:user.uid username:username email:email];
             }
-            
         }];
     }
-    
-
-    
-
 }
 
 - (IBAction)dismissView:(id)sender {

@@ -31,7 +31,6 @@ CLLocationCoordinate2D longPressCoordinates;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self mapSetup];
     [self setUpLongPressGesture];
     [self checkIfCurrentUserIsLoggedIn];
@@ -118,7 +117,7 @@ CLLocationCoordinate2D longPressCoordinates;
     FIRUser *user = [FIRAuth auth].currentUser;
     
     if (user != nil) {
-
+        NSLog(@"CURRENT USER: %@", user.email);
     } else {
         [self performSegueWithIdentifier:@"segueToLogin" sender:self];
 
