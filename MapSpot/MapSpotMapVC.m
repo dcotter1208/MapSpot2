@@ -14,6 +14,8 @@
 
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
+#import "Spot.h"
+#import <FirebaseDatabase/FirebaseDatabase.h>
 
 @interface MapSpotMapVC () <MKMapViewDelegate, CLLocationManagerDelegate>
 
@@ -31,6 +33,7 @@ CLLocationCoordinate2D longPressCoordinates;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
     [self checkIfCurrentUserIsLoggedIn];
@@ -88,23 +91,21 @@ CLLocationCoordinate2D longPressCoordinates;
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"segueToUserSpotCreationVC"]) {
-        UserSpotCreationVC *destionationVC = (UserSpotCreationVC *)segue.destinationViewController;
+        UserSpotCreationVC *destionationVC = [segue destinationViewController];
         [destionationVC setDelegate:self];
         [destionationVC setCoordinatesForCreatedSpot:longPressCoordinates];
     }
 }
 
+
 -(void)createSpotWithUser:(NSString *)user message:(NSString *)message coordinates:(CLLocationCoordinate2D)coordinates createdAt:(NSDate *)createdAt {
+    
+    //WE WILL ADD THE ANNOTATION WITH THE LISTENER METHOD THAT FIREBASE PROVIDES...ONCE A CHILD IS ADDED THEN WE WILL CALL THE "addAnnotation" method.
     
     Spot *spot = [Spot initWithSpotCoordinates:CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude) user:user createdAt:createdAt];
     spot.message = message;
     NSLog(@"Spot: User: %@, Message: %@, CreatedAt: %@", spot.user, spot.message, spot.createdAt);
     
-    Annotation *annotation = [Annotation initWithAnnotationSpot:spot coordinate:CLLocationCoordinate2DMake(spot.spotCoordinates.latitude, spot.spotCoordinates.longitude)];
-    annotation.title = spot.user;
-
-    annotation.subtitle = spot.message;
-    [_mapView addAnnotation:annotation];
 }
 
 
@@ -120,8 +121,41 @@ CLLocationCoordinate2D longPressCoordinates;
         NSLog(@"CURRENT USER: %@", user.email);
     } else {
         [self performSegueWithIdentifier:@"segueToLogin" sender:self];
-
     }
+}
+
+-(void)querySpotsFromFirebase {
+    FBDataService *fbDataService = [[FBDataService alloc]init];
+    FIRDatabaseReference *spotRef = [fbDataService.ref child:@"spots"];
+
+    [spotRef observeEventType:FIRDataEventTypeChildAdded
+     withBlock:^(FIRDataSnapshot *snapshot) {
+         NSDate *createdAt = [self convertStringToDate:snapshot.value[@"createdAt"]];
+         
+         Spot *spot = [[Spot alloc]
+                    initWithSpotCoordinates:CLLocationCoordinate2DMake([snapshot.value[@"latitude"] doubleValue], [snapshot.value[@"longitude"] doubleValue])
+                         user:snapshot.value[@"username"]
+                         createdAt:createdAt];
+         spot.message = snapshot.value[@"message"];
+         
+         [self addSpotToMap:spot];
+
+     }];
+}
+
+-(void)addSpotToMap:(Spot *)spot {
+    Annotation *annotation = [Annotation initWithAnnotationSpot:spot coordinate:CLLocationCoordinate2DMake(spot.spotCoordinates.latitude, spot.spotCoordinates.longitude)];
+    annotation.title = spot.user;
+    annotation.subtitle = (NSString *)spot.createdAt;
+    [_mapView addAnnotation:annotation];
+}
+
+-(NSDate *)convertStringToDate:(NSString *)dateAsString {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *date = [dateFormatter dateFromString:dateAsString];
+    
+    return date;
 }
 
 - (IBAction)longPressToGetCoordinates:(UILongPressGestureRecognizer *)sender {
@@ -144,6 +178,7 @@ CLLocationCoordinate2D longPressCoordinates;
         [_mapView setMapType:MKMapTypeStandard];
         _mapStyleNavBarButton.title = @"3D";
     }
+    
 }
 
 - (IBAction)goBackToMyLocation:(id)sender {

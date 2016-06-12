@@ -17,9 +17,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    //This creates a fake spot for testing and will be deleted when the user can input a spot to create.
-    [self produceTESTSpot];
     
 }
 
@@ -28,25 +25,35 @@
     // Dispose of any resources that can be recreated.
 }
 
-//**************************************************************************
-//You will delete this.
--(void)produceTESTSpot {
+-(void)createSpotWithUsername:(NSString *)username message:(NSString *)message latitude:(NSString *)latitude longitude:(NSString *)longitude {
     NSDate *now = [NSDate date];
-    _spot = [Spot initWithSpotCoordinates: CLLocationCoordinate2DMake(_coordinatesForCreatedSpot.latitude, _coordinatesForCreatedSpot.longitude) user:@"donovancotter" createdAt:now];
-    NSLog(@"Spot Message:%@", _spot.message);
-    NSLog(@"Spot Coordinates: %f and %f", _spot.spotCoordinates.latitude, _spot.spotCoordinates.longitude);
-//**************************************************************************
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    NSString *createdAt = [dateFormatter stringFromDate:now];
+    
+    FIRAuth *auth = [FIRAuth auth];
+    FIRUser *currentUser = [auth currentUser];
+    
+    FBDataService *fbDataService = [[FBDataService alloc]init];
+    FIRDatabaseReference *spotRef = [fbDataService.ref child:@"spots"].childByAutoId;
+    
+    NSDictionary *spot = @{@"userID": currentUser.uid, @"username": username, @"email": currentUser.email, @"latitude":latitude, @"longitude": longitude, @"message": message, @"createdAt": createdAt};
+    
+    [spotRef setValue:spot];
 }
 
 -(void)performDelegateForCreateingSpot {
     NSDate *now = [NSDate date];
     [self.delegate createSpotWithUser:_spot.user message:_messageTF.text coordinates:(_coordinatesForCreatedSpot) createdAt:now];
-    NSLog(@"SPOT DELEGATE:: %f, %f", _coordinatesForCreatedSpot.latitude, _coordinatesForCreatedSpot.longitude);
 }
 
 - (IBAction)createSpotButtonPressed:(id)sender {
     
-    [self performDelegateForCreateingSpot];
+    NSString *latAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude];
+    NSString *longAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude];
+
+    [self createSpotWithUsername:@"DonovanCotter" message:_messageTF.text latitude: latAsString longitude:longAsString];
     
 }
 
