@@ -7,8 +7,9 @@
 //
 
 #import "AppDelegate.h"
+
 @import Firebase;
-@import FirebaseDatabase;
+@import FirebaseAuth;
 
 @interface AppDelegate ()
 
@@ -19,9 +20,39 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    [FIRApp configure];
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
-    // Override point for customization after application launch.
+    NSLog(@"App Delegate Presented - 1");
+    
+    [FIRApp configure];
+
+    
+    NSLog(@"App Delegate Presented - 1.1");
+
+    
+    [[FIRAuth auth] addAuthStateDidChangeListener:^(FIRAuth *auth,
+                                                    FIRUser *user) {
+        
+        NSLog(@"USER: %@", user.email);
+        if (user != nil) {
+            
+            // Show the dashboard
+            self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"InitialNavController"];
+        } else {
+            // Login
+            self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        }
+        [self.window makeKeyAndVisible];
+    }];
+    
+//    else {
+//        
+//        NSLog(@"App Delegate Presented - 3");
+//        self.window.rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateInitialViewController];
+//        
+//    }
+    
     return YES;
 }
 

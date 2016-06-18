@@ -25,23 +25,25 @@
 
 @end
 
-CLLocation *newLocation, *oldLocation;
+CLLocation *newLocation;
 MKCoordinateRegion userLocation;
 CLLocationCoordinate2D longPressCoordinates;
 
 @implementation MapSpotMapVC
 
 - (void)viewDidLoad {
+    
+    NSLog(@"Map View Presented");
+    
     [super viewDidLoad];
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
-    [self checkIfCurrentUserIsLoggedIn];
+//    [self checkIfCurrentUserIsLoggedIn];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(void)mapSetup {
@@ -68,13 +70,6 @@ CLLocationCoordinate2D longPressCoordinates;
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
 
     newLocation = [locations lastObject];
-    
-    if (locations.count > 1) {
-        NSUInteger newLocationIndex = [locations indexOfObject:newLocation];
-        oldLocation = [locations objectAtIndex:newLocationIndex];
-    } else {
-        oldLocation = nil;
-    }
     
     userLocation = MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 300.0, 300.0);
     [_mapView setRegion:userLocation animated:YES];
@@ -107,7 +102,6 @@ CLLocationCoordinate2D longPressCoordinates;
     NSLog(@"Spot: User: %@, Message: %@, CreatedAt: %@", spot.user, spot.message, spot.createdAt);
     
 }
-
 
 -(void)setUpLongPressGesture {
     _longPressGesture.minimumPressDuration = 2;
