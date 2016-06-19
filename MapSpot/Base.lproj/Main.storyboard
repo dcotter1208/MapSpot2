@@ -4,7 +4,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--LoginVC-->
@@ -170,28 +169,36 @@
                                     <outletCollection property="gestureRecognizers" destination="4RU-R8-riZ" appends="YES" id="yY8-t3-8y8"/>
                                 </connections>
                             </mapView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lQz-xO-Qeb">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="4oK-t8-avN"/>
+                                    <barButtonItem image="spotMaker" id="5jt-27-b6O">
+                                        <connections>
+                                            <action selector="quickSpotButtonPressed:" destination="BYZ-38-t0r" id="49H-bx-TQo"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="i7F-Sh-z8L"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="lQz-xO-Qeb" firstAttribute="trailing" secondItem="HHN-tL-gcW" secondAttribute="trailing" id="8An-7z-NZ1"/>
                             <constraint firstItem="HHN-tL-gcW" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="ETD-Fj-xgn"/>
+                            <constraint firstItem="lQz-xO-Qeb" firstAttribute="leading" secondItem="HHN-tL-gcW" secondAttribute="leading" id="EfG-En-ILi"/>
                             <constraint firstAttribute="trailing" secondItem="HHN-tL-gcW" secondAttribute="trailing" id="J5r-bu-CDm"/>
+                            <constraint firstItem="lQz-xO-Qeb" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="TyQ-Wt-Ai4"/>
                             <constraint firstItem="HHN-tL-gcW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="bEf-0n-klX"/>
                             <constraint firstItem="HHN-tL-gcW" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="fZc-6q-9bS"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Edf-Ja-x4a">
-                        <leftBarButtonItems>
-                            <barButtonItem title="My Location" id="uXo-nf-Inq">
-                                <connections>
-                                    <action selector="goBackToMyLocation:" destination="BYZ-38-t0r" id="WHt-bU-Odf"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem image="spotMaker" id="yQ8-ip-Qhr">
-                                <connections>
-                                    <action selector="quickSpotButtonPressed:" destination="BYZ-38-t0r" id="enU-DC-8NL"/>
-                                </connections>
-                            </barButtonItem>
-                        </leftBarButtonItems>
+                        <barButtonItem key="leftBarButtonItem" title="My Location" id="uXo-nf-Inq">
+                            <connections>
+                                <action selector="goBackToMyLocation:" destination="BYZ-38-t0r" id="WHt-bU-Odf"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Standard" id="NL3-d9-cBG">
                             <connections>
                                 <action selector="changeMapStyle:" destination="BYZ-38-t0r" id="VWr-9p-5Vd"/>
@@ -201,7 +208,7 @@
                     <connections>
                         <outlet property="mapStyleNavBarButton" destination="NL3-d9-cBG" id="KlB-Qi-wZ5"/>
                         <outlet property="mapView" destination="HHN-tL-gcW" id="Kwk-NI-Ul3"/>
-                        <outlet property="quickSpotNavBarButton" destination="yQ8-ip-Qhr" id="oRJ-pe-c9h"/>
+                        <outlet property="quickSpotNavBarButton" destination="5jt-27-b6O" id="m6F-br-JWS"/>
                         <segue destination="tKn-pk-HUU" kind="show" identifier="segueToUserSpotCreationVC" id="LnO-1x-lLn"/>
                     </connections>
                 </viewController>
