@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "Spot.h"
+#import <FirebaseAuth/FirebaseAuth.h>
+#import <FirebaseDatabase/FirebaseDatabase.h>
+#import "FBDataService.h"
 
 @protocol CreateSpotDelegate <NSObject>
 

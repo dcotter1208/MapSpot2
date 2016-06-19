@@ -8,6 +8,9 @@
 
 #import "AppDelegate.h"
 
+@import Firebase;
+@import FirebaseAuth;
+
 @interface AppDelegate ()
 
 @end
@@ -16,7 +19,27 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    //Makes the LoginViewController the initial view controller if no Fireabse user is logged in. Otherwise it makes the MapViewController's embedded Navigation Controller the initial view controller.
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    [FIRApp configure];
+    
+    [[FIRAuth auth] addAuthStateDidChangeListener:^(FIRAuth *auth,
+                                                    FIRUser *user) {
+        
+        if (user != nil) {
+            
+            // Show the dashboard
+            self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"InitialNavController"];
+        } else {
+            // Login
+            self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        }
+        [self.window makeKeyAndVisible];
+    }];
+
     return YES;
 }
 

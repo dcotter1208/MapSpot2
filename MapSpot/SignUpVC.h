@@ -1,0 +1,16 @@
+//
+//  SignUpVC.h
+//  MapSpot
+//
+//  Created by DetroitLabs on 6/2/16.
+//  Copyright © 2016 DetroitLabs. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import <FirebaseAuth/FirebaseAuth.h>
+#import <Firebase.h>
+#import "FBDataService.h"
+
+@interface SignUpVC : UIViewController
+
+@end

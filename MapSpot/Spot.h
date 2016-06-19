@@ -10,6 +10,12 @@
 #import <CoreLocation/CoreLocation.h>
 
 
+/*
+
+ MAKE A SPOT PROTOCOL. THIS WILL BE SOMETHING THAT ALL SPOTS HAVE AND WORK ACROSS THE USER SPOTS, BUSINESS SPOTS, POINTS OF INTEREST SPOTS... IT WILL BE MORE EXPANSIVE.
+ 
+*/
+
 @interface Spot : NSObject
 
 @property(nonatomic, strong) NSString *user;

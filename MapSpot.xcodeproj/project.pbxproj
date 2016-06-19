@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43251A701D047CF100F7E9AD /* FBDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 43251A6F1D047CF100F7E9AD /* FBDataService.m */; };
 		43280D921CF87BF900F726FE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 43280D911CF87BF900F726FE /* main.m */; };
 		43280D951CF87BF900F726FE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 43280D941CF87BF900F726FE /* AppDelegate.m */; };
 		43280D981CF87BF900F726FE /* MapSpotMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43280D971CF87BF900F726FE /* MapSpotMapVC.m */; };
@@ -15,15 +16,21 @@
 		43280DA01CF87BF900F726FE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43280D9E1CF87BF900F726FE /* LaunchScreen.storyboard */; };
 		435544E21CFA2F6C002A4370 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435544E11CFA2F6C002A4370 /* MapKit.framework */; };
 		435544E41CFA3180002A4370 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 435544E31CFA3180002A4370 /* .gitignore */; };
+		4374D3181D010ECA00C8FE5B /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4374D3171D010ECA00C8FE5B /* User.m */; };
+		4374D31A1D02001F00C8FE5B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4374D3191D02001F00C8FE5B /* GoogleService-Info.plist */; };
 		43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */; };
 		43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329F1CFB8C1E00631D92 /* Spot.m */; };
 		43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB32A21CFBF9A700631D92 /* Annotation.m */; };
+		43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEB1D0104F00060D1BF /* LoginVC.m */; };
+		43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEE1D0105210060D1BF /* SignUpVC.m */; };
 		FE717BA2A2685DF966FD7AD0 /* libPods-MapSpot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E4651FF2387130EC55898D /* libPods-MapSpot.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		11E4651FF2387130EC55898D /* libPods-MapSpot.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapSpot.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1946161770F870D8FC0DA413 /* Pods-MapSpot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapSpot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MapSpot/Pods-MapSpot.debug.xcconfig"; sourceTree = "<group>"; };
+		43251A6E1D047CF100F7E9AD /* FBDataService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBDataService.h; sourceTree = "<group>"; };
+		43251A6F1D047CF100F7E9AD /* FBDataService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBDataService.m; sourceTree = "<group>"; };
 		43280D8D1CF87BF900F726FE /* MapSpot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapSpot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43280D911CF87BF900F726FE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		43280D931CF87BF900F726FE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -36,12 +43,19 @@
 		43280DA11CF87BF900F726FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		435544E11CFA2F6C002A4370 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		435544E31CFA3180002A4370 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
+		4374D3161D010ECA00C8FE5B /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		4374D3171D010ECA00C8FE5B /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		4374D3191D02001F00C8FE5B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		43AB329B1CFACCF300631D92 /* UserSpotCreationVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSpotCreationVC.h; sourceTree = "<group>"; };
 		43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSpotCreationVC.m; sourceTree = "<group>"; };
 		43AB329E1CFB8C1E00631D92 /* Spot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Spot.h; sourceTree = "<group>"; };
 		43AB329F1CFB8C1E00631D92 /* Spot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Spot.m; sourceTree = "<group>"; };
 		43AB32A11CFBF9A700631D92 /* Annotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Annotation.h; sourceTree = "<group>"; };
 		43AB32A21CFBF9A700631D92 /* Annotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Annotation.m; sourceTree = "<group>"; };
+		43D8DEEA1D0104F00060D1BF /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
+		43D8DEEB1D0104F00060D1BF /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
+		43D8DEED1D0105210060D1BF /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
+		43D8DEEE1D0105210060D1BF /* SignUpVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpVC.m; sourceTree = "<group>"; };
 		5BC4E31F1BC35754AC23F30F /* Pods-MapSpot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapSpot.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapSpot/Pods-MapSpot.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +110,7 @@
 		43280D901CF87BF900F726FE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4374D3191D02001F00C8FE5B /* GoogleService-Info.plist */,
 				43280DA11CF87BF900F726FE /* Info.plist */,
 				43280D911CF87BF900F726FE /* main.m */,
 			);
@@ -109,6 +124,10 @@
 				43AB329F1CFB8C1E00631D92 /* Spot.m */,
 				43AB32A11CFBF9A700631D92 /* Annotation.h */,
 				43AB32A21CFBF9A700631D92 /* Annotation.m */,
+				4374D3161D010ECA00C8FE5B /* User.h */,
+				4374D3171D010ECA00C8FE5B /* User.m */,
+				43251A6E1D047CF100F7E9AD /* FBDataService.h */,
+				43251A6F1D047CF100F7E9AD /* FBDataService.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -116,12 +135,24 @@
 		43AB32A51CFBF9BD00631D92 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				43D8DEF01D0105290060D1BF /* Login */,
 				43280D961CF87BF900F726FE /* MapSpotMapVC.h */,
 				43280D971CF87BF900F726FE /* MapSpotMapVC.m */,
 				43AB329B1CFACCF300631D92 /* UserSpotCreationVC.h */,
 				43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */,
 			);
 			name = ViewController;
+			sourceTree = "<group>";
+		};
+		43D8DEF01D0105290060D1BF /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				43D8DEED1D0105210060D1BF /* SignUpVC.h */,
+				43D8DEEE1D0105210060D1BF /* SignUpVC.m */,
+				43D8DEEA1D0104F00060D1BF /* LoginVC.h */,
+				43D8DEEB1D0104F00060D1BF /* LoginVC.m */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 		8D1DA3111945723E9E059048 /* Pods */ = {
@@ -203,6 +234,7 @@
 			files = (
 				435544E41CFA3180002A4370 /* .gitignore in Resources */,
 				43280DA01CF87BF900F726FE /* LaunchScreen.storyboard in Resources */,
+				4374D31A1D02001F00C8FE5B /* GoogleService-Info.plist in Resources */,
 				43280D9D1CF87BF900F726FE /* Assets.xcassets in Resources */,
 				43280D9B1CF87BF900F726FE /* Main.storyboard in Resources */,
 			);
@@ -265,10 +297,14 @@
 			files = (
 				43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */,
 				43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */,
+				4374D3181D010ECA00C8FE5B /* User.m in Sources */,
 				43280D981CF87BF900F726FE /* MapSpotMapVC.m in Sources */,
 				43280D951CF87BF900F726FE /* AppDelegate.m in Sources */,
+				43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */,
 				43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */,
+				43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */,
 				43280D921CF87BF900F726FE /* main.m in Sources */,
+				43251A701D047CF100F7E9AD /* FBDataService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
