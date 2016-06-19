@@ -4,6 +4,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--LoginVC-->
@@ -48,26 +49,26 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="70D-on-c7I" secondAttribute="trailing" id="0Xk-5G-NSZ"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="cCX-mt-G5W" secondAttribute="leading" id="0lc-LS-YFy"/>
-                            <constraint firstItem="KJJ-d4-qmL" firstAttribute="centerX" secondItem="OOk-ma-LtJ" secondAttribute="centerX" id="57Y-Er-7NO"/>
-                            <constraint firstItem="MTW-LQ-KFv" firstAttribute="centerX" secondItem="OOk-ma-LtJ" secondAttribute="centerX" id="Bgn-O9-suv"/>
-                            <constraint firstItem="KJJ-d4-qmL" firstAttribute="leading" secondItem="MTW-LQ-KFv" secondAttribute="trailing" constant="-98" id="C4F-KU-aFf"/>
-                            <constraint firstItem="cCX-mt-G5W" firstAttribute="top" secondItem="70D-on-c7I" secondAttribute="bottom" constant="22" id="KeD-hg-JrD"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="70D-on-c7I" secondAttribute="leading" id="LHN-gk-BxT"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="cCX-mt-G5W" secondAttribute="trailing" id="UCY-nt-VR5"/>
-                            <constraint firstItem="MTW-LQ-KFv" firstAttribute="top" secondItem="VqK-ql-kbV" secondAttribute="bottom" constant="16" id="djd-NW-kdA"/>
-                            <constraint firstItem="VqK-ql-kbV" firstAttribute="centerX" secondItem="OOk-ma-LtJ" secondAttribute="centerX" id="g9E-tY-N6C"/>
-                            <constraint firstItem="VqK-ql-kbV" firstAttribute="top" secondItem="cCX-mt-G5W" secondAttribute="bottom" constant="42" id="kpH-wn-QU4"/>
-                            <constraint firstItem="70D-on-c7I" firstAttribute="top" secondItem="G9A-B6-0Xg" secondAttribute="bottom" constant="11" id="pXN-nR-vgx"/>
-                            <constraint firstItem="KJJ-d4-qmL" firstAttribute="top" secondItem="VqK-ql-kbV" secondAttribute="bottom" constant="45" id="s7Z-y0-Oon"/>
+                            <constraint firstItem="MTW-LQ-KFv" firstAttribute="trailing" secondItem="KJJ-d4-qmL" secondAttribute="trailing" id="3eI-Ex-NCy"/>
+                            <constraint firstItem="KJJ-d4-qmL" firstAttribute="top" secondItem="MTW-LQ-KFv" secondAttribute="bottom" constant="8" symbolic="YES" id="5f4-Mo-1q6"/>
+                            <constraint firstItem="70D-on-c7I" firstAttribute="top" secondItem="G9A-B6-0Xg" secondAttribute="bottom" constant="55" id="Aav-FC-ehX"/>
+                            <constraint firstItem="70D-on-c7I" firstAttribute="leading" secondItem="cCX-mt-G5W" secondAttribute="leading" id="Dp2-lV-mUV"/>
+                            <constraint firstItem="70D-on-c7I" firstAttribute="leading" secondItem="OOk-ma-LtJ" secondAttribute="leadingMargin" id="HY3-3v-vSl"/>
+                            <constraint firstItem="cCX-mt-G5W" firstAttribute="top" secondItem="70D-on-c7I" secondAttribute="bottom" constant="22" id="Lse-rr-JB5"/>
+                            <constraint firstItem="VqK-ql-kbV" firstAttribute="top" secondItem="cCX-mt-G5W" secondAttribute="bottom" constant="42" id="Xwo-Re-TUb"/>
+                            <constraint firstItem="MTW-LQ-KFv" firstAttribute="leading" secondItem="KJJ-d4-qmL" secondAttribute="leading" id="Yna-AQ-hVU"/>
+                            <constraint firstItem="70D-on-c7I" firstAttribute="trailing" secondItem="OOk-ma-LtJ" secondAttribute="trailingMargin" id="jeV-MX-cWO"/>
+                            <constraint firstItem="cCX-mt-G5W" firstAttribute="centerX" secondItem="VqK-ql-kbV" secondAttribute="centerX" id="ndy-HN-9js"/>
+                            <constraint firstItem="MTW-LQ-KFv" firstAttribute="top" secondItem="VqK-ql-kbV" secondAttribute="bottom" constant="16" id="ozz-rg-5AF"/>
+                            <constraint firstItem="VqK-ql-kbV" firstAttribute="centerX" secondItem="MTW-LQ-KFv" secondAttribute="centerX" id="uMr-56-QnV"/>
+                            <constraint firstItem="70D-on-c7I" firstAttribute="trailing" secondItem="cCX-mt-G5W" secondAttribute="trailing" id="znq-dA-H3F"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="H13-V4-xsZ"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PdH-Cc-NMX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-564" y="-421"/>
+            <point key="canvasLocation" x="-550" y="-421"/>
         </scene>
         <!--Sign UpVC-->
         <scene sceneID="a4J-Sz-jwi">
@@ -179,11 +180,18 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Edf-Ja-x4a">
-                        <barButtonItem key="leftBarButtonItem" title="My Location" id="uXo-nf-Inq">
-                            <connections>
-                                <action selector="goBackToMyLocation:" destination="BYZ-38-t0r" id="WHt-bU-Odf"/>
-                            </connections>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem title="My Location" id="uXo-nf-Inq">
+                                <connections>
+                                    <action selector="goBackToMyLocation:" destination="BYZ-38-t0r" id="WHt-bU-Odf"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="spotMaker" id="yQ8-ip-Qhr">
+                                <connections>
+                                    <action selector="quickSpotButtonPressed:" destination="BYZ-38-t0r" id="enU-DC-8NL"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <barButtonItem key="rightBarButtonItem" title="Standard" id="NL3-d9-cBG">
                             <connections>
                                 <action selector="changeMapStyle:" destination="BYZ-38-t0r" id="VWr-9p-5Vd"/>
@@ -193,6 +201,7 @@
                     <connections>
                         <outlet property="mapStyleNavBarButton" destination="NL3-d9-cBG" id="KlB-Qi-wZ5"/>
                         <outlet property="mapView" destination="HHN-tL-gcW" id="Kwk-NI-Ul3"/>
+                        <outlet property="quickSpotNavBarButton" destination="yQ8-ip-Qhr" id="oRJ-pe-c9h"/>
                         <segue destination="tKn-pk-HUU" kind="show" identifier="segueToUserSpotCreationVC" id="LnO-1x-lLn"/>
                     </connections>
                 </viewController>
@@ -219,25 +228,28 @@
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SjI-XZ-Bme">
                                 <rect key="frame" x="20" y="126" width="560" height="97"/>
-                                <color key="backgroundColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="textColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nL0-dp-NHd">
                                 <rect key="frame" x="246" y="252" width="108" height="46"/>
-                                <color key="backgroundColor" red="0.40000000600000002" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="108" id="9OX-iU-YY7"/>
                                     <constraint firstAttribute="height" constant="46" id="jzy-TS-CFS"/>
                                 </constraints>
-                                <state key="normal" title="Create Spot"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Create Spot">
+                                    <color key="titleColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="createSpotButtonPressed:" destination="tKn-pk-HUU" eventType="touchUpInside" id="uSW-qx-H4c"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="SjI-XZ-Bme" firstAttribute="trailing" secondItem="xwt-in-GBt" secondAttribute="trailingMargin" id="3sB-1j-lvN"/>
                             <constraint firstItem="SjI-XZ-Bme" firstAttribute="top" secondItem="s6y-54-RdT" secondAttribute="bottom" constant="62" id="WOc-sI-cuG"/>
@@ -258,7 +270,6 @@
         <!--Navigation Controller-->
         <scene sceneID="7s4-fm-uRk">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="XvZ-VJ-1h4" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController storyboardIdentifier="InitialNavController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="n6X-Kr-H5I" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="LxQ-a6-8zy">
@@ -270,8 +281,12 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="764-5d-OPr"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XvZ-VJ-1h4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-594" y="330"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="spotMaker" width="24" height="24"/>
+    </resources>
 </document>

@@ -13,7 +13,7 @@
 #import "UserSpotCreationVC.h"
 #import "Annotation.h"
 
-@interface MapSpotMapVC : UIViewController <CreateSpotDelegate>
+@interface MapSpotMapVC : UIViewController
 
 @property(nonatomic, strong) CLLocationManager *locationManager;
 @property(nonatomic, strong) NSMutableArray *spots;

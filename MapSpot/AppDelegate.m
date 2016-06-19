@@ -20,21 +20,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    //Makes the LoginViewController the initial view controller if no Fireabse user is logged in. Otherwise it makes the MapViewController's embedded Navigation Controller the initial view controller.
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
-    NSLog(@"App Delegate Presented - 1");
-    
     [FIRApp configure];
-
-    
-    NSLog(@"App Delegate Presented - 1.1");
-
     
     [[FIRAuth auth] addAuthStateDidChangeListener:^(FIRAuth *auth,
                                                     FIRUser *user) {
         
-        NSLog(@"USER: %@", user.email);
         if (user != nil) {
             
             // Show the dashboard
@@ -45,14 +39,7 @@
         }
         [self.window makeKeyAndVisible];
     }];
-    
-//    else {
-//        
-//        NSLog(@"App Delegate Presented - 3");
-//        self.window.rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateInitialViewController];
-//        
-//    }
-    
+
     return YES;
 }
 

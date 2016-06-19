@@ -18,6 +18,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSLog(@"Lat: %f Long: %f", _coordinatesForCreatedSpot.latitude, _coordinatesForCreatedSpot.longitude);
+    
 }
 
 - (void)didReceiveMemoryWarning {

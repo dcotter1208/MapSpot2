@@ -15,13 +15,16 @@
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
 #import "Spot.h"
-#import <FirebaseDatabase/FirebaseDatabase.h>
+@import FirebaseDatabase;
 
 @interface MapSpotMapVC () <MKMapViewDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *mapStyleNavBarButton;
 @property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *longPressGesture;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *quickSpotNavBarButton;
+
+@property(nonatomic) CLLocationCoordinate2D userCoordinatesForCreatedSpot;
 
 @end
 
@@ -39,7 +42,6 @@ CLLocationCoordinate2D longPressCoordinates;
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
-//    [self checkIfCurrentUserIsLoggedIn];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -84,38 +86,25 @@ CLLocationCoordinate2D longPressCoordinates;
     }
 }
 
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     if ([segue.identifier isEqualToString:@"segueToUserSpotCreationVC"]) {
         UserSpotCreationVC *destionationVC = [segue destinationViewController];
-        [destionationVC setDelegate:self];
-        [destionationVC setCoordinatesForCreatedSpot:longPressCoordinates];
+
+        if ([_quickSpotNavBarButton.accessibilityLabel isEqualToString:@"quickSpotButton"]) {
+            NSLog(@"Acc Label: %@", _quickSpotNavBarButton.accessibilityLabel);
+            [destionationVC setCoordinatesForCreatedSpot:CLLocationCoordinate2DMake(userLocation.center.latitude, userLocation.center.longitude)];
+        } else {
+            NSLog(@"Acc Label: %@", _quickSpotNavBarButton.accessibilityLabel);
+            [destionationVC setCoordinatesForCreatedSpot:longPressCoordinates];
+        }
     }
-}
-
-
--(void)createSpotWithUser:(NSString *)user message:(NSString *)message coordinates:(CLLocationCoordinate2D)coordinates createdAt:(NSDate *)createdAt {
-    
-    //WE WILL ADD THE ANNOTATION WITH THE LISTENER METHOD THAT FIREBASE PROVIDES...ONCE A CHILD IS ADDED THEN WE WILL CALL THE "addAnnotation" method.
-    
-    Spot *spot = [Spot initWithSpotCoordinates:CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude) user:user createdAt:createdAt];
-    spot.message = message;
-    NSLog(@"Spot: User: %@, Message: %@, CreatedAt: %@", spot.user, spot.message, spot.createdAt);
-    
 }
 
 -(void)setUpLongPressGesture {
     _longPressGesture.minimumPressDuration = 2;
     _longPressGesture.allowableMovement = 100.0f;
-}
-
--(void)checkIfCurrentUserIsLoggedIn {
-    FIRUser *user = [FIRAuth auth].currentUser;
-    
-    if (user != nil) {
-        NSLog(@"CURRENT USER: %@", user.email);
-    } else {
-        [self performSegueWithIdentifier:@"segueToLogin" sender:self];
-    }
 }
 
 -(void)querySpotsFromFirebase {
@@ -153,6 +142,9 @@ CLLocationCoordinate2D longPressCoordinates;
 }
 
 - (IBAction)longPressToGetCoordinates:(UILongPressGestureRecognizer *)sender {
+    
+    _quickSpotNavBarButton.accessibilityLabel = nil;
+    
     _longPressGesture = sender;
 
     CGPoint touchPoint = [sender locationInView:self.mapView];
@@ -180,6 +172,13 @@ CLLocationCoordinate2D longPressCoordinates;
     [_mapView setRegion:userLocation animated:true];
     
 }
+
+- (IBAction)quickSpotButtonPressed:(id)sender {
+    _quickSpotNavBarButton.accessibilityLabel = @"quickSpotButton";
+    [self performSegueWithIdentifier:@"segueToUserSpotCreationVC" sender:self];
+}
+
+
 
 
 

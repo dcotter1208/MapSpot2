@@ -30,7 +30,9 @@
 -(void)addUserProfileInfo:(NSString *)userID username:(NSString *)username email:(NSString *)email {
     FBDataService *fbDataService = [[FBDataService alloc]init];
     FIRDatabaseReference *userRef = [fbDataService.ref child:@"users"].childByAutoId;
-    NSDictionary *userProfile = @{@"userID": userID, @"username": username, @"email": email};
+    NSDictionary *userProfile = @{@"userID": userID,
+                                  @"username": username,
+                                  @"email": email};
     [userRef setValue:userProfile];
 
 }
