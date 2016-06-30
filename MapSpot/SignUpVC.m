@@ -7,6 +7,7 @@
 //
 
 #import "SignUpVC.h"
+#import "FirebaseDatabaseService.h"
 
 @interface SignUpVC ()
 @property (weak, nonatomic) IBOutlet UITextField *usernameTF;
@@ -28,8 +29,10 @@
 }
 
 -(void)addUserProfileInfo:(NSString *)userID username:(NSString *)username email:(NSString *)email {
-    FBDataService *fbDataService = [[FBDataService alloc]init];
-    FIRDatabaseReference *userRef = [fbDataService.ref child:@"users"].childByAutoId;
+    
+    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
+    [firebaseDatabaseService initWithReference];
+    FIRDatabaseReference *userRef = [firebaseDatabaseService.ref child:@"users"].childByAutoId;
     NSDictionary *userProfile = @{@"userID": userID,
                                   @"username": username,
                                   @"email": email};

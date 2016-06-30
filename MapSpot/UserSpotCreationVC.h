@@ -5,13 +5,11 @@
 //  Created by DetroitLabs on 5/29/16.
 //  Copyright © 2016 DetroitLabs. All rights reserved.
 //
-
+@import FirebaseAuth;
+@import FirebaseDatabase;
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "Spot.h"
-#import <FirebaseAuth/FirebaseAuth.h>
-#import <FirebaseDatabase/FirebaseDatabase.h>
-#import "FBDataService.h"
 
 @protocol CreateSpotDelegate <NSObject>
 

@@ -7,6 +7,7 @@
 //
 
 #import "UserSpotCreationVC.h"
+#import "FirebaseDatabaseService.h"
 
 @interface UserSpotCreationVC ()
 @property (weak, nonatomic) IBOutlet UITextView *messageTF;
@@ -37,9 +38,10 @@
     FIRAuth *auth = [FIRAuth auth];
     FIRUser *currentUser = [auth currentUser];
     
-    FBDataService *fbDataService = [[FBDataService alloc]init];
-    FIRDatabaseReference *spotRef = [fbDataService.ref child:@"spots"].childByAutoId;
-    
+    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
+    [firebaseDatabaseService initWithReference];
+    FIRDatabaseReference *spotRef = [firebaseDatabaseService.ref child:@"spots"].childByAutoId;
+                                 
     NSDictionary *spot = @{@"userID": currentUser.uid, @"username": username, @"email": currentUser.email, @"latitude":latitude, @"longitude": longitude, @"message": message, @"createdAt": createdAt};
     
     [spotRef setValue:spot];

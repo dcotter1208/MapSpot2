@@ -15,6 +15,7 @@
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
 #import "Spot.h"
+#import "FirebaseDatabaseService.h"
 @import FirebaseDatabase;
 
 @interface MapSpotMapVC () <MKMapViewDelegate, CLLocationManagerDelegate>
@@ -35,9 +36,7 @@ CLLocationCoordinate2D longPressCoordinates;
 @implementation MapSpotMapVC
 
 - (void)viewDidLoad {
-    
-    NSLog(@"Map View Presented");
-    
+        
     [super viewDidLoad];
     [self querySpotsFromFirebase];
     [self mapSetup];
@@ -93,10 +92,8 @@ CLLocationCoordinate2D longPressCoordinates;
         UserSpotCreationVC *destionationVC = [segue destinationViewController];
 
         if ([_quickSpotNavBarButton.accessibilityLabel isEqualToString:@"quickSpotButton"]) {
-            NSLog(@"Acc Label: %@", _quickSpotNavBarButton.accessibilityLabel);
             [destionationVC setCoordinatesForCreatedSpot:CLLocationCoordinate2DMake(userLocation.center.latitude, userLocation.center.longitude)];
         } else {
-            NSLog(@"Acc Label: %@", _quickSpotNavBarButton.accessibilityLabel);
             [destionationVC setCoordinatesForCreatedSpot:longPressCoordinates];
         }
     }
@@ -108,8 +105,10 @@ CLLocationCoordinate2D longPressCoordinates;
 }
 
 -(void)querySpotsFromFirebase {
-    FBDataService *fbDataService = [[FBDataService alloc]init];
-    FIRDatabaseReference *spotRef = [fbDataService.ref child:@"spots"];
+    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
+    [firebaseDatabaseService initWithReference];
+    
+    FIRDatabaseReference *spotRef = [firebaseDatabaseService.ref child:@"spots"];
 
     [spotRef observeEventType:FIRDataEventTypeChildAdded
      withBlock:^(FIRDataSnapshot *snapshot) {

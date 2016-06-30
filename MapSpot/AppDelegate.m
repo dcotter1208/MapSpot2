@@ -31,7 +31,7 @@
         
         if (user != nil) {
             
-            // Show the dashboard
+            // Show the Initial MapSpotMapVC
             self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"InitialNavController"];
         } else {
             // Login
