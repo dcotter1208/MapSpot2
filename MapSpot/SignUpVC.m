@@ -13,7 +13,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *usernameTF;
 @property (weak, nonatomic) IBOutlet UITextField *emailTF;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTF;
-@property (weak, nonatomic) IBOutlet UITextField *passwordConfirmationTF;
+@property (weak, nonatomic) IBOutlet UITextField *repeatPasswordTF;
 
 @end
 
@@ -40,14 +40,11 @@
 
 }
 
-- (IBAction)signUpNewUser:(id)sender {
-    
-    //Use REGEX for user sign up.
-    
+-(void)signUpUserWithFirebase {
     NSString *username = _usernameTF.text;
     NSString *email = _emailTF.text;
     
-    if ([_passwordTF.text isEqualToString:_passwordConfirmationTF.text]) {
+    if ([_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
         [[FIRAuth auth]createUserWithEmail:email password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
             
             if (error) {
@@ -57,6 +54,59 @@
             }
         }];
     }
+}
+
+-(void)signUpFailedAlertView:(NSString *)title message:(NSString *)message {
+    UIAlertController *alertController =[UIAlertController
+                                         alertControllerWithTitle:title
+                                         message:message
+                                         preferredStyle:UIAlertControllerStyleAlert];
+    
+    
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
+    [alertController addAction:ok];
+    [self presentViewController:alertController animated:true completion:nil];
+    
+}
+
+-(BOOL)validateEmail:(NSString *)email {
+    
+    NSString *emailRegEx = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"self matches %@", emailRegEx];
+    BOOL result = [emailTest evaluateWithObject:email];
+    
+    return result;
+}
+
+-(BOOL)validatePassword:(NSString *)password {
+    NSString    *regex = @"^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]*$";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    BOOL isValidPassword = [predicate evaluateWithObject:password];
+    return isValidPassword;
+}
+
+- (IBAction)signUpNewUser:(id)sender {
+    //email valid but password fields don't match
+    if ([self validateEmail:_emailTF.text] && ![_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
+        [self signUpFailedAlertView:@"Sign Up Failed" message:@"Please make sure your passwords match."];
+        //email is not valid but password fields match
+    }else if (![self validateEmail:_emailTF.text] && [_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
+        [self signUpFailedAlertView:@"Sign Up Failed" message:@"Please make sure you put in a valid email."];
+        //BOTH email and password are not validated
+    } else if (![self validateEmail:_emailTF.text] && ![self validatePassword:_passwordTF.text]) {
+        [self signUpFailedAlertView:@"Sign Up Failed" message:@"Your email and password aren't valid"];
+        //email is valid but password is not.
+    } else if ([self validateEmail:_emailTF.text] && ![self validatePassword:_passwordTF.text]) {
+        [self signUpFailedAlertView:@"Sign Up Failed" message:@"password must contain letters and numbers"];
+    } else if (_usernameTF.text.length < 5 && ![_usernameTF.text containsString:@" "]) {
+        [self signUpFailedAlertView:@"Sign Up Failed" message:@"Username must be at least 5 characters (no white space.)"];
+    } else {
+        [self signUpUserWithFirebase];
+
+    }
+    
+    
+
 }
 
 - (IBAction)dismissView:(id)sender {

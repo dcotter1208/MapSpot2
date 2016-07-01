@@ -141,8 +141,8 @@
                     </view>
                     <connections>
                         <outlet property="emailTF" destination="OlV-zv-5p8" id="0PQ-xK-rxS"/>
-                        <outlet property="passwordConfirmationTF" destination="xhG-Vw-O9y" id="lSP-Oo-ge7"/>
                         <outlet property="passwordTF" destination="ksJ-VZ-vK3" id="pqm-n8-MPG"/>
+                        <outlet property="repeatPasswordTF" destination="xhG-Vw-O9y" id="8QA-t8-eT7"/>
                         <outlet property="usernameTF" destination="rvl-xA-y9w" id="N03-eq-Hz4"/>
                     </connections>
                 </viewController>
