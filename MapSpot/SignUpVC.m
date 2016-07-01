@@ -10,6 +10,9 @@
 #import "FirebaseDatabaseService.h"
 
 @interface SignUpVC ()
+
+#pragma mark Properties
+
 @property (weak, nonatomic) IBOutlet UITextField *usernameTF;
 @property (weak, nonatomic) IBOutlet UITextField *emailTF;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTF;
@@ -18,6 +21,8 @@
 @end
 
 @implementation SignUpVC
+
+#pragma mark Lifecycle Methods
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,6 +33,9 @@
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark Firebase Helper Methods
+
+//Creates a user profile on Firebase Database.
 -(void)addUserProfileInfo:(NSString *)userID username:(NSString *)username email:(NSString *)email {
     
     FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
@@ -40,6 +48,7 @@
 
 }
 
+//Signs up the user for Firebase email/password auth.
 -(void)signUpUserWithFirebase {
     NSString *username = _usernameTF.text;
     NSString *email = _emailTF.text;
@@ -56,6 +65,9 @@
     }
 }
 
+#pragma mark Validation Helper Methods
+
+//Alert Message function.
 -(void)signUpFailedAlertView:(NSString *)title message:(NSString *)message {
     UIAlertController *alertController =[UIAlertController
                                          alertControllerWithTitle:title
@@ -69,6 +81,7 @@
     
 }
 
+//Validates the user's email with regex.
 -(BOOL)validateEmail:(NSString *)email {
     
     NSString *emailRegEx = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}";
@@ -78,12 +91,15 @@
     return result;
 }
 
+//validates the user's password with regex.
 -(BOOL)validatePassword:(NSString *)password {
     NSString    *regex = @"^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]*$";
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL isValidPassword = [predicate evaluateWithObject:password];
     return isValidPassword;
 }
+
+#pragma mark Sign Up IBAction
 
 - (IBAction)signUpNewUser:(id)sender {
     //email valid but password fields don't match
@@ -102,16 +118,8 @@
         [self signUpFailedAlertView:@"Sign Up Failed" message:@"Username must be at least 5 characters (no white space.)"];
     } else {
         [self signUpUserWithFirebase];
-
     }
     
-    
-
-}
-
-- (IBAction)dismissView:(id)sender {
-    [self dismissViewControllerAnimated:true completion:nil];
-
 }
 
 @end

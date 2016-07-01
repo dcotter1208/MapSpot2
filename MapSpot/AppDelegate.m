@@ -35,7 +35,7 @@
             self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"InitialNavController"];
         } else {
             // Login
-            self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+            self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginNavController"];
         }
         [self.window makeKeyAndVisible];
     }];
