@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <FirebaseAuth/FirebaseAuth.h>
 #import <Firebase.h>
-#import "FBDataService.h"
 
 @interface SignUpVC : UIViewController
 

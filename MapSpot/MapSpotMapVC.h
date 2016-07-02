@@ -7,16 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MapKit/MapKit.h>
-#import <CoreLocation/CoreLocation.h>
-#import <FirebaseAuth/FirebaseAuth.h>
-#import "UserSpotCreationVC.h"
-#import "Annotation.h"
 
 @interface MapSpotMapVC : UIViewController
-
-@property(nonatomic, strong) CLLocationManager *locationManager;
-@property(nonatomic, strong) NSMutableArray *spots;
 
 @end
 
