@@ -19,12 +19,12 @@
 @interface Spot : NSObject
 
 @property(nonatomic, strong) NSString *user;
-@property(nonatomic, strong) NSDate *createdAt;
+@property(nonatomic, strong) NSString *createdAt;
 @property(nonatomic) CLLocationCoordinate2D spotCoordinates;
 @property(nonatomic, strong) NSString *message;
 
--(id)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSDate *)createdAt;
-+(id)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSDate *)createdAt;
+-(id)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt;
++(id)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt;
 
 
 @end
