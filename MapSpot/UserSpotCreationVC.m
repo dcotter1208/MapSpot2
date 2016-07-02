@@ -16,10 +16,10 @@
 
 @implementation UserSpotCreationVC
 
+#pragma mark Lifecycle methods
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSLog(@"Lat: %f Long: %f", _coordinatesForCreatedSpot.latitude, _coordinatesForCreatedSpot.longitude);
     
 }
 
@@ -28,12 +28,27 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)createSpotWithUsername:(NSString *)username message:(NSString *)message latitude:(NSString *)latitude longitude:(NSString *)longitude {
-    NSDate *now = [NSDate date];
+#pragma mark Help Methods
+
+/*
+ Accepts a date and turns it into a string.
+ We use this to store date on Firebase as a string because Firebase doesn't accept NSDate.
+*/
+ -(NSString *)dateToStringFormatter:(NSDate *)date {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-    NSString *createdAt = [dateFormatter stringFromDate:now];
+    return [dateFormatter stringFromDate:date];
+}
+
+#pragma mark Firebase Helper Methods
+
+/*
+ Used to create a spot when the createSpotButton is pressed.
+ It then saves the spot to Firebase.
+*/
+-(void)createSpotWithUsername:(NSString *)username message:(NSString *)message latitude:(NSString *)latitude longitude:(NSString *)longitude {
+    NSDate *now = [NSDate date];
 
     FIRAuth *auth = [FIRAuth auth];
     FIRUser *currentUser = [auth currentUser];
@@ -42,16 +57,20 @@
     [firebaseDatabaseService initWithReference];
     FIRDatabaseReference *spotRef = [firebaseDatabaseService.ref child:@"spots"].childByAutoId;
                                  
-    NSDictionary *spot = @{@"userID": currentUser.uid, @"username": username, @"email": currentUser.email, @"latitude":latitude, @"longitude": longitude, @"message": message, @"createdAt": createdAt};
+    NSDictionary *spot = @{@"userID": currentUser.uid,
+                           @"username": username,
+                           @"email": currentUser.email,
+                           @"latitude":latitude,
+                           @"longitude": longitude,
+                           @"message": message,
+                           @"createdAt": [self dateToStringFormatter:now]};
     
     [spotRef setValue:spot];
 }
 
--(void)performDelegateForCreateingSpot {
-    NSDate *now = [NSDate date];
-    [self.delegate createSpotWithUser:_spot.user message:_messageTF.text coordinates:(_coordinatesForCreatedSpot) createdAt:now];
-}
+#pragma mark IBActions
 
+//This creates the spot by calling the createSpotWithUsername func.
 - (IBAction)createSpotButtonPressed:(id)sender {
     
     NSString *latAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude];
