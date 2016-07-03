@@ -100,26 +100,14 @@
 }
 
 -(void)validateUsernameUniqueness:(NSString *)username {
-    NSLog(@"Called 1");
     FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
     [firebaseDatabaseService initWithReference];
-    FIRDatabaseReference *usersRef = [firebaseDatabaseService.ref child:@"users"];
-    NSLog(@"Called 2");
-
-    FIRDatabaseQuery *usernameQuery = [[usersRef queryOrderedByChild:@"username"] queryEqualToValue:username];
-    NSLog(@"Called 3");
-
-    [usernameQuery observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot *snapshot) {
-        NSLog(@"Called 4");
-        if (snapshot.exists) {
-            [self signUpFailedAlertView:@"Sign Up Failed" message:@"Username already exists."];
-            NSLog(@"Username: %@ already exists", snapshot.value);
-            NSLog(@"Username Entered: %@", username);
-        } else {
-            NSLog(@"Username available");
-        }
-
-    }];
+    
+    FIRDatabaseReference *userRef = [firebaseDatabaseService.ref child:@"users"];
+    [userRef observeEventType:FIRDataEventTypeChildAdded
+        withBlock:^(FIRDataSnapshot *snapshot) {
+            
+        }];
 
 }
 
