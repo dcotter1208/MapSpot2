@@ -31,9 +31,6 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VqK-ql-kbV">
                                 <rect key="frame" x="281" y="243" width="38" height="30"/>
                                 <state key="normal" title="Login"/>
-                                <connections>
-                                    <action selector="loginButtonPressed:" destination="Sen-yn-3DL" eventType="touchUpInside" id="uYN-h4-6Dz"/>
-                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MTW-LQ-KFv">
                                 <rect key="frame" x="251" y="289" width="98" height="21"/>
@@ -67,10 +64,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="H13-V4-xsZ"/>
-                    <connections>
-                        <outlet property="emailTF" destination="70D-on-c7I" id="hoU-jV-huC"/>
-                        <outlet property="passwordTF" destination="cCX-mt-G5W" id="TY6-6W-LW4"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PdH-Cc-NMX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -192,21 +185,12 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Edf-Ja-x4a">
-                        <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" title="My Location" id="uXo-nf-Inq">
                             <color key="tintColor" red="0.0" green="0.51121367515905369" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="goBackToMyLocation:" destination="BYZ-38-t0r" id="WHt-bU-Odf"/>
                             </connections>
                         </barButtonItem>
-                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="74D-qo-BKN">
-                            <rect key="frame" x="180" y="7" width="240" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Sign Out"/>
-                            <connections>
-                                <action selector="signOutPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZvE-I6-j9i"/>
-                            </connections>
-                        </button>
                         <barButtonItem key="rightBarButtonItem" title="Standard" id="NL3-d9-cBG">
                             <color key="tintColor" red="0.0" green="0.51121367520000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
