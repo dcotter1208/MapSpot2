@@ -8,6 +8,9 @@
 
 #import "SignUpVC.h"
 #import "FirebaseDatabaseService.h"
+@import FirebaseDatabase;
+@import Firebase;
+@import FirebaseAuth;
 
 @interface SignUpVC ()
 
@@ -99,9 +102,29 @@
     return isValidPassword;
 }
 
+/*
+ -this is validating if the username exists but
+ if it doesn't it was not hitting the ELSE statement in the signUpNewUser IBAction.
+ Need to set Firebase security rules to coorelate with this method.
+ */
+-(void)validateUsernameUniqueness:(NSString *)username completion:(void(^)(FIRDataSnapshot *snapshot))completion {
+    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
+    [firebaseDatabaseService initWithReference];
+    
+    FIRDatabaseReference *userRef = [firebaseDatabaseService.ref child:@"users"];
+    FIRDatabaseQuery *usernameUniquenessQuery = [[userRef queryOrderedByChild:@"username"]queryEqualToValue:username];
+    [usernameUniquenessQuery observeEventType:FIRDataEventTypeChildAdded
+        withBlock:^(FIRDataSnapshot *snapshot) {
+            
+            completion(snapshot);
+        }];
+
+}
+
 #pragma mark Sign Up IBAction
 
 - (IBAction)signUpNewUser:(id)sender {
+
     //email valid but password fields don't match
     if ([self validateEmail:_emailTF.text] && ![_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
         [self signUpFailedAlertView:@"Sign Up Failed" message:@"Please make sure your passwords match."];

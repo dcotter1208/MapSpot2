@@ -25,11 +25,15 @@
 
 @interface MapSpotMapVC () <MKMapViewDelegate, CLLocationManagerDelegate>
 
-#pragma mark Properties
+#pragma mark Outlets
+
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *mapStyleNavBarButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *quickSpotNavBarButton;
 @property (nonatomic, strong) IBOutlet UILongPressGestureRecognizer *longPressGesture;
+
+#pragma mark Properties
+
 @property(nonatomic, strong) CLLocationManager *locationManager;
 @property(nonatomic, strong) CLLocation *newestLocation;
 @property(nonatomic) MKCoordinateRegion userLocation;
@@ -210,8 +214,19 @@
     [self performSegueWithIdentifier:@"segueToUserSpotCreationVC" sender:self];
 }
 
+//THIS IS ONLY TEMP WHILE IN DEVELOPMENT ******************
+
+- (IBAction)signOutPressed:(id)sender {
+    
+    NSError *error;
+    [[FIRAuth auth] signOut:&error];
+    if (error) {
+        NSLog(@"Sign Out Error: %@", error.description);
+    }
+    
+}
 
 
-
+//**********************
 
 @end
