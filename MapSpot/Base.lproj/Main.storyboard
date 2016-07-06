@@ -251,15 +251,23 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="220"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_background_photo" translatesAutoresizingMaskIntoConstraints="NO" id="Mwi-Vh-i4B">
+                                                <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_background_photo" translatesAutoresizingMaskIntoConstraints="NO" id="Mwi-Vh-i4B">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="220"/>
+                                                    <gestureRecognizers/>
+                                                    <connections>
+                                                        <outletCollection property="gestureRecognizers" destination="GcM-Yz-Qkq" appends="YES" id="r3v-p9-Phv"/>
+                                                    </connections>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_photo" translatesAutoresizingMaskIntoConstraints="NO" id="Sq3-4W-yL5">
+                                                <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_photo" translatesAutoresizingMaskIntoConstraints="NO" id="Sq3-4W-yL5">
                                                     <rect key="frame" x="8" y="29" width="160" height="160"/>
                                                     <color key="backgroundColor" red="0.0" green="0.51121367520000005" blue="1" alpha="0.77400323280000005" colorSpace="calibratedRGB"/>
+                                                    <gestureRecognizers/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="160" id="zDX-fW-qap"/>
                                                     </constraints>
+                                                    <connections>
+                                                        <outletCollection property="gestureRecognizers" destination="Zb4-4w-Yxo" appends="YES" id="qhS-Jr-0Pg"/>
+                                                    </connections>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -400,12 +408,40 @@
                             <outlet property="delegate" destination="49f-qj-ALZ" id="y10-d9-v3G"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="7Sr-wa-VNr">
+                        <nil key="title"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="xp5-mV-zhF">
+                            <connections>
+                                <segue destination="CaL-ne-Pio" kind="unwind" unwindAction="unwindToMapSpotMapVC:" id="6wi-yF-ZBZ"/>
+                            </connections>
+                        </barButtonItem>
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="d1H-ez-fnP">
+                            <rect key="frame" x="261" y="7" width="78" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Sign Out"/>
+                            <connections>
+                                <action selector="signOutPressed:" destination="49f-qj-ALZ" eventType="touchUpInside" id="stY-pN-3Xj"/>
+                            </connections>
+                        </button>
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="JZ3-0A-6Vh"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="backgroundProfilePhotoImageView" destination="Mwi-Vh-i4B" id="tbc-qX-s11"/>
                         <outlet property="profilePhotoImageView" destination="Sq3-4W-yL5" id="zi1-w9-9FE"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A8A-kY-D2B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="CaL-ne-Pio" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="Zb4-4w-Yxo">
+                    <connections>
+                        <action selector="profilePhotoSelected:" destination="49f-qj-ALZ" id="j6P-6e-fqb"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="GcM-Yz-Qkq">
+                    <connections>
+                        <action selector="backgroundProfilePhotoSelected:" destination="49f-qj-ALZ" id="fdf-ph-7ak"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="58" y="635"/>
         </scene>

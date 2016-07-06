@@ -214,19 +214,8 @@
     [self performSegueWithIdentifier:@"segueToUserSpotCreationVC" sender:self];
 }
 
-//THIS IS ONLY TEMP WHILE IN DEVELOPMENT ******************
-
-- (IBAction)signOutPressed:(id)sender {
-    
-    NSError *error;
-    [[FIRAuth auth] signOut:&error];
-    if (error) {
-        NSLog(@"Sign Out Error: %@", error.description);
-    }
+-(IBAction)unwindToMapSpotMapVC:(UIStoryboardSegue *)segue {
     
 }
-
-
-//**********************
 
 @end

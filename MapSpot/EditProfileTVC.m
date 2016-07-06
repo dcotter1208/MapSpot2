@@ -7,6 +7,7 @@
 //
 
 #import "EditProfileTVC.h"
+@import FirebaseAuth;
 
 @interface EditProfileTVC ()
 @property (weak, nonatomic) IBOutlet UIImageView *profilePhotoImageView;
@@ -35,6 +36,23 @@
     _profilePhotoImageView.layer.cornerRadius = _profilePhotoImageView.frame.size.height/2;
     _profilePhotoImageView.layer.masksToBounds = TRUE;
     _backgroundProfilePhotoImageView.layer.masksToBounds = TRUE;
+}
+
+- (IBAction)profilePhotoSelected:(id)sender {
+    NSLog(@"Profile Photo");
+}
+
+- (IBAction)backgroundProfilePhotoSelected:(id)sender {
+    NSLog(@"Background Phaoto");
+}
+
+- (IBAction)signOutPressed:(id)sender {
+    NSError *error;
+    [[FIRAuth auth] signOut:&error];
+    if (error) {
+        NSLog(@"Sign Out Error: %@", error.description);
+    }
+    
 }
 
 
