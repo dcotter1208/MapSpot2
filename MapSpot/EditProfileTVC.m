@@ -12,6 +12,11 @@
 @interface EditProfileTVC ()
 @property (weak, nonatomic) IBOutlet UIImageView *profilePhotoImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundProfilePhotoImageView;
+@property (weak, nonatomic) IBOutlet UITextView *bioTextView;
+@property (weak, nonatomic) IBOutlet UITextField *usernameTF;
+@property (weak, nonatomic) IBOutlet UITextField *nameTF;
+@property (weak, nonatomic) IBOutlet UITextField *locationTF;
+@property (weak, nonatomic) IBOutlet UITextField *DOBTF;
 
 @end
 
@@ -52,8 +57,17 @@
     if (error) {
         NSLog(@"Sign Out Error: %@", error.description);
     }
+}
+
+- (IBAction)savePressed:(id)sender {
+    
+    
+    
     
 }
+
+
+
 
 
 @end
