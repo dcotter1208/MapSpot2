@@ -113,18 +113,20 @@
     
     FIRDatabaseReference *userRef = [firebaseDatabaseService.ref child:@"users"];
     FIRDatabaseQuery *usernameUniquenessQuery = [[userRef queryOrderedByChild:@"username"]queryEqualToValue:username];
-    [usernameUniquenessQuery observeEventType:FIRDataEventTypeChildAdded
-        withBlock:^(FIRDataSnapshot *snapshot) {
-            
-            completion(snapshot);
-        }];
-
+    [usernameUniquenessQuery observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot *snapshot) {
+        
+        completion(snapshot);
+        
+    } withCancelBlock:^(NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
 }
 
 #pragma mark Sign Up IBAction
 
 - (IBAction)signUpNewUser:(id)sender {
-
+    
     //email valid but password fields don't match
     if ([self validateEmail:_emailTF.text] && ![_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
         [self signUpFailedAlertView:@"Sign Up Failed" message:@"Please make sure your passwords match."];
@@ -140,7 +142,16 @@
     } else if (_usernameTF.text.length < 5 && ![_usernameTF.text containsString:@" "]) {
         [self signUpFailedAlertView:@"Sign Up Failed" message:@"Username must be at least 5 characters (no white space.)"];
     } else {
-        [self signUpUserWithFirebase];
+        
+        [self validateUsernameUniqueness:_usernameTF.text completion:^(FIRDataSnapshot *snapshot) {
+            
+            if ([snapshot exists]) {
+                [self signUpFailedAlertView:@"Sign Up Failed" message:[NSString stringWithFormat:@"The username '%@' is taken.", _usernameTF.text]];
+            } else {
+                [self signUpUserWithFirebase];
+            }
+        
+        }];
     }
     
 }
