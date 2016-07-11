@@ -89,7 +89,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ksJ-VZ-vK3">
-                                <rect key="frame" x="20" y="179" width="560" height="30"/>
+                                <rect key="frame" x="20" y="223" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -99,43 +99,52 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="repeat password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xhG-Vw-O9y">
-                                <rect key="frame" x="20" y="228" width="560" height="30"/>
+                                <rect key="frame" x="20" y="272" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ypl-vW-fC2">
-                                <rect key="frame" x="273" y="296" width="55" height="30"/>
-                                <state key="normal" title="Sign Up"/>
-                                <connections>
-                                    <action selector="signUpNewUser:" destination="IIb-ah-QRZ" eventType="touchUpInside" id="iD2-UZ-IJN"/>
-                                </connections>
-                            </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rvl-xA-y9w">
                                 <rect key="frame" x="20" y="127" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="full name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uyq-OT-veF">
+                                <rect key="frame" x="20" y="174" width="560" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ypl-vW-fC2">
+                                <rect key="frame" x="273" y="354" width="55" height="30"/>
+                                <state key="normal" title="Sign Up"/>
+                                <connections>
+                                    <action selector="signUpNewUser:" destination="IIb-ah-QRZ" eventType="touchUpInside" id="iD2-UZ-IJN"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ksJ-VZ-vK3" firstAttribute="top" secondItem="rvl-xA-y9w" secondAttribute="bottom" constant="22" id="0Oh-LE-5z5"/>
-                            <constraint firstItem="ksJ-VZ-vK3" firstAttribute="trailing" secondItem="xhG-Vw-O9y" secondAttribute="trailing" id="5BF-bG-BFU"/>
-                            <constraint firstItem="Ypl-vW-fC2" firstAttribute="top" secondItem="xhG-Vw-O9y" secondAttribute="bottom" constant="38" id="6VU-9N-o2c"/>
-                            <constraint firstItem="rvl-xA-y9w" firstAttribute="leading" secondItem="ksJ-VZ-vK3" secondAttribute="leading" id="Cmh-BO-6w6"/>
-                            <constraint firstItem="OlV-zv-5p8" firstAttribute="leading" secondItem="N5n-ze-1kz" secondAttribute="leadingMargin" id="N14-87-BSd"/>
-                            <constraint firstItem="rvl-xA-y9w" firstAttribute="trailing" secondItem="ksJ-VZ-vK3" secondAttribute="trailing" id="NcR-rz-iRt"/>
-                            <constraint firstItem="OlV-zv-5p8" firstAttribute="trailing" secondItem="N5n-ze-1kz" secondAttribute="trailingMargin" id="Y9t-As-us0"/>
-                            <constraint firstItem="rvl-xA-y9w" firstAttribute="top" secondItem="OlV-zv-5p8" secondAttribute="bottom" constant="17" id="fS6-wb-uST"/>
-                            <constraint firstItem="OlV-zv-5p8" firstAttribute="trailing" secondItem="rvl-xA-y9w" secondAttribute="trailing" id="hr6-su-M7M"/>
-                            <constraint firstItem="xhG-Vw-O9y" firstAttribute="top" secondItem="ksJ-VZ-vK3" secondAttribute="bottom" constant="19" id="ldB-2V-B9c"/>
-                            <constraint firstItem="OlV-zv-5p8" firstAttribute="leading" secondItem="rvl-xA-y9w" secondAttribute="leading" id="puA-lS-l2a"/>
-                            <constraint firstItem="ksJ-VZ-vK3" firstAttribute="leading" secondItem="xhG-Vw-O9y" secondAttribute="leading" id="rpA-Wa-faw"/>
-                            <constraint firstItem="OlV-zv-5p8" firstAttribute="top" secondItem="GJJ-6k-Mb0" secondAttribute="bottom" constant="16" id="tEw-VK-a78"/>
-                            <constraint firstItem="xhG-Vw-O9y" firstAttribute="centerX" secondItem="Ypl-vW-fC2" secondAttribute="centerX" id="wWm-S0-fA6"/>
+                            <constraint firstItem="OlV-zv-5p8" firstAttribute="leading" secondItem="rvl-xA-y9w" secondAttribute="leading" id="11D-yL-BX4"/>
+                            <constraint firstItem="rvl-xA-y9w" firstAttribute="trailing" secondItem="uyq-OT-veF" secondAttribute="trailing" id="26F-78-Pke"/>
+                            <constraint firstItem="Ypl-vW-fC2" firstAttribute="top" secondItem="xhG-Vw-O9y" secondAttribute="bottom" constant="52" id="5ah-Uh-twB"/>
+                            <constraint firstItem="uyq-OT-veF" firstAttribute="top" secondItem="rvl-xA-y9w" secondAttribute="bottom" constant="17" id="7NF-rx-iDy"/>
+                            <constraint firstItem="uyq-OT-veF" firstAttribute="leading" secondItem="ksJ-VZ-vK3" secondAttribute="leading" id="Bo5-WC-f92"/>
+                            <constraint firstItem="OlV-zv-5p8" firstAttribute="trailing" secondItem="N5n-ze-1kz" secondAttribute="trailingMargin" id="C3f-GR-idh"/>
+                            <constraint firstItem="ksJ-VZ-vK3" firstAttribute="trailing" secondItem="xhG-Vw-O9y" secondAttribute="trailing" id="Ci2-IG-7Oi"/>
+                            <constraint firstItem="rvl-xA-y9w" firstAttribute="leading" secondItem="uyq-OT-veF" secondAttribute="leading" id="KW6-Pk-ZCi"/>
+                            <constraint firstItem="OlV-zv-5p8" firstAttribute="top" secondItem="GJJ-6k-Mb0" secondAttribute="bottom" constant="16" id="KZ4-9W-qBP"/>
+                            <constraint firstItem="uyq-OT-veF" firstAttribute="trailing" secondItem="ksJ-VZ-vK3" secondAttribute="trailing" id="R9o-1B-ZYf"/>
+                            <constraint firstItem="ksJ-VZ-vK3" firstAttribute="top" secondItem="uyq-OT-veF" secondAttribute="bottom" constant="19" id="ZWT-3T-dON"/>
+                            <constraint firstItem="rvl-xA-y9w" firstAttribute="top" secondItem="OlV-zv-5p8" secondAttribute="bottom" constant="17" id="b9v-Tg-5TM"/>
+                            <constraint firstItem="OlV-zv-5p8" firstAttribute="leading" secondItem="N5n-ze-1kz" secondAttribute="leadingMargin" id="dWZ-Oc-Fv3"/>
+                            <constraint firstItem="ksJ-VZ-vK3" firstAttribute="leading" secondItem="xhG-Vw-O9y" secondAttribute="leading" id="gCb-Hj-eiL"/>
+                            <constraint firstItem="OlV-zv-5p8" firstAttribute="trailing" secondItem="rvl-xA-y9w" secondAttribute="trailing" id="gLJ-LI-Msg"/>
+                            <constraint firstItem="xhG-Vw-O9y" firstAttribute="top" secondItem="ksJ-VZ-vK3" secondAttribute="bottom" constant="19" id="kHA-mO-aR3"/>
+                            <constraint firstItem="xhG-Vw-O9y" firstAttribute="centerX" secondItem="Ypl-vW-fC2" secondAttribute="centerX" id="zPx-PA-hR1"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="emailTF" destination="OlV-zv-5p8" id="0PQ-xK-rxS"/>
+                        <outlet property="nameTF" destination="uyq-OT-veF" id="v1c-Lb-Y3F"/>
                         <outlet property="passwordTF" destination="ksJ-VZ-vK3" id="pqm-n8-MPG"/>
                         <outlet property="repeatPasswordTF" destination="xhG-Vw-O9y" id="8QA-t8-eT7"/>
                         <outlet property="usernameTF" destination="rvl-xA-y9w" id="N03-eq-Hz4"/>

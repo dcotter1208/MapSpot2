@@ -10,7 +10,7 @@
 
 @implementation Spot
 
--(id)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt
+-(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt
 {
     self = [super init];
     
@@ -22,7 +22,7 @@
     return self;
 }
 
-+(id)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt
++(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt
 {
     return [[self alloc]initWithSpotCoordinates:spotCoordinates user:user createdAt:createdAt];
 }

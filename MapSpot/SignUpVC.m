@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *emailTF;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTF;
 @property (weak, nonatomic) IBOutlet UITextField *repeatPasswordTF;
+@property (weak, nonatomic) IBOutlet UITextField *nameTF;
 
 @end
 
@@ -39,30 +40,31 @@
 #pragma mark Firebase Helper Methods
 
 //Creates a user profile on Firebase Database.
--(void)addUserProfileInfo:(NSString *)userID username:(NSString *)username email:(NSString *)email {
+-(void)addUserProfileInfo:(NSString *)userID username:(NSString *)username fullName:(NSString *)fullName email:(NSString *)email {
     
     FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
     [firebaseDatabaseService initWithReference];
+    
     FIRDatabaseReference *userRef = [firebaseDatabaseService.ref child:@"users"].childByAutoId;
     NSDictionary *userProfile = @{@"userID": userID,
                                   @"username": username,
+                                  @"fullName": fullName,
                                   @"email": email};
+    
     [userRef setValue:userProfile];
 
 }
 
 //Signs up the user for Firebase email/password auth.
 -(void)signUpUserWithFirebase {
-    NSString *username = _usernameTF.text;
-    NSString *email = _emailTF.text;
     
     if ([_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
-        [[FIRAuth auth]createUserWithEmail:email password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
+        [[FIRAuth auth]createUserWithEmail:_emailTF.text password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
             
             if (error) {
                 NSLog(@"ERROR: %@", error);
             } else {
-                [self addUserProfileInfo:user.uid username:username email:email];
+                [self addUserProfileInfo:user.uid username:_usernameTF.text fullName:_nameTF.text email:_emailTF.text];
             }
         }];
     }
@@ -76,7 +78,6 @@
                                          alertControllerWithTitle:title
                                          message:message
                                          preferredStyle:UIAlertControllerStyleAlert];
-    
     
     UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
     [alertController addAction:ok];
@@ -141,6 +142,8 @@
         [self signUpFailedAlertView:@"Sign Up Failed" message:@"password must contain letters and numbers"];
     } else if (_usernameTF.text.length < 5 && ![_usernameTF.text containsString:@" "]) {
         [self signUpFailedAlertView:@"Sign Up Failed" message:@"Username must be at least 5 characters (no white space.)"];
+    } else if ([_nameTF.text isEqualToString:@""]) {
+        [self signUpFailedAlertView:@"Sign Up Failed" message:@"Please enter your name."];
     } else {
         [self validateUsernameUniqueness:_usernameTF.text completion:^(FIRDataSnapshot *snapshot) {
             if ([snapshot exists]) {

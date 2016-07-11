@@ -10,7 +10,7 @@
 
 @implementation Annotation
 
--(id)initWithAnnotationSpot:(Spot *)spot coordinate:(CLLocationCoordinate2D)coordinate {
+-(instancetype)initWithAnnotationSpot:(Spot *)spot coordinate:(CLLocationCoordinate2D)coordinate {
     self = [super init];
     
     if (self) {
@@ -23,7 +23,7 @@
     return self;
 }
 
-+(id)initWithAnnotationSpot:(Spot *)spot coordinate:(CLLocationCoordinate2D)coordinate {
++(instancetype)initWithAnnotationSpot:(Spot *)spot coordinate:(CLLocationCoordinate2D)coordinate {
     return [[self alloc]initWithAnnotationSpot:spot coordinate:coordinate];
 }
 

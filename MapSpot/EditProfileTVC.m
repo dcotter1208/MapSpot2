@@ -7,6 +7,8 @@
 //
 
 #import "EditProfileTVC.h"
+#import "FirebaseDatabaseService.h"
+#import "User.h"
 @import FirebaseAuth;
 
 @interface EditProfileTVC ()
@@ -35,12 +37,22 @@
     // Dispose of any resources that can be recreated.
 }
 
+//Configre the profile photos.
 -(void)viewWillLayoutSubviews {
     _profilePhotoImageView.layer.borderWidth = 4.0;
     _profilePhotoImageView.layer.borderColor = [[UIColor whiteColor]CGColor];
     _profilePhotoImageView.layer.cornerRadius = _profilePhotoImageView.frame.size.height/2;
     _profilePhotoImageView.layer.masksToBounds = TRUE;
     _backgroundProfilePhotoImageView.layer.masksToBounds = TRUE;
+}
+
+-(void)updateCurrentUserProfileOnFirebase:(User *)user {
+    
+    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
+    [firebaseDatabaseService initWithReference];
+    
+
+    
 }
 
 - (IBAction)profilePhotoSelected:(id)sender {
