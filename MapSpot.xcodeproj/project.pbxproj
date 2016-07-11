@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		43013AEB1D243A9C004D569F /* FirebaseDatabaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = 43013AEA1D243A9C004D569F /* FirebaseDatabaseService.m */; };
-		431180911D2D3B590002DC22 /* EditProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 431180901D2D3B590002DC22 /* EditProfileVC.m */; };
+		4311809D1D2D4DB50002DC22 /* EditProfileTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4311809C1D2D4DB50002DC22 /* EditProfileTVC.m */; };
 		43280D921CF87BF900F726FE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 43280D911CF87BF900F726FE /* main.m */; };
 		43280D951CF87BF900F726FE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 43280D941CF87BF900F726FE /* AppDelegate.m */; };
 		43280D981CF87BF900F726FE /* MapSpotMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43280D971CF87BF900F726FE /* MapSpotMapVC.m */; };
@@ -32,8 +32,8 @@
 		1946161770F870D8FC0DA413 /* Pods-MapSpot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapSpot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MapSpot/Pods-MapSpot.debug.xcconfig"; sourceTree = "<group>"; };
 		43013AE91D243A9C004D569F /* FirebaseDatabaseService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirebaseDatabaseService.h; sourceTree = "<group>"; };
 		43013AEA1D243A9C004D569F /* FirebaseDatabaseService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirebaseDatabaseService.m; sourceTree = "<group>"; };
-		4311808F1D2D3B590002DC22 /* EditProfileVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileVC.h; sourceTree = "<group>"; };
-		431180901D2D3B590002DC22 /* EditProfileVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileVC.m; sourceTree = "<group>"; };
+		4311809B1D2D4DB50002DC22 /* EditProfileTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileTVC.h; sourceTree = "<group>"; };
+		4311809C1D2D4DB50002DC22 /* EditProfileTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileTVC.m; sourceTree = "<group>"; };
 		43280D8D1CF87BF900F726FE /* MapSpot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapSpot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43280D911CF87BF900F726FE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		43280D931CF87BF900F726FE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -139,8 +139,8 @@
 			isa = PBXGroup;
 			children = (
 				43D8DEF01D0105290060D1BF /* Login */,
-				4311808F1D2D3B590002DC22 /* EditProfileVC.h */,
-				431180901D2D3B590002DC22 /* EditProfileVC.m */,
+				4311809B1D2D4DB50002DC22 /* EditProfileTVC.h */,
+				4311809C1D2D4DB50002DC22 /* EditProfileTVC.m */,
 				43280D961CF87BF900F726FE /* MapSpotMapVC.h */,
 				43280D971CF87BF900F726FE /* MapSpotMapVC.m */,
 				43AB329B1CFACCF300631D92 /* UserSpotCreationVC.h */,
@@ -303,9 +303,9 @@
 				43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */,
 				43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */,
 				4374D3181D010ECA00C8FE5B /* User.m in Sources */,
-				431180911D2D3B590002DC22 /* EditProfileVC.m in Sources */,
 				43280D981CF87BF900F726FE /* MapSpotMapVC.m in Sources */,
 				43280D951CF87BF900F726FE /* AppDelegate.m in Sources */,
+				4311809D1D2D4DB50002DC22 /* EditProfileTVC.m in Sources */,
 				43013AEB1D243A9C004D569F /* FirebaseDatabaseService.m in Sources */,
 				43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */,
 				43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */,

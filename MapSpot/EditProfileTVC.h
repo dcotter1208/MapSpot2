@@ -1,13 +1,13 @@
 //
-//  EditProfileVC.h
+//  EditProfileTVC.h
 //  MapSpot
 //
 //  Created by DetroitLabs on 7/6/16.
 //  Copyright © 2016 DetroitLabs. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface EditProfileVC : NSObject
+@interface EditProfileTVC : UITableViewController
 
 @end
