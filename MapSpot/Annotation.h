@@ -17,7 +17,7 @@
 @property (nonatomic, copy) NSString *subtitle;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 
--(id)initWithAnnotationSpot:(Spot *)spot coordinate:(CLLocationCoordinate2D)coordinate;
-+(id)initWithAnnotationSpot:(Spot *)spot coordinate:(CLLocationCoordinate2D)coordinate;
+-(instancetype)initWithAnnotationSpot:(Spot *)spot coordinate:(CLLocationCoordinate2D)coordinate;
++(instancetype)initWithAnnotationSpot:(Spot *)spot coordinate:(CLLocationCoordinate2D)coordinate;
 
 @end

@@ -23,8 +23,8 @@
 @property(nonatomic) CLLocationCoordinate2D spotCoordinates;
 @property(nonatomic, strong) NSString *message;
 
--(id)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt;
-+(id)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt;
+-(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt;
++(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt;
 
 
 @end

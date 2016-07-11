@@ -22,6 +22,7 @@
 		43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */; };
 		43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329F1CFB8C1E00631D92 /* Spot.m */; };
 		43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB32A21CFBF9A700631D92 /* Annotation.m */; };
+		43ACBAAE1D34095F0082FE0A /* CurrentUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ACBAAD1D34095F0082FE0A /* CurrentUser.m */; };
 		43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEB1D0104F00060D1BF /* LoginVC.m */; };
 		43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEE1D0105210060D1BF /* SignUpVC.m */; };
 		FE717BA2A2685DF966FD7AD0 /* libPods-MapSpot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E4651FF2387130EC55898D /* libPods-MapSpot.a */; };
@@ -55,6 +56,8 @@
 		43AB329F1CFB8C1E00631D92 /* Spot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Spot.m; sourceTree = "<group>"; };
 		43AB32A11CFBF9A700631D92 /* Annotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Annotation.h; sourceTree = "<group>"; };
 		43AB32A21CFBF9A700631D92 /* Annotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Annotation.m; sourceTree = "<group>"; };
+		43ACBAAC1D34095F0082FE0A /* CurrentUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentUser.h; sourceTree = "<group>"; };
+		43ACBAAD1D34095F0082FE0A /* CurrentUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentUser.m; sourceTree = "<group>"; };
 		43D8DEEA1D0104F00060D1BF /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		43D8DEEB1D0104F00060D1BF /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		43D8DEED1D0105210060D1BF /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
@@ -131,6 +134,8 @@
 				4374D3171D010ECA00C8FE5B /* User.m */,
 				43013AE91D243A9C004D569F /* FirebaseDatabaseService.h */,
 				43013AEA1D243A9C004D569F /* FirebaseDatabaseService.m */,
+				43ACBAAC1D34095F0082FE0A /* CurrentUser.h */,
+				43ACBAAD1D34095F0082FE0A /* CurrentUser.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -306,6 +311,7 @@
 				43280D981CF87BF900F726FE /* MapSpotMapVC.m in Sources */,
 				43280D951CF87BF900F726FE /* AppDelegate.m in Sources */,
 				4311809D1D2D4DB50002DC22 /* EditProfileTVC.m in Sources */,
+				43ACBAAE1D34095F0082FE0A /* CurrentUser.m in Sources */,
 				43013AEB1D243A9C004D569F /* FirebaseDatabaseService.m in Sources */,
 				43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */,
 				43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */,

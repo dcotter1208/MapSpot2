@@ -1,15 +1,15 @@
 //
-//  User.h
+//  CurrentUser.h
 //  MapSpot
 //
-//  Created by DetroitLabs on 6/2/16.
+//  Created by DetroitLabs on 7/11/16.
 //  Copyright © 2016 DetroitLabs. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface User : NSObject
+@interface CurrentUser : NSObject
 
 @property (nonatomic, strong) NSString *username;
 @property (nonatomic, strong) NSString *fullName;
@@ -20,6 +20,8 @@
 @property (nonatomic, strong) UIImage *profilePhoto;
 @property (nonatomic, strong) UIImage *backgroundProfilePhoto;
 
--(instancetype)initWithUsername:(NSString *)username fullName:(NSString *)fullName email:(NSString *)email userId:(NSString *)userId;
+-(void)initWithUsername:(NSString *)username fullName:(NSString *)fullName email:(NSString *)email userId:(NSString *)userId;
+
++(instancetype)sharedInstance;
 
 @end
