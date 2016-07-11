@@ -8,6 +8,7 @@
 
 #import "SignUpVC.h"
 #import "FirebaseDatabaseService.h"
+#import "CurrentUser.h"
 @import FirebaseDatabase;
 @import Firebase;
 @import FirebaseAuth;
@@ -65,6 +66,7 @@
                 NSLog(@"ERROR: %@", error);
             } else {
                 [self addUserProfileInfo:user.uid username:_usernameTF.text fullName:_nameTF.text email:_emailTF.text];
+                [self setCurrentUser];
             }
         }];
     }
@@ -101,6 +103,12 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL isValidPassword = [predicate evaluateWithObject:password];
     return isValidPassword;
+}
+
+-(void)setCurrentUser {
+    CurrentUser *currentUser = [CurrentUser sharedInstance];
+    [currentUser initWithUsername:_usernameTF.text fullName:_nameTF.text email:_emailTF.text userId:[FIRAuth auth].currentUser.uid];
+    NSLog(@"Current User: username: %@, full name: %@, email: %@, userId: %@", currentUser.username, currentUser.fullName, currentUser.email, currentUser.userId);
 }
 
 /*

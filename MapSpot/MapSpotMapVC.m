@@ -18,6 +18,7 @@
 #import "FirebaseDatabaseService.h"
 #import "UserSpotCreationVC.h"
 #import "Annotation.h"
+#import "CurrentUser.h"
 @import FirebaseAuth;
 @import FirebaseDatabase;
 @import MapKit;
@@ -48,7 +49,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
@@ -217,5 +218,6 @@
 -(IBAction)unwindToMapSpotMapVC:(UIStoryboardSegue *)segue {
     
 }
+
 
 @end
