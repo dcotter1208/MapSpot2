@@ -150,6 +150,11 @@
         }];
 }
 
+/*
+ Checks if the CurrentUser singleton is already set.
+ If it isn't then it calls 'getCurrentUserInfoFromFirebaseDatabaseWithCompletion',
+ which then calls 'setCurrentUser' and sets the CurrentUser singleton.
+ */
 -(void)checkForCurrentUserValue {
     if ([CurrentUser sharedInstance].username == nil) {
         [self getCurrentUserInfoFromFirebaseDatabaseWithCompletion:^(FIRDataSnapshot *snapshot) {
@@ -158,6 +163,7 @@
     }
 }
 
+//Queries the userprofile for the currently logged in user.
 -(void)getCurrentUserInfoFromFirebaseDatabaseWithCompletion:(void(^)(FIRDataSnapshot *snapshot))completion {
     FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
     [firebaseDatabaseService initWithReference];
@@ -169,6 +175,7 @@
     }];
 }
 
+//Sets the User
 -(void)setCurrentUser:(FIRDataSnapshot *)snapshot {
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
