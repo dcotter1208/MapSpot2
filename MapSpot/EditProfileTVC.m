@@ -8,7 +8,7 @@
 
 #import "EditProfileTVC.h"
 #import "FirebaseDatabaseService.h"
-#import "User.h"
+#import "CurrentUser.h"
 @import FirebaseAuth;
 
 @interface EditProfileTVC ()
@@ -29,6 +29,7 @@
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
+    NSLog(@"CURRENT USER: %@", [CurrentUser sharedInstance].username);
     
 }
 
@@ -46,7 +47,7 @@
     _backgroundProfilePhotoImageView.layer.masksToBounds = TRUE;
 }
 
--(void)updateCurrentUserProfileOnFirebase:(User *)user {
+-(void)updateCurrentUserProfileOnFirebase:(CurrentUser *)user {
     
     FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
     [firebaseDatabaseService initWithReference];

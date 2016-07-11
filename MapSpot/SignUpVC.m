@@ -108,7 +108,6 @@
 -(void)setCurrentUser {
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     [currentUser initWithUsername:_usernameTF.text fullName:_nameTF.text email:_emailTF.text userId:[FIRAuth auth].currentUser.uid];
-    NSLog(@"Current User: username: %@, full name: %@, email: %@, userId: %@", currentUser.username, currentUser.fullName, currentUser.email, currentUser.userId);
 }
 
 /*
