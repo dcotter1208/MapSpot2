@@ -135,7 +135,7 @@
 //Queries ALL the spots from Firebase
 -(void)querySpotsFromFirebase {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    [firebaseOperation queryFirebaseWithNoConstraintsAndObserveEventTypeWithChild:@"spots" andFIRDataEventType:FIRDataEventTypeChildAdded completion:^(FIRDataSnapshot *snapshot) {
+    [firebaseOperation queryFirebaseWithNoConstraintsForChild:@"spots" andFIRDataEventType:FIRDataEventTypeChildAdded completion:^(FIRDataSnapshot *snapshot) {
         Spot *spot = [[Spot alloc]
                       initWithSpotCoordinates:CLLocationCoordinate2DMake([snapshot.value[@"latitude"] doubleValue], [snapshot.value[@"longitude"] doubleValue])
                       user:snapshot.value[@"username"]

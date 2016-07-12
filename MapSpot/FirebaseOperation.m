@@ -19,7 +19,7 @@
     return self;
 }
 
--(void)queryFirebaseWithNoConstraintsAndObserveEventTypeWithChild:(NSString *)child andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion {
+-(void)queryFirebaseWithNoConstraintsForChild:(NSString *)child andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion {
     
     FIRDatabaseReference *childRef = [_firebaseDatabaseService.ref child:child];
     [childRef observeEventType:FIRDataEventType withBlock:^(FIRDataSnapshot *snapshot) {

@@ -15,7 +15,9 @@
 
 @property (nonatomic, strong) FirebaseDatabaseService *firebaseDatabaseService;
 
--(void)queryFirebaseWithNoConstraintsAndObserveEventTypeWithChild:(NSString *)child andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion;
+-(void)queryFirebaseWithNoConstraintsForChild:(NSString *)child andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion;
+
+-(void)queryFirebaseWithConstraintsForChild;
 
 -(instancetype)init;
 
