@@ -109,8 +109,18 @@
     
     [self validateUsernameUniqueness:_usernameTF.text completion:^(FIRDataSnapshot *snapshot) {
         
-        if ([snapshot exists] && (![snapshot.value[@"userId"] isEqualToString:_currentUser.userId])) {
+        NSString *snapshotUserId;
+        
+        for (FIRDataSnapshot *child in snapshot.children) {
+            snapshotUserId = child.value[@"userId"];
+        }
+        
+        if ([snapshot exists] && (![snapshotUserId isEqualToString:_currentUser.userId])) {
+            //ADD A UIALERTVIEW HERE***************
             NSLog(@"username taken!!!!!!!!!!!!!!!!!");
+        } else if (_usernameTF.text.length < 5 || [_usernameTF.text containsString:@" "]) {
+            //ADD A UIALERTVIEW HERE***************
+            NSLog(@"Username can't be less than 5 and no whitespaces");
         } else {
             NSDictionary *userProfileToUpdate = @{@"username": _usernameTF.text,
                                                   @"email": _currentUser.email,
@@ -122,9 +132,7 @@
             
             [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
         }
-        
     }];
-    
     
 }
 
