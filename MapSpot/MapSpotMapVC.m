@@ -15,7 +15,8 @@
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
 #import "Spot.h"
-#import "FirebaseDatabaseService.h"
+//#import "FirebaseDatabaseService.h"
+#import "FirebaseOperation.h"
 #import "UserSpotCreationVC.h"
 #import "Annotation.h"
 #import "CurrentUser.h"
@@ -133,21 +134,16 @@
 
 //Queries ALL the spots from Firebase
 -(void)querySpotsFromFirebase {
-    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
-    [firebaseDatabaseService initWithReference];
-    
-    FIRDatabaseReference *spotRef = [firebaseDatabaseService.ref child:@"spots"];
-    
-    [spotRef observeEventType:FIRDataEventTypeChildAdded
-        withBlock:^(FIRDataSnapshot *snapshot) {
-            Spot *spot = [[Spot alloc]
-                          initWithSpotCoordinates:CLLocationCoordinate2DMake([snapshot.value[@"latitude"] doubleValue], [snapshot.value[@"longitude"] doubleValue])
-                          user:snapshot.value[@"username"]
-                          createdAt:snapshot.value[@"createdAt"]];
-            spot.message = snapshot.value[@"message"];
-            
-            [self addSpotToMap:spot];
-        }];
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    [firebaseOperation queryFirebaseWithNoConstraintsForChild:@"spots" andFIRDataEventType:FIRDataEventTypeChildAdded completion:^(FIRDataSnapshot *snapshot) {
+        Spot *spot = [[Spot alloc]
+                      initWithSpotCoordinates:CLLocationCoordinate2DMake([snapshot.value[@"latitude"] doubleValue], [snapshot.value[@"longitude"] doubleValue])
+                      user:snapshot.value[@"username"]
+                      createdAt:snapshot.value[@"createdAt"]];
+        spot.message = snapshot.value[@"message"];
+        
+        [self addSpotToMap:spot];
+    }];
 }
 
 /*
@@ -157,21 +153,14 @@
  */
 -(void)checkForCurrentUserValue {
     if ([CurrentUser sharedInstance].username == nil) {
-        [self getCurrentUserInfoFromFirebaseDatabaseWithCompletion:^(FIRDataSnapshot *snapshot) {
-            [self setCurrentUser:snapshot];
-        }];
+        [self getCurrentUserProfileFromFirebase];
     }
 }
 
-//Queries the userprofile for the currently logged in user.
--(void)getCurrentUserInfoFromFirebaseDatabaseWithCompletion:(void(^)(FIRDataSnapshot *snapshot))completion {
-    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
-    [firebaseDatabaseService initWithReference];
-    FIRDatabaseQuery *currentUserQuery = [[[firebaseDatabaseService.ref child:@"users"]queryOrderedByChild:@"userID"]queryEqualToValue:[FIRAuth auth].currentUser.uid];
-    [currentUserQuery observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot *snapshot) {
-        completion(snapshot);
-    } withCancelBlock:^(NSError *error) {
-        NSLog(@"Error***ERROR***ERROR*****ERROR: %@", error);
+-(void)getCurrentUserProfileFromFirebase {
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userID" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
+        [self setCurrentUser:snapshot];
     }];
 }
 
@@ -181,9 +170,9 @@
     
     for (FIRDataSnapshot *child in snapshot.children) {
         [currentUser initWithUsername:child.value[@"username"] fullName:child.value[@"fullName"] email:child.value[@"email"] userId:child.value[@"userID"]];
+        NSLog(@"Current User *************: %@", currentUser.username);
     }
 }
-
 
 #pragma mark Navigation:
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

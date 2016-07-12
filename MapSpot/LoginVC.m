@@ -9,6 +9,7 @@
 #import "LoginVC.h"
 #import "CurrentUser.h"
 #import "FirebaseDatabaseService.h"
+#import "FirebaseOperation.h"
 @import FirebaseAuth;
 
 @interface LoginVC ()
@@ -29,14 +30,10 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)getCurrentUserInfoFromFirebaseDatabaseWithCompletion:(void(^)(FIRDataSnapshot *snapshot))completion {
-    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
-    [firebaseDatabaseService initWithReference];
-    FIRDatabaseQuery *currentUserQuery = [[[firebaseDatabaseService.ref child:@"users"]queryOrderedByChild:@"userID"]queryEqualToValue:[FIRAuth auth].currentUser.uid];
-    [currentUserQuery observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot *snapshot) {
-        completion(snapshot);
-    } withCancelBlock:^(NSError *error) {
-        NSLog(@"Error***ERROR***ERROR*****ERROR: %@", error);
+-(void)getCurrentUserProfileFromFirebase {
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userID" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
+        [self setCurrentUser:snapshot];
     }];
 }
 
@@ -47,7 +44,6 @@
         [currentUser initWithUsername:child.value[@"username"] fullName:child.value[@"fullName"] email:child.value[@"email"] userId:child.value[@"userID"]];
     }
 }
-
 
 //Used to display alert for failed login.
 -(void)loginFailedAlertView:(NSString *)title message:(NSString *)message {
@@ -74,9 +70,7 @@
                 [self loginFailedAlertView:@"Login Failed" message:@"Please try again."];
             }
         } else {
-            [self getCurrentUserInfoFromFirebaseDatabaseWithCompletion:^(FIRDataSnapshot *snapshot) {
-                [self setCurrentUser:snapshot];
-            }];
+            [self getCurrentUserProfileFromFirebase];
         }
     }];
 }

@@ -7,7 +7,8 @@
 //
 
 #import "UserSpotCreationVC.h"
-#import "FirebaseDatabaseService.h"
+#import "FirebaseOperation.h"
+#import "CurrentUser.h"
 
 @interface UserSpotCreationVC ()
 @property (weak, nonatomic) IBOutlet UITextView *messageTF;
@@ -47,25 +48,24 @@
  Used to create a spot when the createSpotButton is pressed.
  It then saves the spot to Firebase.
 */
--(void)createSpotWithUsername:(NSString *)username message:(NSString *)message latitude:(NSString *)latitude longitude:(NSString *)longitude {
+-(void)createSpotWithMessage:(NSString *)message latitude:(NSString *)latitude longitude:(NSString *)longitude {
     NSDate *now = [NSDate date];
 
-    FIRAuth *auth = [FIRAuth auth];
-    FIRUser *currentUser = [auth currentUser];
+    FIRUser *currentUserAuth = [[FIRAuth auth]currentUser];
+    CurrentUser *currentUser = [CurrentUser sharedInstance];
     
-    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
-    [firebaseDatabaseService initWithReference];
-    FIRDatabaseReference *spotRef = [firebaseDatabaseService.ref child:@"spots"].childByAutoId;
-                                 
-    NSDictionary *spot = @{@"userID": currentUser.uid,
-                           @"username": username,
-                           @"email": currentUser.email,
+    NSDictionary *spot = @{@"userID": currentUserAuth.uid,
+                           @"username": currentUser.username,
+                           @"email": currentUserAuth.email,
                            @"latitude":latitude,
                            @"longitude": longitude,
                            @"message": message,
                            @"createdAt": [self dateToStringFormatter:now]};
     
-    [spotRef setValue:spot];
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    [firebaseOperation createSpotForCurrentUser:spot];
+
 }
 
 #pragma mark IBActions
@@ -75,8 +75,8 @@
     
     NSString *latAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude];
     NSString *longAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude];
-
-    [self createSpotWithUsername:@"DonovanCotter" message:_messageTF.text latitude: latAsString longitude:longAsString];
+    
+    [self createSpotWithMessage:_messageTF.text latitude: latAsString longitude:longAsString];
     
 }
 
