@@ -168,10 +168,7 @@
 
 //Sets the CurrentUser singleton
 -(void)setCurrentUser:(FIRDataSnapshot *)snapshot {
-    
-    NSLog(@"Called");
 
-    
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
     for (FIRDataSnapshot *child in snapshot.children) {

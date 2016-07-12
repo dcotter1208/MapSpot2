@@ -80,6 +80,8 @@
 
 - (IBAction)savePressed:(id)sender {
     
+    NSLog(@"EMAIK: %@", _currentUser.email);
+    
     NSDictionary *userProfileToUpdate = @{@"username": _usernameTF.text,
                                           @"email": _currentUser.email,
                                           @"userId": _currentUser.userId,

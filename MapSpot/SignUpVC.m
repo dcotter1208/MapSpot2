@@ -43,16 +43,14 @@
 //Creates a user profile on Firebase Database.
 -(void)addUserProfileInfo:(NSString *)userId username:(NSString *)username fullName:(NSString *)fullName email:(NSString *)email {
     
-    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
-    [firebaseDatabaseService initWithReference];
-    
-    FIRDatabaseReference *userRef = [firebaseDatabaseService.ref child:@"users"].childByAutoId;
     NSDictionary *userProfile = @{@"userId": userId,
                                   @"username": username,
                                   @"fullName": fullName,
                                   @"email": email};
     
-    [userRef setValue:userProfile];
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    [firebaseOperation setValueForFirebaseChild:@"users" value:userProfile];
 
 }
 
@@ -134,19 +132,6 @@
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"username" queryEqualToValue:username andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
         completion(snapshot);
     }];
-    
-//    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
-//    [firebaseDatabaseService initWithReference];
-//    
-//    FIRDatabaseReference *userRef = [firebaseDatabaseService.ref child:@"users"];
-//    FIRDatabaseQuery *usernameUniquenessQuery = [[userRef queryOrderedByChild:@"username"]queryEqualToValue:username];
-//    [usernameUniquenessQuery observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot *snapshot) {
-//        
-//        completion(snapshot);
-//        
-//    } withCancelBlock:^(NSError *error) {
-//        NSLog(@"Error: %@", error);
-//    }];
 
 }
 
