@@ -58,7 +58,6 @@
 -(void)updateCurrentUserProfileOnFirebase:(CurrentUser *)user {
     
     [_firebaseOperation listenForChildNodeChanges:@"users" completion:^(CurrentUser *updatedCurrentUser) {
-        NSLog(@"&&&&&&&&&& Updated Current User: %@", updatedCurrentUser.username);
         [self setUserProfileFields:updatedCurrentUser];
     }];
 }
@@ -99,8 +98,6 @@
     _locationTF.text = currentUser.location;
     _bioTextView.text = currentUser.bio;
     _DOBTF.text = currentUser.DOB;
-    
-    NSLog(@"*********Current Username: %@**********", currentUser.username);
     
     if (currentUser.profilePhoto != nil) {
         _profilePhotoImageView.image = currentUser.profilePhoto;

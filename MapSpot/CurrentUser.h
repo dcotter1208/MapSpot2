@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+@import FirebaseDatabase;
 
 @interface CurrentUser : NSObject
 
@@ -25,6 +26,8 @@
 @property (nonatomic, strong) NSString *profileKey;
 
 -(void)initWithUsername:(NSString *)username fullName:(NSString *)fullName email:(NSString *)email userId:(NSString *)userId;
+
+-(void)updateCurrentUser:(FIRDataSnapshot *)snapshot;
 
 +(instancetype)sharedInstance;
 
