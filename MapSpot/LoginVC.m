@@ -9,6 +9,7 @@
 #import "LoginVC.h"
 #import "CurrentUser.h"
 #import "FirebaseDatabaseService.h"
+#import "FirebaseOperation.h"
 @import FirebaseAuth;
 
 @interface LoginVC ()

@@ -27,4 +27,14 @@
     }];
 }
 
+-(void)queryFirebaseWithConstraintsForChild:(NSString *)child queryOrderedByChild:(NSString *)childKey queryEqualToValue:(NSString *)value andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion {
+    
+    FIRDatabaseQuery *query = [[[_firebaseDatabaseService.ref child:child]queryOrderedByChild:childKey] queryEqualToValue:value];
+    
+    [query observeSingleEventOfType:FIRDataEventType withBlock:^(FIRDataSnapshot *snapshot) {
+        completion(snapshot);
+    }];
+    
+}
+
 @end
