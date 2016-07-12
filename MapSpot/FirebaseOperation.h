@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FirebaseDatabaseService.h"
+#import "CurrentUser.h"
 @import Firebase;
 @import FirebaseDatabase;
 
@@ -15,11 +16,18 @@
 
 @property (nonatomic, strong) FirebaseDatabaseService *firebaseDatabaseService;
 
+//Queries all child nodes of a specified reference with no constraints.
 -(void)queryFirebaseWithNoConstraintsForChild:(NSString *)child andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion;
 
+//Used to query a child node with the constraints of orderByChild and queryEqualToValue
 -(void)queryFirebaseWithConstraintsForChild:(NSString *)child queryOrderedByChild:(NSString *)childKey queryEqualToValue:(NSString *)value andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion;
 
+//Used to create a child node.
 -(void)setValueForFirebaseChild:(NSString *)child value:(NSDictionary *)value;
+
+-(void)listenForChildNodeChanges:(NSString *)child completion:(void(^)(CurrentUser *updatedCurrentUser))completion;
+
+-(void)updateChildNode:(NSString *)child nodeToUpdate:(NSDictionary *)nodeToUpdate;
 
 -(instancetype)init;
 

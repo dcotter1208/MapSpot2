@@ -54,7 +54,7 @@
     FIRUser *currentUserAuth = [[FIRAuth auth]currentUser];
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
-    NSDictionary *spot = @{@"userID": currentUserAuth.uid,
+    NSDictionary *spot = @{@"userId": currentUserAuth.uid,
                            @"username": currentUser.username,
                            @"email": currentUserAuth.email,
                            @"latitude":latitude,

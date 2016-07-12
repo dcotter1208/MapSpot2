@@ -7,7 +7,7 @@
 //
 
 #import "EditProfileTVC.h"
-#import "FirebaseDatabaseService.h"
+#import "FirebaseOperation.h"
 #import "CurrentUser.h"
 @import FirebaseAuth;
 
@@ -19,16 +19,26 @@
 @property (weak, nonatomic) IBOutlet UITextField *nameTF;
 @property (weak, nonatomic) IBOutlet UITextField *locationTF;
 @property (weak, nonatomic) IBOutlet UITextField *DOBTF;
+@property (nonatomic, strong) CurrentUser *currentUser;
+@property (nonatomic, strong) FirebaseOperation *firebaseOperation;
 
 @end
 
 @implementation EditProfileTVC
 
 - (void)viewDidLoad {
+    _currentUser = [CurrentUser sharedInstance];
+    _firebaseOperation = [[FirebaseOperation alloc]init];
+    [self updateCurrentUserProfileOnFirebase:_currentUser];
     [super viewDidLoad];
     
+    //This creates a whie space at the bottom where there are no more cells so there are no ghost cells present.
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [self setUserProfileFields:_currentUser];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -47,9 +57,10 @@
 
 -(void)updateCurrentUserProfileOnFirebase:(CurrentUser *)user {
     
-    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
-    [firebaseDatabaseService initWithReference];
-    
+    [_firebaseOperation listenForChildNodeChanges:@"users" completion:^(CurrentUser *updatedCurrentUser) {
+        NSLog(@"&&&&&&&&&& Updated Current User: %@", updatedCurrentUser.username);
+        [self setUserProfileFields:updatedCurrentUser];
+    }];
 }
 
 - (IBAction)profilePhotoSelected:(id)sender {
@@ -70,11 +81,33 @@
 
 - (IBAction)savePressed:(id)sender {
     
+    NSDictionary *userProfileToUpdate = @{@"username": _usernameTF.text,
+                                          @"email": _currentUser.email,
+                                          @"userId": _currentUser.userId,
+                                          @"fullName": _nameTF.text,
+                                          @"bio": _bioTextView.text,
+                                          @"location": _locationTF.text,
+                                          @"DOB": _DOBTF.text};
     
+    [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
     
 }
 
-
+-(void)setUserProfileFields:(CurrentUser *)currentUser {
+    _usernameTF.text = currentUser.username;
+    _nameTF.text = currentUser.fullName;
+    _locationTF.text = currentUser.location;
+    _bioTextView.text = currentUser.bio;
+    _DOBTF.text = currentUser.DOB;
+    
+    NSLog(@"*********Current Username: %@**********", currentUser.username);
+    
+    if (currentUser.profilePhoto != nil) {
+        _profilePhotoImageView.image = currentUser.profilePhoto;
+        _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
+    }
+    
+}
 
 
 

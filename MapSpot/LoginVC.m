@@ -31,7 +31,7 @@
 
 -(void)getCurrentUserProfileFromFirebase {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userID" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
         [self setCurrentUser:snapshot];
     }];
 }
@@ -40,8 +40,8 @@
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
     for (FIRDataSnapshot *child in snapshot.children) {
-        [currentUser initWithUsername:child.value[@"username"] fullName:child.value[@"fullName"] email:child.value[@"email"] userId:child.value[@"userID"]];
-        currentUser.currentUserProfileKey = child.key;
+        [currentUser initWithUsername:child.value[@"username"] fullName:child.value[@"fullName"] email:child.value[@"email"] userId:child.value[@"userId"]];
+        currentUser.profileKey = child.key;
     }
 }
 
