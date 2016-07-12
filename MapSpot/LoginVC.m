@@ -8,7 +8,6 @@
 
 #import "LoginVC.h"
 #import "CurrentUser.h"
-#import "FirebaseDatabaseService.h"
 #import "FirebaseOperation.h"
 @import FirebaseAuth;
 
@@ -42,6 +41,7 @@
     
     for (FIRDataSnapshot *child in snapshot.children) {
         [currentUser initWithUsername:child.value[@"username"] fullName:child.value[@"fullName"] email:child.value[@"email"] userId:child.value[@"userID"]];
+        currentUser.currentUserProfileKey = child.key;
     }
 }
 

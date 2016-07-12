@@ -38,11 +38,11 @@
     }];
 }
 
--(void)createSpotForCurrentUser:(NSDictionary *)spot {
+-(void)setValueForFirebaseChild:(NSString *)child value:(NSDictionary *)value {
     
-    FIRDatabaseReference *spotRef = [_firebaseDatabaseService.ref child:@"spots"].childByAutoId;
+    FIRDatabaseReference *childRef = [_firebaseDatabaseService.ref child:child].childByAutoId;
 
-    [spotRef setValue:spot];
+    [childRef setValue:value];
     
 }
 

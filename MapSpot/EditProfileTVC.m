@@ -28,8 +28,6 @@
     [super viewDidLoad];
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-
-    NSLog(@"CURRENT USER: %@", [CurrentUser sharedInstance].username);
     
 }
 
@@ -52,8 +50,6 @@
     FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
     [firebaseDatabaseService initWithReference];
     
-
-    
 }
 
 - (IBAction)profilePhotoSelected:(id)sender {
@@ -73,7 +69,6 @@
 }
 
 - (IBAction)savePressed:(id)sender {
-    
     
     
     

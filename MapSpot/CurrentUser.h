@@ -19,6 +19,7 @@
 @property (nonatomic, strong) NSString *backgroundProfilePhotoDownloadURL;
 @property (nonatomic, strong) UIImage *profilePhoto;
 @property (nonatomic, strong) UIImage *backgroundProfilePhoto;
+@property (nonatomic, strong) NSString *currentUserProfileKey;
 
 -(void)initWithUsername:(NSString *)username fullName:(NSString *)fullName email:(NSString *)email userId:(NSString *)userId;
 

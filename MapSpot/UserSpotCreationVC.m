@@ -64,7 +64,7 @@
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
-    [firebaseOperation createSpotForCurrentUser:spot];
+    [firebaseOperation setValueForFirebaseChild:@"spots" value:spot];
 
 }
 

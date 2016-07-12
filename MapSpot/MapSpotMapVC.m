@@ -15,7 +15,6 @@
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
 #import "Spot.h"
-//#import "FirebaseDatabaseService.h"
 #import "FirebaseOperation.h"
 #import "UserSpotCreationVC.h"
 #import "Annotation.h"
@@ -157,6 +156,10 @@
     }
 }
 
+/*
+ Makes a Firebase query to get the currently logged in user's userprofile.
+ It then calls the setCurrentUser function, which sets the CurrentUser singleton.
+ */
 -(void)getCurrentUserProfileFromFirebase {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userID" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
@@ -164,13 +167,13 @@
     }];
 }
 
-//Sets the User
+//Sets the CurrentUser singleton
 -(void)setCurrentUser:(FIRDataSnapshot *)snapshot {
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
     for (FIRDataSnapshot *child in snapshot.children) {
         [currentUser initWithUsername:child.value[@"username"] fullName:child.value[@"fullName"] email:child.value[@"email"] userId:child.value[@"userID"]];
-        NSLog(@"Current User *************: %@", currentUser.username);
+        currentUser.currentUserProfileKey = child.key;
     }
 }
 
