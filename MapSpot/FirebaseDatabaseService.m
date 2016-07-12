@@ -22,6 +22,9 @@
 
 - (instancetype)initPrivately {
     self = [super init];
+//    if (self) {
+//        _ref = [[FIRDatabase database] reference];
+//    }
     return self;
 }
 

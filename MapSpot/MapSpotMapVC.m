@@ -15,7 +15,8 @@
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
 #import "Spot.h"
-#import "FirebaseDatabaseService.h"
+//#import "FirebaseDatabaseService.h"
+#import "FirebaseOperation.h"
 #import "UserSpotCreationVC.h"
 #import "Annotation.h"
 #import "CurrentUser.h"
@@ -133,21 +134,16 @@
 
 //Queries ALL the spots from Firebase
 -(void)querySpotsFromFirebase {
-    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
-    [firebaseDatabaseService initWithReference];
-    
-    FIRDatabaseReference *spotRef = [firebaseDatabaseService.ref child:@"spots"];
-    
-    [spotRef observeEventType:FIRDataEventTypeChildAdded
-        withBlock:^(FIRDataSnapshot *snapshot) {
-            Spot *spot = [[Spot alloc]
-                          initWithSpotCoordinates:CLLocationCoordinate2DMake([snapshot.value[@"latitude"] doubleValue], [snapshot.value[@"longitude"] doubleValue])
-                          user:snapshot.value[@"username"]
-                          createdAt:snapshot.value[@"createdAt"]];
-            spot.message = snapshot.value[@"message"];
-            
-            [self addSpotToMap:spot];
-        }];
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    [firebaseOperation queryFirebaseWithNoConstraintsAndObserveEventTypeWithChild:@"spots" andFIRDataEventType:FIRDataEventTypeChildAdded completion:^(FIRDataSnapshot *snapshot) {
+        Spot *spot = [[Spot alloc]
+                      initWithSpotCoordinates:CLLocationCoordinate2DMake([snapshot.value[@"latitude"] doubleValue], [snapshot.value[@"longitude"] doubleValue])
+                      user:snapshot.value[@"username"]
+                      createdAt:snapshot.value[@"createdAt"]];
+        spot.message = snapshot.value[@"message"];
+        
+        [self addSpotToMap:spot];
+    }];
 }
 
 /*
