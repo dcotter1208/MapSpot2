@@ -62,6 +62,33 @@
     }];
 }
 
+-(void)setUserProfileFields:(CurrentUser *)currentUser {
+    _usernameTF.text = currentUser.username;
+    _nameTF.text = currentUser.fullName;
+    _locationTF.text = currentUser.location;
+    _bioTextView.text = currentUser.bio;
+    _DOBTF.text = currentUser.DOB;
+    
+    if (currentUser.profilePhoto != nil) {
+        _profilePhotoImageView.image = currentUser.profilePhoto;
+        _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
+    }
+    
+}
+
+/*
+ -Validates if the username exists
+ */
+-(void)validateUsernameUniqueness:(NSString *)username completion:(void(^)(FIRDataSnapshot *snapshot))completion {
+    
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"username" queryEqualToValue:username andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
+        completion(snapshot);
+    }];
+    
+}
+
 - (IBAction)profilePhotoSelected:(id)sender {
     NSLog(@"Profile Photo");
 }
@@ -80,33 +107,28 @@
 
 - (IBAction)savePressed:(id)sender {
     
-    NSLog(@"EMAIK: %@", _currentUser.email);
+    [self validateUsernameUniqueness:_usernameTF.text completion:^(FIRDataSnapshot *snapshot) {
+        
+        if ([snapshot exists] && (![snapshot.value[@"userId"] isEqualToString:_currentUser.userId])) {
+            NSLog(@"username taken!!!!!!!!!!!!!!!!!");
+        } else {
+            NSDictionary *userProfileToUpdate = @{@"username": _usernameTF.text,
+                                                  @"email": _currentUser.email,
+                                                  @"userId": _currentUser.userId,
+                                                  @"fullName": _nameTF.text,
+                                                  @"bio": _bioTextView.text,
+                                                  @"location": _locationTF.text,
+                                                  @"DOB": _DOBTF.text};
+            
+            [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
+        }
+        
+    }];
     
-    NSDictionary *userProfileToUpdate = @{@"username": _usernameTF.text,
-                                          @"email": _currentUser.email,
-                                          @"userId": _currentUser.userId,
-                                          @"fullName": _nameTF.text,
-                                          @"bio": _bioTextView.text,
-                                          @"location": _locationTF.text,
-                                          @"DOB": _DOBTF.text};
-    
-    [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
     
 }
 
--(void)setUserProfileFields:(CurrentUser *)currentUser {
-    _usernameTF.text = currentUser.username;
-    _nameTF.text = currentUser.fullName;
-    _locationTF.text = currentUser.location;
-    _bioTextView.text = currentUser.bio;
-    _DOBTF.text = currentUser.DOB;
-    
-    if (currentUser.profilePhoto != nil) {
-        _profilePhotoImageView.image = currentUser.profilePhoto;
-        _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
-    }
-    
-}
+
 
 
 
