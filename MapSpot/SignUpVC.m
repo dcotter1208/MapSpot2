@@ -7,7 +7,7 @@
 //
 
 #import "SignUpVC.h"
-#import "FirebaseDatabaseService.h"
+#import "FirebaseOperation.h"
 #import "CurrentUser.h"
 @import FirebaseDatabase;
 @import Firebase;
@@ -66,7 +66,7 @@
                 NSLog(@"ERROR: %@", error);
             } else {
                 [self addUserProfileInfo:user.uid username:_usernameTF.text fullName:_nameTF.text email:_emailTF.text];
-                [self setCurrentUser];
+                [self getCurrentUserProfileFromFirebase];
             }
         }];
     }
@@ -105,10 +105,27 @@
     return isValidPassword;
 }
 
--(void)setCurrentUser {
-    CurrentUser *currentUser = [CurrentUser sharedInstance];
-    [currentUser initWithUsername:_usernameTF.text fullName:_nameTF.text email:_emailTF.text userId:[FIRAuth auth].currentUser.uid];
+
+-(void)getCurrentUserProfileFromFirebase {
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userID" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
+        [self setCurrentUser:snapshot];
+    }];
 }
+
+-(void)setCurrentUser:(FIRDataSnapshot *)snapshot {
+    CurrentUser *currentUser = [CurrentUser sharedInstance];
+    
+    for (FIRDataSnapshot *child in snapshot.children) {
+        [currentUser initWithUsername:child.value[@"username"] fullName:child.value[@"fullName"] email:child.value[@"email"] userId:child.value[@"userID"]];
+        currentUser.currentUserProfileKey = child.key;
+    }
+}
+
+//-(void)setCurrentUser {
+//    CurrentUser *currentUser = [CurrentUser sharedInstance];
+//    [currentUser initWithUsername:_usernameTF.text fullName:_nameTF.text email:_emailTF.text userId:[FIRAuth auth].currentUser.uid];
+//}
 
 /*
  -this is validating if the username exists but
