@@ -128,7 +128,6 @@
     [_mapView addAnnotation:annotation];
 }
 
-
 #pragma mark Firebase Helper Methods
 
 //Queries ALL the spots from Firebase
@@ -176,7 +175,6 @@
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
     for (FIRDataSnapshot *child in snapshot.children) {
-        NSLog(@"CHILD: %@", child.value);
         [currentUser updateCurrentUser:child];
     }
 }
@@ -197,7 +195,6 @@
         }
     }
 }
-
 
 #pragma mark IBActions
 
