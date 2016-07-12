@@ -48,7 +48,7 @@
  Used to create a spot when the createSpotButton is pressed.
  It then saves the spot to Firebase.
 */
--(void)createSpotWithUsername:(NSString *)username message:(NSString *)message latitude:(NSString *)latitude longitude:(NSString *)longitude {
+-(void)createSpotWithMessage:(NSString *)message latitude:(NSString *)latitude longitude:(NSString *)longitude {
     NSDate *now = [NSDate date];
 
     FIRUser *currentUserAuth = [[FIRAuth auth]currentUser];
@@ -66,7 +66,6 @@
     
     [firebaseOperation createSpotForCurrentUser:spot];
 
-    
 }
 
 #pragma mark IBActions
@@ -76,8 +75,8 @@
     
     NSString *latAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude];
     NSString *longAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude];
-
-    [self createSpotWithUsername:@"DonovanCotter" message:_messageTF.text latitude: latAsString longitude:longAsString];
+    
+    [self createSpotWithMessage:_messageTF.text latitude: latAsString longitude:longAsString];
     
 }
 
