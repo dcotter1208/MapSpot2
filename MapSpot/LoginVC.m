@@ -30,10 +30,6 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)getCurrentUserProfileInfoFromFirebase {
-    
-}
-
 -(void)getCurrentUserProfileFromFirebase {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userID" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
@@ -46,10 +42,8 @@
     
     for (FIRDataSnapshot *child in snapshot.children) {
         [currentUser initWithUsername:child.value[@"username"] fullName:child.value[@"fullName"] email:child.value[@"email"] userId:child.value[@"userID"]];
-        NSLog(@"Current User $$$$$$: %@", currentUser.username);
     }
 }
-
 
 //Used to display alert for failed login.
 -(void)loginFailedAlertView:(NSString *)title message:(NSString *)message {

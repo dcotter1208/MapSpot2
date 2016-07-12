@@ -7,6 +7,8 @@
 //
 
 #import "FirebaseOperation.h"
+#import "CurrentUser.h"
+@import FirebaseAuth;
 
 @implementation FirebaseOperation
 
@@ -34,6 +36,13 @@
     [query observeSingleEventOfType:FIRDataEventType withBlock:^(FIRDataSnapshot *snapshot) {
         completion(snapshot);
     }];
+}
+
+-(void)createSpotForCurrentUser:(NSDictionary *)spot {
+    
+    FIRDatabaseReference *spotRef = [_firebaseDatabaseService.ref child:@"spots"].childByAutoId;
+
+    [spotRef setValue:spot];
     
 }
 

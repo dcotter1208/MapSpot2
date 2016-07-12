@@ -19,6 +19,8 @@
 
 -(void)queryFirebaseWithConstraintsForChild:(NSString *)child queryOrderedByChild:(NSString *)childKey queryEqualToValue:(NSString *)value andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion;
 
+-(void)createSpotForCurrentUser:(NSDictionary *)spot;
+
 -(instancetype)init;
 
 @end
