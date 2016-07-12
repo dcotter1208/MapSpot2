@@ -38,12 +38,55 @@
     }];
 }
 
--(void)createSpotForCurrentUser:(NSDictionary *)spot {
+-(void)setValueForFirebaseChild:(NSString *)child value:(NSDictionary *)value {
     
-    FIRDatabaseReference *spotRef = [_firebaseDatabaseService.ref child:@"spots"].childByAutoId;
+    FIRDatabaseReference *childRef = [_firebaseDatabaseService.ref child:child].childByAutoId;
 
-    [spotRef setValue:spot];
+    [childRef setValue:value];
     
+}
+
+-(void)listenForChildNodeChanges:(NSString *)child completion:(void(^)(CurrentUser *updatedCurrentUser))completion {
+    if ([child isEqualToString:@"users"]) {
+        [self queryUpdatedUserProfile:child completion:^(FIRDataSnapshot *snapshot) {
+
+            completion([self updateCurrentUserInfo:snapshot]);
+        }];
+    } else {
+        //We will query changes to spots...
+    }
+}
+
+//Used to detect changes to the user profile. Called in 'listenForChildNodeChanges'
+-(void)queryUpdatedUserProfile:(NSString *)child completion:(void(^)(FIRDataSnapshot *snapshot))completion {
+    FIRDatabaseQuery *query = [[[_firebaseDatabaseService.ref child:child]queryOrderedByChild:@"userId"] queryEqualToValue:[FIRAuth auth].currentUser.uid];
+    [query observeEventType:FIRDataEventTypeChildChanged withBlock:^(FIRDataSnapshot *snapshot) {
+        completion(snapshot);
+    }];
+}
+
+
+-(void)updateChildNode:(NSString *)child nodeToUpdate:(NSDictionary *)nodeToUpdate {
+    FIRDatabaseReference *childRef = [_firebaseDatabaseService.ref child:child];
+    NSDictionary *childUpdates;
+    
+    if ([child isEqualToString:@"users"]) {
+        childUpdates = @{[CurrentUser sharedInstance].profileKey: nodeToUpdate};
+        [childRef updateChildValues:childUpdates];
+    }
+}
+
+-(CurrentUser *)updateCurrentUserInfo:(FIRDataSnapshot *)snapshot {
+    CurrentUser *currentUser = [CurrentUser sharedInstance];
+    [currentUser initWithUsername:snapshot.value[@"username"]
+                         fullName:snapshot.value[@"fullName"]
+                            email:snapshot.value[@"email"]
+                           userId:snapshot.value[@"userId"]];
+                currentUser.bio = snapshot.value[@"bio"];
+                currentUser.location = snapshot.value[@"location"];
+                currentUser.DOB = snapshot.value[@"DOB"];
+    
+    return currentUser;
 }
 
 @end

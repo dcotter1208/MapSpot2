@@ -7,7 +7,7 @@
 //
 
 #import "SignUpVC.h"
-#import "FirebaseDatabaseService.h"
+#import "FirebaseOperation.h"
 #import "CurrentUser.h"
 @import FirebaseDatabase;
 @import Firebase;
@@ -41,18 +41,16 @@
 #pragma mark Firebase Helper Methods
 
 //Creates a user profile on Firebase Database.
--(void)addUserProfileInfo:(NSString *)userID username:(NSString *)username fullName:(NSString *)fullName email:(NSString *)email {
+-(void)addUserProfileInfo:(NSString *)userId username:(NSString *)username fullName:(NSString *)fullName email:(NSString *)email {
     
-    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
-    [firebaseDatabaseService initWithReference];
-    
-    FIRDatabaseReference *userRef = [firebaseDatabaseService.ref child:@"users"].childByAutoId;
-    NSDictionary *userProfile = @{@"userID": userID,
+    NSDictionary *userProfile = @{@"userId": userId,
                                   @"username": username,
                                   @"fullName": fullName,
                                   @"email": email};
     
-    [userRef setValue:userProfile];
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    [firebaseOperation setValueForFirebaseChild:@"users" value:userProfile];
 
 }
 
@@ -63,10 +61,13 @@
         [[FIRAuth auth]createUserWithEmail:_emailTF.text password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
             
             if (error) {
+                if (error.code == 17007) {
+                    [self signUpFailedAlertView:@"Sign Up Failed" message:[NSString stringWithFormat:@"%@ is already in use.", _emailTF.text]];
+                }
                 NSLog(@"ERROR: %@", error);
             } else {
                 [self addUserProfileInfo:user.uid username:_usernameTF.text fullName:_nameTF.text email:_emailTF.text];
-                [self setCurrentUser];
+                [self getCurrentUserProfileFromFirebase];
             }
         }];
     }
@@ -105,30 +106,33 @@
     return isValidPassword;
 }
 
--(void)setCurrentUser {
+
+-(void)getCurrentUserProfileFromFirebase {
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
+        [self setCurrentUser:snapshot];
+    }];
+}
+
+-(void)setCurrentUser:(FIRDataSnapshot *)snapshot {
     CurrentUser *currentUser = [CurrentUser sharedInstance];
-    [currentUser initWithUsername:_usernameTF.text fullName:_nameTF.text email:_emailTF.text userId:[FIRAuth auth].currentUser.uid];
+    
+    for (FIRDataSnapshot *child in snapshot.children) {
+        [currentUser updateCurrentUser:child];
+    }
 }
 
 /*
- -this is validating if the username exists but
- if it doesn't it was not hitting the ELSE statement in the signUpNewUser IBAction.
- Need to set Firebase security rules to coorelate with this method.
+ -Validates if the username exists
  */
 -(void)validateUsernameUniqueness:(NSString *)username completion:(void(^)(FIRDataSnapshot *snapshot))completion {
-    FirebaseDatabaseService *firebaseDatabaseService = [FirebaseDatabaseService sharedInstance];
-    [firebaseDatabaseService initWithReference];
     
-    FIRDatabaseReference *userRef = [firebaseDatabaseService.ref child:@"users"];
-    FIRDatabaseQuery *usernameUniquenessQuery = [[userRef queryOrderedByChild:@"username"]queryEqualToValue:username];
-    [usernameUniquenessQuery observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot *snapshot) {
-        
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"username" queryEqualToValue:username andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
         completion(snapshot);
-        
-    } withCancelBlock:^(NSError *error) {
-        NSLog(@"Error: %@", error);
     }];
-    
+
 }
 
 #pragma mark Sign Up IBAction
@@ -147,7 +151,7 @@
         //email is valid but password is not.
     } else if ([self validateEmail:_emailTF.text] && ![self validatePassword:_passwordTF.text]) {
         [self signUpFailedAlertView:@"Sign Up Failed" message:@"password must contain letters and numbers"];
-    } else if (_usernameTF.text.length < 5 && ![_usernameTF.text containsString:@" "]) {
+    } else if (_usernameTF.text.length < 5 || [_usernameTF.text containsString:@" "]) {
         [self signUpFailedAlertView:@"Sign Up Failed" message:@"Username must be at least 5 characters (no white space.)"];
     } else if ([_nameTF.text isEqualToString:@""]) {
         [self signUpFailedAlertView:@"Sign Up Failed" message:@"Please enter your name."];
