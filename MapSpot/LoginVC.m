@@ -40,9 +40,7 @@
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
     for (FIRDataSnapshot *child in snapshot.children) {
-        [currentUser updateCurrentUser:child];
-        currentUser.profileKey = child.key;
- 
+        [currentUser updateCurrentUser:child]; 
     }
 }
 

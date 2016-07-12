@@ -38,6 +38,7 @@
     self.bio = snapshot.value[@"bio"];
     self.location = snapshot.value[@"location"];
     self.DOB = snapshot.value[@"DOB"];
+    self.profileKey = snapshot.key;
     
     //WILL HAVE TO UPDATE PHOTOS AND URLS HERE TOO...
     

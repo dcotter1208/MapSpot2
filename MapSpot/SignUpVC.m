@@ -117,8 +117,7 @@
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
     for (FIRDataSnapshot *child in snapshot.children) {
-        [currentUser initWithUsername:child.value[@"username"] fullName:child.value[@"fullName"] email:child.value[@"email"] userId:child.value[@"userId"]];
-        currentUser.profileKey = child.key;
+        [currentUser updateCurrentUser:child];
     }
 }
 
