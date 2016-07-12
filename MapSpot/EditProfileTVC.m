@@ -28,6 +28,7 @@
 
 - (void)viewDidLoad {
     _currentUser = [CurrentUser sharedInstance];
+    [self setUserProfileFields:_currentUser];
     _firebaseOperation = [[FirebaseOperation alloc]init];
     [self updateCurrentUserProfileOnFirebase:_currentUser];
     [super viewDidLoad];
@@ -35,10 +36,6 @@
     //This creates a whie space at the bottom where there are no more cells so there are no ghost cells present.
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-}
-
--(void)viewWillAppear:(BOOL)animated {
-    [self setUserProfileFields:_currentUser];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -62,6 +59,7 @@
     }];
 }
 
+//Sets textfields, textview and UIImageViews with the user's profile info.
 -(void)setUserProfileFields:(CurrentUser *)currentUser {
     _usernameTF.text = currentUser.username;
     _nameTF.text = currentUser.fullName;
@@ -89,9 +87,12 @@
     
 }
 
+#pragma mark IBActions
+
 - (IBAction)profilePhotoSelected:(id)sender {
     NSLog(@"Profile Photo");
 }
+
 
 - (IBAction)backgroundProfilePhotoSelected:(id)sender {
     NSLog(@"Background Phaoto");
@@ -105,6 +106,7 @@
     }
 }
 
+//saves the profile changes.
 - (IBAction)savePressed:(id)sender {
     
     [self validateUsernameUniqueness:_usernameTF.text completion:^(FIRDataSnapshot *snapshot) {
