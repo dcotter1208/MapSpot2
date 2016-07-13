@@ -98,6 +98,20 @@
     
 }
 
+//Removes all whitespace or only leading and trailing of a given string.
+-(NSString *)removeLeadingAndTrailingWhitespace:(NSString *)string removeAllWhiteSpace:(BOOL)removeAllWhiteSpace {
+    
+    if (removeAllWhiteSpace) {
+        NSString *newString = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSString *noWhiteSpaceString = [newString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        return noWhiteSpaceString;
+    } else {
+        NSString *newString = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        return newString;
+    }
+    
+}
+
 #pragma mark IBActions
 
 - (IBAction)profilePhotoSelected:(id)sender {
@@ -120,7 +134,13 @@
 //saves the profile changes.
 - (IBAction)savePressed:(id)sender {
     
-    [self validateUsernameUniqueness:_usernameTF.text completion:^(FIRDataSnapshot *snapshot) {
+    NSString *username = [self removeLeadingAndTrailingWhitespace:_usernameTF.text removeAllWhiteSpace:false];
+    NSString *fullName = [self removeLeadingAndTrailingWhitespace:_nameTF.text removeAllWhiteSpace:false];
+    NSString *location = [self removeLeadingAndTrailingWhitespace:_locationTF.text removeAllWhiteSpace:false];
+    NSString *DOB = [self removeLeadingAndTrailingWhitespace:_DOBTF.text removeAllWhiteSpace:true];
+    NSString *bio = [self removeLeadingAndTrailingWhitespace:_bioTextView.text removeAllWhiteSpace:false];
+    
+    [self validateUsernameUniqueness:username completion:^(FIRDataSnapshot *snapshot) {
         
         NSString *snapshotUserId;
         
@@ -129,17 +149,17 @@
         }
         
         if ([snapshot exists] && (![snapshotUserId isEqualToString:_currentUser.userId])) {
-            [_alertView genericAlert:@"Whoops!" message:[NSString stringWithFormat:@"The username '%@' is taken.", _usernameTF.text] presentingViewController:self];
-        } else if (_usernameTF.text.length < 5 || [_usernameTF.text containsString:@" "]) {
+            [_alertView genericAlert:@"Whoops!" message:[NSString stringWithFormat:@"The username '%@' is taken.", username] presentingViewController:self];
+        } else if (username.length < 5 || [username containsString:@" "]) {
             [_alertView genericAlert:@"Whoops!" message:@"Username must be at least 5 characters (no white space.)" presentingViewController:self];
         } else {
-            NSDictionary *userProfileToUpdate = @{@"username": _usernameTF.text,
+            NSDictionary *userProfileToUpdate = @{@"username": username,
                                                   @"email": _currentUser.email,
                                                   @"userId": _currentUser.userId,
-                                                  @"fullName": _nameTF.text,
-                                                  @"bio": _bioTextView.text,
-                                                  @"location": _locationTF.text,
-                                                  @"DOB": _DOBTF.text};
+                                                  @"fullName": fullName,
+                                                  @"bio": bio,
+                                                  @"location": location,
+                                                  @"DOB": DOB};
             
             [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
         }

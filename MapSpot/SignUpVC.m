@@ -61,8 +61,14 @@
 //Signs up the user for Firebase email/password auth.
 -(void)signUpUserWithFirebase {
     
-    if ([_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
-        [[FIRAuth auth]createUserWithEmail:_emailTF.text password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
+    NSString *email = [self removeLeadingAndTrailingWhitespace: _emailTF.text removeAllWhiteSpace:true];
+    NSString *password = [self removeLeadingAndTrailingWhitespace: _passwordTF.text removeAllWhiteSpace:true];
+    NSString *repeatPassowrd = [self removeLeadingAndTrailingWhitespace:_repeatPasswordTF.text removeAllWhiteSpace:true];
+    NSString *username = [self removeLeadingAndTrailingWhitespace:_usernameTF.text removeAllWhiteSpace:false];
+    NSString *fullName = [self removeLeadingAndTrailingWhitespace:_nameTF.text removeAllWhiteSpace:false];
+    
+    if ([password isEqualToString:repeatPassowrd]) {
+        [[FIRAuth auth]createUserWithEmail:email password:password completion:^(FIRUser *user, NSError *error) {
             
             if (error) {
                 if (error.code == 17007) {
@@ -73,7 +79,7 @@
                     NSLog(@"ERROR: %@", error);
                 }
             } else {
-                [self addUserProfileInfo:user.uid username:_usernameTF.text fullName:_nameTF.text email:_emailTF.text];
+                [self addUserProfileInfo:user.uid username:username fullName:fullName email:email];
                 [self getCurrentUserProfileFromFirebase];
             }
         }];
@@ -129,37 +135,57 @@
 
 }
 
+//Removes all whitespace or only leading and trailing of a given string.
+-(NSString *)removeLeadingAndTrailingWhitespace:(NSString *)string removeAllWhiteSpace:(BOOL)removeAllWhiteSpace {
+    
+    if (removeAllWhiteSpace) {
+        NSString *newString = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        NSString *noWhiteSpaceString = [newString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        return noWhiteSpaceString;
+    } else {
+        NSString *newString = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        return newString;
+    }
+    
+}
+
 #pragma mark Sign Up IBAction
 
 - (IBAction)signUpNewUser:(id)sender {
     
+    NSString *email = [self removeLeadingAndTrailingWhitespace: _emailTF.text removeAllWhiteSpace:true];
+    NSString *password = [self removeLeadingAndTrailingWhitespace: _passwordTF.text removeAllWhiteSpace:true];
+    NSString *repeatPassowrd = [self removeLeadingAndTrailingWhitespace:_repeatPasswordTF.text removeAllWhiteSpace:true];
+    NSString *username = [self removeLeadingAndTrailingWhitespace:_usernameTF.text removeAllWhiteSpace:false];
+    NSString *fullName = [self removeLeadingAndTrailingWhitespace:_nameTF.text removeAllWhiteSpace:false];
+
     //email valid but password fields don't match
-    if ([self validateEmail:_emailTF.text] && ![_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
+    if ([self validateEmail:email] && ![password isEqualToString:repeatPassowrd]) {
         [_alertView genericAlert:@"Sign Up Failed." message:@"Please make sure your passwords match." presentingViewController:self];
         
         //email is not valid but password fields match
-    }else if (![self validateEmail:_emailTF.text] && [_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
+    }else if (![self validateEmail:email] && [password isEqualToString:repeatPassowrd]) {
         [_alertView genericAlert:@"Sign Up Failed." message:@"Please make sure you put in a valid email." presentingViewController:self];
         
         //BOTH email and password are not validated
-    } else if (![self validateEmail:_emailTF.text] && ![self validatePassword:_passwordTF.text]) {
+    } else if (![self validateEmail:email] && ![self validatePassword:password]) {
         [_alertView genericAlert:@"Sign Up Failed" message:@"Your email and password aren't valid" presentingViewController:self];
         
         //email is valid but password is not.
-    } else if ([self validateEmail:_emailTF.text] && ![self validatePassword:_passwordTF.text]) {
+    } else if ([self validateEmail:email] && ![self validatePassword:password]) {
         [_alertView genericAlert:@"Sign Up Failed" message:@"password must contain letters and numbers" presentingViewController:self];
         
         //Username has to be > 5 chars and no whitespace.
-    } else if (_usernameTF.text.length < 5 || [_usernameTF.text containsString:@" "]) {
+    } else if (username.length < 5 || [username containsString:@" "]) {
         [_alertView genericAlert:@"Sign Up Failed." message:@"Username must be at least 5 characters (no white space.)" presentingViewController:self];
         
         //Checks if the name textfield is empty.
-    } else if ([_nameTF.text isEqualToString:@""]) {
+    } else if ([fullName isEqualToString:@""]) {
         [_alertView genericAlert:@"Sign Up Failed." message:@"Please enter your name." presentingViewController:self];
         
         //Checks for username uniqueness
     } else {
-        [self validateUsernameUniqueness:_usernameTF.text completion:^(FIRDataSnapshot *snapshot) {
+        [self validateUsernameUniqueness:username completion:^(FIRDataSnapshot *snapshot) {
             if ([snapshot exists]) {
                 [_alertView genericAlert:@"Sign Up Failed" message:@"The username '%@' is taken." presentingViewController:self];
                 
