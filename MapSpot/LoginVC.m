@@ -27,6 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _alertView = [[AlertView alloc]init];
     // Do any additional setup after loading the view.
 }
 
@@ -34,6 +35,8 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark Helper Methods
 
 //Gets the current user's profile from Firebase.
 -(void)getCurrentUserProfileFromFirebase {
@@ -52,19 +55,6 @@
     }
 }
 
-//Used to display alert for failed login.
--(void)loginFailedAlertView:(NSString *)title message:(NSString *)message {
-    UIAlertController *alertController =[UIAlertController
-                                         alertControllerWithTitle:title
-                                         message:message
-                                         preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
-    [alertController addAction:ok];
-    [self presentViewController:alertController animated:true completion:nil];
-    
-}
-
 //Logs the user into Firebase or displays an error message using the loginFailedAlerView func if there was an error.
 -(void)loginUserWithFirebaseAuth {
     [[FIRAuth auth] signInWithEmail:_emailTF.text password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
@@ -77,15 +67,20 @@
                 //Password incorrect
             } else if (error.code == 17009) {
                 [_alertView genericAlert:@"Login Failed" message:@"Your password doesn't appear to be correct. Please try again." presentingViewController:self];
+                
                 //Generic Failure.
             } else {
                 [_alertView genericAlert:@"Login Failed" message:@"Please try again." presentingViewController:self];
             }
+            
+            //If everything is valid log the user into the app.
         } else {
             [self getCurrentUserProfileFromFirebase];
         }
     }];
 }
+
+#pragma mark IBActions
 
 - (IBAction)loginButtonPressed:(id)sender {
     [self loginUserWithFirebaseAuth];
