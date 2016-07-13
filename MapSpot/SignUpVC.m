@@ -9,19 +9,22 @@
 #import "SignUpVC.h"
 #import "FirebaseOperation.h"
 #import "CurrentUser.h"
+#import "AlertView.h"
 @import FirebaseDatabase;
 @import Firebase;
 @import FirebaseAuth;
 
 @interface SignUpVC ()
 
-#pragma mark Properties
-
+#pragma mark IBOutlets
 @property (weak, nonatomic) IBOutlet UITextField *usernameTF;
 @property (weak, nonatomic) IBOutlet UITextField *emailTF;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTF;
 @property (weak, nonatomic) IBOutlet UITextField *repeatPasswordTF;
 @property (weak, nonatomic) IBOutlet UITextField *nameTF;
+
+#pragma mark Properties
+@property (nonatomic, strong) AlertView *alertView;
 
 @end
 
@@ -31,6 +34,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _alertView = [[AlertView alloc]init];
 
 }
 
@@ -62,9 +66,12 @@
             
             if (error) {
                 if (error.code == 17007) {
-                    [self signUpFailedAlertView:@"Sign Up Failed" message:[NSString stringWithFormat:@"%@ is already in use.", _emailTF.text]];
+                    [_alertView genericAlert:@"Sign Up Failed" message:@"%@ is already in use." presentingViewController:self];
+                } else if ((error.code == 1001) || error.code == 1009) {
+                    [_alertView genericAlert:@"Sign Up Failed" message:@"Network Connection Failed." presentingViewController:self];
+                } else {
+                    NSLog(@"ERROR: %@", error);
                 }
-                NSLog(@"ERROR: %@", error);
             } else {
                 [self addUserProfileInfo:user.uid username:_usernameTF.text fullName:_nameTF.text email:_emailTF.text];
                 [self getCurrentUserProfileFromFirebase];
@@ -74,19 +81,6 @@
 }
 
 #pragma mark Validation Helper Methods
-
-//Alert Message function.
--(void)signUpFailedAlertView:(NSString *)title message:(NSString *)message {
-    UIAlertController *alertController =[UIAlertController
-                                         alertControllerWithTitle:title
-                                         message:message
-                                         preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
-    [alertController addAction:ok];
-    [self presentViewController:alertController animated:true completion:nil];
-    
-}
 
 //Validates the user's email with regex.
 -(BOOL)validateEmail:(NSString *)email {
@@ -141,24 +135,35 @@
     
     //email valid but password fields don't match
     if ([self validateEmail:_emailTF.text] && ![_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
-        [self signUpFailedAlertView:@"Sign Up Failed" message:@"Please make sure your passwords match."];
+        [_alertView genericAlert:@"Sign Up Failed." message:@"Please make sure your passwords match." presentingViewController:self];
+        
         //email is not valid but password fields match
     }else if (![self validateEmail:_emailTF.text] && [_passwordTF.text isEqualToString:_repeatPasswordTF.text]) {
-        [self signUpFailedAlertView:@"Sign Up Failed" message:@"Please make sure you put in a valid email."];
+        [_alertView genericAlert:@"Sign Up Failed." message:@"Please make sure you put in a valid email." presentingViewController:self];
+        
         //BOTH email and password are not validated
     } else if (![self validateEmail:_emailTF.text] && ![self validatePassword:_passwordTF.text]) {
-        [self signUpFailedAlertView:@"Sign Up Failed" message:@"Your email and password aren't valid"];
+        [_alertView genericAlert:@"Sign Up Failed" message:@"Your email and password aren't valid" presentingViewController:self];
+        
         //email is valid but password is not.
     } else if ([self validateEmail:_emailTF.text] && ![self validatePassword:_passwordTF.text]) {
-        [self signUpFailedAlertView:@"Sign Up Failed" message:@"password must contain letters and numbers"];
+        [_alertView genericAlert:@"Sign Up Failed" message:@"password must contain letters and numbers" presentingViewController:self];
+        
+        //Username has to be > 5 chars and no whitespace.
     } else if (_usernameTF.text.length < 5 || [_usernameTF.text containsString:@" "]) {
-        [self signUpFailedAlertView:@"Sign Up Failed" message:@"Username must be at least 5 characters (no white space.)"];
+        [_alertView genericAlert:@"Sign Up Failed." message:@"Username must be at least 5 characters (no white space.)" presentingViewController:self];
+        
+        //Checks if the name textfield is empty.
     } else if ([_nameTF.text isEqualToString:@""]) {
-        [self signUpFailedAlertView:@"Sign Up Failed" message:@"Please enter your name."];
+        [_alertView genericAlert:@"Sign Up Failed." message:@"Please enter your name." presentingViewController:self];
+        
+        //Checks for username uniqueness
     } else {
         [self validateUsernameUniqueness:_usernameTF.text completion:^(FIRDataSnapshot *snapshot) {
             if ([snapshot exists]) {
-                [self signUpFailedAlertView:@"Sign Up Failed" message:[NSString stringWithFormat:@"The username '%@' is taken.", _usernameTF.text]];
+                [_alertView genericAlert:@"Sign Up Failed" message:@"The username '%@' is taken." presentingViewController:self];
+                
+                //If all conditions pass and the username is unique then the user is signed up with Firebase.
             } else {
                 [self signUpUserWithFirebase];
             }
