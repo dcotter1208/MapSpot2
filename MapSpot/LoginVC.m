@@ -9,11 +9,17 @@
 #import "LoginVC.h"
 #import "CurrentUser.h"
 #import "FirebaseOperation.h"
+#import "AlertView.h"
 @import FirebaseAuth;
 
 @interface LoginVC ()
+
+#pragma mark IBOutlets
 @property (weak, nonatomic) IBOutlet UITextField *emailTF;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTF;
+
+#pragma mark Properties
+@property (nonatomic, strong) AlertView *alertView;
 
 @end
 
@@ -29,6 +35,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+//Gets the current user's profile from Firebase.
 -(void)getCurrentUserProfileFromFirebase {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
@@ -36,6 +43,7 @@
     }];
 }
 
+//Sets the CurrentUser singleton once the user profile is returned from Firebase.
 -(void)setCurrentUser:(FIRDataSnapshot *)snapshot {
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
@@ -61,12 +69,17 @@
 -(void)loginUserWithFirebaseAuth {
     [[FIRAuth auth] signInWithEmail:_emailTF.text password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
         if (error) {
+            
+            //Not a valid email.
             if (error.code == 17999) {
-                [self loginFailedAlertView:@"Login Failed" message:[NSString stringWithFormat:@"%@ doesn't appear to be an existing email", _emailTF.text]];
+                [_alertView genericAlert:@"Login Failed" message:[NSString stringWithFormat:@"%@ doesn't appear to be an existing email", _emailTF.text] presentingViewController:self];
+                
+                //Password incorrect
             } else if (error.code == 17009) {
-                [self loginFailedAlertView:@"Login Failed" message:@"Your password doesn't appear to be correct. Please try again."];
+                [_alertView genericAlert:@"Login Failed" message:@"Your password doesn't appear to be correct. Please try again." presentingViewController:self];
+                //Generic Failure.
             } else {
-                [self loginFailedAlertView:@"Login Failed" message:@"Please try again."];
+                [_alertView genericAlert:@"Login Failed" message:@"Please try again." presentingViewController:self];
             }
         } else {
             [self getCurrentUserProfileFromFirebase];

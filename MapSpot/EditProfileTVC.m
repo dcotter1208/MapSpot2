@@ -55,7 +55,7 @@
 -(void)updateCurrentUserProfileOnFirebase:(CurrentUser *)user {
     
     [_firebaseOperation listenForChildNodeChanges:@"users" completion:^(CurrentUser *updatedCurrentUser) {
-        [self setUserProfileFields:updatedCurrentUser];
+            [self setUserProfileFields:updatedCurrentUser];
     }];
 }
 
