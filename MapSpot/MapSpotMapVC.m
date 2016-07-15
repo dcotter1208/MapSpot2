@@ -206,10 +206,18 @@
 #pragma mark MapKit Delegate Methods
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    
+
+    //Gets the current region of the mapView.
+    MKCoordinateRegion currentRegion = _mapView.region;
+
+    //Gets the currently selected annotation.
     Annotation *selectedAnnotation = view.annotation;
-    MKCoordinateRegion selectedAnnotationRegion = MKCoordinateRegionMakeWithDistance(selectedAnnotation.coordinate, 300, 300);
-    [_mapView setRegion:selectedAnnotationRegion];
+
+    //sets the center of the current region to the selected annotation's coordinate so the map will center on that coordinate
+    currentRegion.center = selectedAnnotation.coordinate;
+    
+    //sets the map's region to the current region.
+    [_mapView setRegion:currentRegion];
     
     [self.navigationController setNavigationBarHidden:TRUE];
 
