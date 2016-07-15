@@ -138,6 +138,21 @@
     _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/4);
 }
 
+//centers map when an annotation is selected. Called in didSelectAnnotation method.
+-(void)centerMapOnSelectedAnnotation:(MKAnnotationView *)annotationView {
+    //Gets the current region of the mapView.
+    MKCoordinateRegion currentRegion = _mapView.region;
+    
+    //Gets the currently selected annotation.
+    Annotation *selectedAnnotation = annotationView.annotation;
+    
+    //sets the center of the current region to the selected annotation's coordinate so the map will center on that coordinate
+    currentRegion.center = selectedAnnotation.coordinate;
+    
+    //sets the map's region to the current region.
+    [_mapView setRegion:currentRegion];
+}
+
 #pragma mark Firebase Helper Methods
 
 //Queries ALL the spots from Firebase
@@ -207,20 +222,10 @@
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
 
-    //Gets the current region of the mapView.
-    MKCoordinateRegion currentRegion = _mapView.region;
-
-    //Gets the currently selected annotation.
-    Annotation *selectedAnnotation = view.annotation;
-
-    //sets the center of the current region to the selected annotation's coordinate so the map will center on that coordinate
-    currentRegion.center = selectedAnnotation.coordinate;
-    
-    //sets the map's region to the current region.
-    [_mapView setRegion:currentRegion];
-    
     [self.navigationController setNavigationBarHidden:TRUE];
-
+    
+    [self centerMapOnSelectedAnnotation:view];
+    
     [self showCustomMapCallout];
     
 }
