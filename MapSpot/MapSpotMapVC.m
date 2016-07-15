@@ -207,6 +207,10 @@
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     
+    Annotation *selectedAnnotation = view.annotation;
+    MKCoordinateRegion selectedAnnotationRegion = MKCoordinateRegionMakeWithDistance(selectedAnnotation.coordinate, 300, 300);
+    [_mapView setRegion:selectedAnnotationRegion];
+    
     [self.navigationController setNavigationBarHidden:TRUE];
 
     [self showCustomMapCallout];
