@@ -39,6 +39,7 @@
 @property(nonatomic, strong) CLLocation *newestLocation;
 @property(nonatomic) MKCoordinateRegion userLocation;
 @property(nonatomic)CLLocationCoordinate2D longPressCoordinates;
+@property(nonatomic, strong) MapAnnotationCallout *mapAnnotationCallout;
 
 @end
 
@@ -48,21 +49,13 @@
 #pragma mark Lifecycle Methods
 
 - (void)viewDidLoad {
+    _mapAnnotationCallout = [[MapAnnotationCallout alloc]init];
     [self checkForCurrentUserValue];
     [super viewDidLoad];
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
     
-    
-    MapAnnotationCallout *callout = [[MapAnnotationCallout alloc]init];
-    callout.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:callout];
-    callout.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    callout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/4);
-//    callout.center = CGPointMake(CGRectGetMidX(self.view.bounds), self.view.center.y);
-//    callout.clipsToBounds = YES;
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -104,8 +97,7 @@
     
 }
 
-
-#pragma mark Map Actions Help Method
+#pragma mark Map Actions Help Methods
 
 /*
  Sets longPressGesture's duration and maximum movement
@@ -136,6 +128,14 @@
     annotation.title = spot.user;
     annotation.subtitle = [NSString stringWithFormat:@"%@", spot.message];
     [_mapView addAnnotation:annotation];
+}
+
+-(void)showCustomMapCallout {
+//    self.navigationController.navigationBar.hidden = YES;
+    
+    _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:_mapAnnotationCallout];
+    _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/4);
 }
 
 #pragma mark Firebase Helper Methods
@@ -201,6 +201,21 @@
             [destionationVC setCoordinatesForCreatedSpot:_longPressCoordinates];
         }
     }
+}
+
+#pragma mark MapKit Delegate Methods
+
+-(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    
+    [self showCustomMapCallout];
+    
+}
+
+-(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+    
+    NSLog(@"DEselected");
+    
+    [_mapAnnotationCallout removeFromSuperview];
 }
 
 #pragma mark IBActions
