@@ -10,7 +10,23 @@
 
 @implementation MapAnnotationCallout
 
-
+-(id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        
+        // 1. Load .xib
+        
+        [[NSBundle mainBundle]loadNibNamed:@"MapAnnotationCalloutView" owner:self options:nil];
+        
+        // 2. Adjust bounds - the bounds being loaded are from the xib file we created.
+        self.bounds = _view.bounds;
+        
+        // 3. add as a subview.
+        [self addSubview:_view];
+        
+    }
+    return self;
+}
 
 
 /*

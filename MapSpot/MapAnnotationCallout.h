@@ -11,5 +11,6 @@
 @interface MapAnnotationCallout : UIView
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
+@property (strong, nonatomic) IBOutlet UIView *view;
 
 @end

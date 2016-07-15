@@ -14,9 +14,9 @@
 
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
+#import "MapAnnotationCallout.h"
 #import "Spot.h"
 #import "FirebaseOperation.h"
-#import "UserSpotCreationVC.h"
 #import "Annotation.h"
 #import "CurrentUser.h"
 @import FirebaseAuth;
@@ -53,6 +53,16 @@
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
+    
+    
+    MapAnnotationCallout *callout = [[MapAnnotationCallout alloc]init];
+    callout.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:callout];
+    callout.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    callout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/4);
+//    callout.center = CGPointMake(CGRectGetMidX(self.view.bounds), self.view.center.y);
+//    callout.clipsToBounds = YES;
+
 }
 
 - (void)didReceiveMemoryWarning {
