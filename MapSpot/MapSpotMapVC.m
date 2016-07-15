@@ -207,14 +207,14 @@
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     
+    [self.navigationController setNavigationBarHidden:TRUE];
+
     [self showCustomMapCallout];
     
 }
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
-    
-    NSLog(@"DEselected");
-    
+    [self.navigationController setNavigationBarHidden:FALSE];
     [_mapAnnotationCallout removeFromSuperview];
 }
 
