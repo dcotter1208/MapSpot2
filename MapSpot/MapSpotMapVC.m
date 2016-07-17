@@ -56,6 +56,11 @@
     [self mapSetup];
     [self setUpLongPressGesture];
     
+    NSString *count = @"At Belle Isle today... this place is great! Nice weather and I'm definitely coming back to kayak along with the pups. See you next time Detroit!";
+    
+    NSLog(@"COUNT: %lu",count.length);
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -134,8 +139,9 @@
 //    self.navigationController.navigationBar.hidden = YES;
     
     _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
+    _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
     [self.view addSubview:_mapAnnotationCallout];
-    _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/4);
+
 }
 
 //centers map when an annotation is selected. Called in didSelectAnnotation method.
@@ -150,7 +156,8 @@
     currentRegion.center = selectedAnnotation.coordinate;
     
     //sets the map's region to the current region.
-    [_mapView setRegion:currentRegion];
+    [_mapView setRegion:currentRegion animated:true];
+//    [_mapView setRegion:currentRegion];
 }
 
 #pragma mark Firebase Helper Methods

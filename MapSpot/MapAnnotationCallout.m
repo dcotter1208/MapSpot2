@@ -11,23 +11,59 @@
 @implementation MapAnnotationCallout
 
 -(id)initWithFrame:(CGRect)frame {
+
     self = [super initWithFrame:frame];
     if (self) {
-        
-        // 1. Load .xib
+    
+         _previewImages = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"belleIsle-1"], [UIImage imageNamed:@"belleIsle-2"], [UIImage imageNamed:@"old_english_D"], nil];
         
         [[NSBundle mainBundle]loadNibNamed:@"MapAnnotationCalloutView" owner:self options:nil];
+        [_mediaCollectionView registerNib:[UINib nibWithNibName:@"MediaPreviewCell" bundle:nil] forCellWithReuseIdentifier:@"mediaCell"];
         
-        // 2. Adjust bounds - the bounds being loaded are from the xib file we created.
+
+        _mediaCollectionView.backgroundColor = [UIColor clearColor];
+        
         self.bounds = _view.bounds;
         
-        // 3. add as a subview.
         [self addSubview:_view];
         
     }
     return self;
 }
 
+-(void)layoutSubviews {
+    _userProfileImageView.layer.cornerRadius = _userProfileImageView.layer.frame.size.height/2;
+    _userProfileImageView.layer.borderWidth = 1.0;
+    _userProfileImageView.layer.borderColor = [[UIColor blackColor]CGColor];
+    _userProfileImageView.layer.masksToBounds = TRUE;
+
+}
+
+#pragma mark : Collection View Datasource
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return [_previewImages count];
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return CGSizeMake(80, 80);
+}
+
+- (MediaPreviewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    MediaPreviewCell *cell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"mediaCell" forIndexPath:indexPath];
+    
+     UIImageView *mediaImageView = (UIImageView *)[cell viewWithTag:100];
+    
+    //I DISCONNECTED OUTLET FOR THE UIIMAGE IN THE CELL....hook it back up or give it a tag like in TCWine App collectionview. Then set the mediaImageView.image
+        
+    mediaImageView.image = [_previewImages objectAtIndex:indexPath.item];
+    
+    //Add your cell Values here
+    
+    return cell;
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.
