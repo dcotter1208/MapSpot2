@@ -48,8 +48,8 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="l0E-zb-O4T">
-                    <rect key="frame" x="8" y="84" width="463" height="91"/>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="l0E-zb-O4T">
+                    <rect key="frame" x="0.0" y="84" width="479" height="91"/>
                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="02Q-wk-vRX">
                         <size key="itemSize" width="80" height="80"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -64,7 +64,7 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="l0E-zb-O4T" secondAttribute="trailing" constant="8" id="6j1-r9-FhF"/>
+                <constraint firstAttribute="trailing" secondItem="l0E-zb-O4T" secondAttribute="trailing" id="6j1-r9-FhF"/>
                 <constraint firstItem="Tv1-ec-vMc" firstAttribute="leading" secondItem="Ma7-Zg-Cq5" secondAttribute="trailing" constant="8" symbolic="YES" id="9VQ-wx-1wg"/>
                 <constraint firstItem="l0E-zb-O4T" firstAttribute="top" secondItem="Tv1-ec-vMc" secondAttribute="bottom" constant="39" id="AZc-WM-5Mu"/>
                 <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="Dwa-qw-hbS"/>
@@ -76,7 +76,7 @@
                 <constraint firstItem="3iE-5C-Kmn" firstAttribute="top" secondItem="l0E-zb-O4T" secondAttribute="bottom" constant="8" symbolic="YES" id="kNZ-xI-xBd"/>
                 <constraint firstItem="l0E-zb-O4T" firstAttribute="centerX" secondItem="3iE-5C-Kmn" secondAttribute="centerX" id="ler-vJ-Z3f"/>
                 <constraint firstItem="l0E-zb-O4T" firstAttribute="top" secondItem="Ma7-Zg-Cq5" secondAttribute="bottom" constant="8" symbolic="YES" id="pDJ-pM-YsZ"/>
-                <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="leading" secondItem="l0E-zb-O4T" secondAttribute="leading" id="wRO-fO-DBB"/>
+                <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="leading" secondItem="l0E-zb-O4T" secondAttribute="leading" constant="8" id="wRO-fO-DBB"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

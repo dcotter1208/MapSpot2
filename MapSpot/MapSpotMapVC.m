@@ -40,6 +40,7 @@
 @property(nonatomic) MKCoordinateRegion userLocation;
 @property(nonatomic)CLLocationCoordinate2D longPressCoordinates;
 @property(nonatomic, strong) MapAnnotationCallout *mapAnnotationCallout;
+@property (nonatomic, strong) Annotation *selectedAnnotation;
 
 @end
 
@@ -57,6 +58,13 @@
     [self setUpLongPressGesture];
     
 }
+
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [_mapAnnotationCallout removeFromSuperview];
+    [_mapView deselectAnnotation:_selectedAnnotation animated:FALSE];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -145,15 +153,15 @@
 }
 
 //centers map when an annotation is selected. Called in didSelectAnnotation method.
--(void)centerMapOnSelectedAnnotation:(MKAnnotationView *)annotationView {
+-(void)centerMapOnSelectedAnnotation:(Annotation *)annotation {
     //Gets the current region of the mapView.
     MKCoordinateRegion currentRegion = _mapView.region;
     
     //Gets the currently selected annotation.
-    Annotation *selectedAnnotation = annotationView.annotation;
+//    _selectedAnnotation = annotation;
     
     //sets the center of the current region to the selected annotation's coordinate so the map will center on that coordinate
-    currentRegion.center = selectedAnnotation.coordinate;
+    currentRegion.center = _selectedAnnotation.coordinate;
     
     //sets the map's region to the current region.
     [_mapView setRegion:currentRegion animated:true];
@@ -229,12 +237,12 @@
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     
-    Annotation *selectedAnnotation = view.annotation;
+    _selectedAnnotation = view.annotation;
     
-    if (![selectedAnnotation isEqual: _mapView.userLocation]) {
-        [self setCustomMapCalloutAttributes:selectedAnnotation.spotAtAnnotation];
+    if (![_selectedAnnotation isEqual: _mapView.userLocation]) {
+        [self setCustomMapCalloutAttributes:_selectedAnnotation.spotAtAnnotation];
         [self.navigationController setNavigationBarHidden:TRUE];
-        [self centerMapOnSelectedAnnotation:view];
+        [self centerMapOnSelectedAnnotation:_selectedAnnotation];
         [self showCustomMapCallout];
     }
     

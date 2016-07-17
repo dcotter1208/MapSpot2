@@ -21,6 +21,7 @@
         
         _mediaCollectionView.backgroundColor = [UIColor clearColor];
         
+        
         self.bounds = _view.bounds;
         
         [self addSubview:_view];
