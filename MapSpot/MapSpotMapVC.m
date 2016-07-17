@@ -156,10 +156,7 @@
 -(void)centerMapOnSelectedAnnotation:(Annotation *)annotation {
     //Gets the current region of the mapView.
     MKCoordinateRegion currentRegion = _mapView.region;
-    
-    //Gets the currently selected annotation.
-//    _selectedAnnotation = annotation;
-    
+
     //sets the center of the current region to the selected annotation's coordinate so the map will center on that coordinate
     currentRegion.center = _selectedAnnotation.coordinate;
     
