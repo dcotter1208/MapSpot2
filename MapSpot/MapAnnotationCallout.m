@@ -15,9 +15,10 @@
     self = [super initWithFrame:frame];
     if (self) {
     
-         _previewImages = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"belleIsle-1"], [UIImage imageNamed:@"belleIsle-2"], [UIImage imageNamed:@"old_english_D"], nil];
+         _previewImages = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"belleIsle-1"], [UIImage imageNamed:@"belleIsle-2"], [UIImage imageNamed:@"old_english_D"], [UIImage imageNamed:@"belleIsle-3"], [UIImage imageNamed:@"belleIsle-4"], [UIImage imageNamed:@"belleIsle-5"], nil];
         
         [[NSBundle mainBundle]loadNibNamed:@"MapAnnotationCalloutView" owner:self options:nil];
+        
         [_mediaCollectionView registerNib:[UINib nibWithNibName:@"MediaPreviewCell" bundle:nil] forCellWithReuseIdentifier:@"mediaCell"];
         
 
@@ -55,12 +56,8 @@
     MediaPreviewCell *cell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"mediaCell" forIndexPath:indexPath];
     
      UIImageView *mediaImageView = (UIImageView *)[cell viewWithTag:100];
-    
-    //I DISCONNECTED OUTLET FOR THE UIIMAGE IN THE CELL....hook it back up or give it a tag like in TCWine App collectionview. Then set the mediaImageView.image
-        
+
     mediaImageView.image = [_previewImages objectAtIndex:indexPath.item];
-    
-    //Add your cell Values here
     
     return cell;
 }
