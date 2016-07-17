@@ -14,14 +14,11 @@
 
     self = [super initWithFrame:frame];
     if (self) {
-    
-         _previewImages = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"belleIsle-1"], [UIImage imageNamed:@"belleIsle-2"], [UIImage imageNamed:@"old_english_D"], [UIImage imageNamed:@"belleIsle-3"], [UIImage imageNamed:@"belleIsle-4"], [UIImage imageNamed:@"belleIsle-5"], nil];
-        
+
         [[NSBundle mainBundle]loadNibNamed:@"MapAnnotationCalloutView" owner:self options:nil];
         
         [_mediaCollectionView registerNib:[UINib nibWithNibName:@"MediaPreviewCell" bundle:nil] forCellWithReuseIdentifier:@"mediaCell"];
         
-
         _mediaCollectionView.backgroundColor = [UIColor clearColor];
         
         self.bounds = _view.bounds;

@@ -56,11 +56,6 @@
     [self mapSetup];
     [self setUpLongPressGesture];
     
-    NSString *count = @"At Belle Isle today... this place is great! Nice weather and I'm definitely coming back to kayak along with the pups. See you next time Detroit!";
-    
-    NSLog(@"COUNT: %lu",count.length);
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -136,11 +131,16 @@
 }
 
 -(void)showCustomMapCallout {
-//    self.navigationController.navigationBar.hidden = YES;
-    
     _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
     _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
     [self.view addSubview:_mapAnnotationCallout];
+}
+
+-(void)setCustomMapCalloutAttributes:(Spot *)spot {
+    _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"belleIsle-1"], [UIImage imageNamed:@"belleIsle-2"], [UIImage imageNamed:@"old_english_D"], [UIImage imageNamed:@"belleIsle-3"], [UIImage imageNamed:@"belleIsle-4"], [UIImage imageNamed:@"belleIsle-5"], nil];
+    
+    _mapAnnotationCallout.usernameLabel.text = spot.user;
+    _mapAnnotationCallout.messageTextView.text = spot.message;
 
 }
 
@@ -228,12 +228,15 @@
 #pragma mark MapKit Delegate Methods
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-
-    [self.navigationController setNavigationBarHidden:TRUE];
     
-    [self centerMapOnSelectedAnnotation:view];
+    Annotation *selectedAnnotation = view.annotation;
     
-    [self showCustomMapCallout];
+    if (![selectedAnnotation isEqual: _mapView.userLocation]) {
+        [self setCustomMapCalloutAttributes:selectedAnnotation.spotAtAnnotation];
+        [self.navigationController setNavigationBarHidden:TRUE];
+        [self centerMapOnSelectedAnnotation:view];
+        [self showCustomMapCallout];
+    }
     
 }
 
