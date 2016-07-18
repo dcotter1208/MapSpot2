@@ -6,12 +6,6 @@
 //  Copyright © 2016 DetroitLabs. All rights reserved.
 //
 
-/*
- 
- MKAnnotationView.image is that image property that will return whatver image we want and not the pin. This is what we can set to the user's selected pin image.
- 
- */
-
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
 #import "MapAnnotationCallout.h"
@@ -270,11 +264,10 @@
 }
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+    
     [self.navigationController setNavigationBarHidden:FALSE];
     [_mapAnnotationCallout removeFromSuperview];
-//    _mapAnnotationCallout.frame = CGRectMake(0, 0, 0, 0);
-//    _mapAnnotationCallout.bounds = CGRectMake(0, 0, 0, 0);
-//    [_mapAnnotationCallout.view removeFromSuperview];
+    
 }
 
 #pragma mark IBActions

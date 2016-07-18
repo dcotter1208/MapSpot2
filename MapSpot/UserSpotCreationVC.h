@@ -11,7 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "Spot.h"
 
-@interface UserSpotCreationVC : UIViewController
+@interface UserSpotCreationVC : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property(nonatomic) CLLocationCoordinate2D coordinatesForCreatedSpot;
 
