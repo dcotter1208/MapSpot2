@@ -232,6 +232,30 @@
 
 #pragma mark MapKit Delegate Methods
 
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    
+    if ([annotation isKindOfClass:[MKUserLocation class]]) {
+        return nil;
+    }
+    
+    if ([annotation isKindOfClass:[Annotation class]]) {
+
+        static NSString *const identifier = @"customAnnotation";
+        MKAnnotationView *annotationView = [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+
+        if (annotationView) {
+            annotationView.annotation = annotation;
+        } else {
+            annotationView = [[MKAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:(identifier)];
+        }
+        annotationView.image = [UIImage imageNamed:@"pin"];
+        annotationView.canShowCallout = FALSE;
+        
+        return annotationView;
+    }
+    return nil;
+}
+
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     
     _selectedAnnotation = view.annotation;
