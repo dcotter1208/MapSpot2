@@ -19,12 +19,17 @@
 		435544E41CFA3180002A4370 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 435544E31CFA3180002A4370 /* .gitignore */; };
 		4374D3181D010ECA00C8FE5B /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4374D3171D010ECA00C8FE5B /* User.m */; };
 		4374D31A1D02001F00C8FE5B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4374D3191D02001F00C8FE5B /* GoogleService-Info.plist */; };
+		437CC2961D3A961C00A81469 /* MediaPreviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 437CC2941D3A961C00A81469 /* MediaPreviewCell.m */; };
+		437CC2971D3A961C00A81469 /* MediaPreviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 437CC2951D3A961C00A81469 /* MediaPreviewCell.xib */; };
 		43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */; };
 		43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB329F1CFB8C1E00631D92 /* Spot.m */; };
 		43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43AB32A21CFBF9A700631D92 /* Annotation.m */; };
 		43ACBAAE1D34095F0082FE0A /* CurrentUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ACBAAD1D34095F0082FE0A /* CurrentUser.m */; };
 		43ACBAE61D352A0A0082FE0A /* FirebaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ACBAE51D352A0A0082FE0A /* FirebaseOperation.m */; };
 		43ACBAEA1D35B40A0082FE0A /* AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ACBAE91D35B40A0082FE0A /* AlertView.m */; };
+		43ACBAEC1D36C5FA0082FE0A /* Schema.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ACBAEB1D36C5FA0082FE0A /* Schema.m */; };
+		43ACBB211D38125C0082FE0A /* MapAnnotationCallout.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ACBB201D38125C0082FE0A /* MapAnnotationCallout.m */; };
+		43ACBB231D3812A20082FE0A /* MapAnnotationCalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43ACBB221D3812A20082FE0A /* MapAnnotationCalloutView.xib */; };
 		43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEB1D0104F00060D1BF /* LoginVC.m */; };
 		43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEE1D0105210060D1BF /* SignUpVC.m */; };
 		FE717BA2A2685DF966FD7AD0 /* libPods-MapSpot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E4651FF2387130EC55898D /* libPods-MapSpot.a */; };
@@ -52,6 +57,9 @@
 		4374D3161D010ECA00C8FE5B /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		4374D3171D010ECA00C8FE5B /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		4374D3191D02001F00C8FE5B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		437CC2931D3A961C00A81469 /* MediaPreviewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaPreviewCell.h; sourceTree = "<group>"; };
+		437CC2941D3A961C00A81469 /* MediaPreviewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaPreviewCell.m; sourceTree = "<group>"; };
+		437CC2951D3A961C00A81469 /* MediaPreviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediaPreviewCell.xib; sourceTree = "<group>"; };
 		43AB329B1CFACCF300631D92 /* UserSpotCreationVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSpotCreationVC.h; sourceTree = "<group>"; };
 		43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSpotCreationVC.m; sourceTree = "<group>"; };
 		43AB329E1CFB8C1E00631D92 /* Spot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Spot.h; sourceTree = "<group>"; };
@@ -64,6 +72,10 @@
 		43ACBAE51D352A0A0082FE0A /* FirebaseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirebaseOperation.m; sourceTree = "<group>"; };
 		43ACBAE81D35B40A0082FE0A /* AlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertView.h; sourceTree = "<group>"; };
 		43ACBAE91D35B40A0082FE0A /* AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertView.m; sourceTree = "<group>"; };
+		43ACBAEB1D36C5FA0082FE0A /* Schema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Schema.m; sourceTree = "<group>"; };
+		43ACBB1F1D38125C0082FE0A /* MapAnnotationCallout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapAnnotationCallout.h; sourceTree = "<group>"; };
+		43ACBB201D38125C0082FE0A /* MapAnnotationCallout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapAnnotationCallout.m; sourceTree = "<group>"; };
+		43ACBB221D3812A20082FE0A /* MapAnnotationCalloutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapAnnotationCalloutView.xib; sourceTree = "<group>"; };
 		43D8DEEA1D0104F00060D1BF /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		43D8DEEB1D0104F00060D1BF /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		43D8DEED1D0105210060D1BF /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
@@ -106,6 +118,7 @@
 		43280D8F1CF87BF900F726FE /* MapSpot */ = {
 			isa = PBXGroup;
 			children = (
+				43ACBAEB1D36C5FA0082FE0A /* Schema.m */,
 				43280D931CF87BF900F726FE /* AppDelegate.h */,
 				43280D941CF87BF900F726FE /* AppDelegate.m */,
 				43AB32A51CFBF9BD00631D92 /* ViewController */,
@@ -143,6 +156,12 @@
 				43ACBAAD1D34095F0082FE0A /* CurrentUser.m */,
 				43ACBAE81D35B40A0082FE0A /* AlertView.h */,
 				43ACBAE91D35B40A0082FE0A /* AlertView.m */,
+				43ACBB1F1D38125C0082FE0A /* MapAnnotationCallout.h */,
+				43ACBB201D38125C0082FE0A /* MapAnnotationCallout.m */,
+				43ACBB221D3812A20082FE0A /* MapAnnotationCalloutView.xib */,
+				437CC2931D3A961C00A81469 /* MediaPreviewCell.h */,
+				437CC2941D3A961C00A81469 /* MediaPreviewCell.m */,
+				437CC2951D3A961C00A81469 /* MediaPreviewCell.xib */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -263,6 +282,8 @@
 				435544E41CFA3180002A4370 /* .gitignore in Resources */,
 				43280DA01CF87BF900F726FE /* LaunchScreen.storyboard in Resources */,
 				4374D31A1D02001F00C8FE5B /* GoogleService-Info.plist in Resources */,
+				43ACBB231D3812A20082FE0A /* MapAnnotationCalloutView.xib in Resources */,
+				437CC2971D3A961C00A81469 /* MediaPreviewCell.xib in Resources */,
 				43280D9D1CF87BF900F726FE /* Assets.xcassets in Resources */,
 				43280D9B1CF87BF900F726FE /* Main.storyboard in Resources */,
 			);
@@ -323,6 +344,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				437CC2961D3A961C00A81469 /* MediaPreviewCell.m in Sources */,
 				43AB32A31CFBF9A700631D92 /* Annotation.m in Sources */,
 				43ACBAEA1D35B40A0082FE0A /* AlertView.m in Sources */,
 				43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */,
@@ -334,8 +356,10 @@
 				43ACBAAE1D34095F0082FE0A /* CurrentUser.m in Sources */,
 				43013AEB1D243A9C004D569F /* FirebaseDatabaseService.m in Sources */,
 				43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */,
+				43ACBAEC1D36C5FA0082FE0A /* Schema.m in Sources */,
 				43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */,
 				43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */,
+				43ACBB211D38125C0082FE0A /* MapAnnotationCallout.m in Sources */,
 				43280D921CF87BF900F726FE /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

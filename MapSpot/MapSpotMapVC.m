@@ -14,9 +14,9 @@
 
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
+#import "MapAnnotationCallout.h"
 #import "Spot.h"
 #import "FirebaseOperation.h"
-#import "UserSpotCreationVC.h"
 #import "Annotation.h"
 #import "CurrentUser.h"
 @import FirebaseAuth;
@@ -39,6 +39,8 @@
 @property(nonatomic, strong) CLLocation *newestLocation;
 @property(nonatomic) MKCoordinateRegion userLocation;
 @property(nonatomic)CLLocationCoordinate2D longPressCoordinates;
+@property(nonatomic, strong) MapAnnotationCallout *mapAnnotationCallout;
+@property (nonatomic, strong) Annotation *selectedAnnotation;
 
 @end
 
@@ -48,12 +50,21 @@
 #pragma mark Lifecycle Methods
 
 - (void)viewDidLoad {
+    _mapAnnotationCallout = [[MapAnnotationCallout alloc]init];
     [self checkForCurrentUserValue];
     [super viewDidLoad];
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
+    
 }
+
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [_mapAnnotationCallout removeFromSuperview];
+    [_mapView deselectAnnotation:_selectedAnnotation animated:FALSE];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -94,8 +105,7 @@
     
 }
 
-
-#pragma mark Map Actions Help Method
+#pragma mark Map Actions Help Methods
 
 /*
  Sets longPressGesture's duration and maximum movement
@@ -126,6 +136,33 @@
     annotation.title = spot.user;
     annotation.subtitle = [NSString stringWithFormat:@"%@", spot.message];
     [_mapView addAnnotation:annotation];
+}
+
+-(void)showCustomMapCallout {
+    _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
+   _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
+    [self.view addSubview:_mapAnnotationCallout];
+}
+
+-(void)setCustomMapCalloutAttributes:(Spot *)spot {
+    _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"belleIsle-1"], [UIImage imageNamed:@"belleIsle-2"], [UIImage imageNamed:@"old_english_D"], [UIImage imageNamed:@"belleIsle-3"], [UIImage imageNamed:@"belleIsle-4"], [UIImage imageNamed:@"belleIsle-5"], nil];
+    
+    _mapAnnotationCallout.usernameLabel.text = spot.user;
+    _mapAnnotationCallout.messageTextView.text = spot.message;
+
+}
+
+//centers map when an annotation is selected. Called in didSelectAnnotation method.
+-(void)centerMapOnSelectedAnnotation:(Annotation *)annotation {
+    //Gets the current region of the mapView.
+    MKCoordinateRegion currentRegion = _mapView.region;
+
+    //sets the center of the current region to the selected annotation's coordinate so the map will center on that coordinate
+    currentRegion.center = _selectedAnnotation.coordinate;
+    
+    //sets the map's region to the current region.
+    [_mapView setRegion:currentRegion animated:true];
+//    [_mapView setRegion:currentRegion];
 }
 
 #pragma mark Firebase Helper Methods
@@ -162,7 +199,6 @@
 -(void)getCurrentUserProfileFromFirebase {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
-        NSLog(@"SNAPSHOT: %@", snapshot.value);
         [self setCurrentUser:snapshot];
     }];
 }
@@ -192,6 +228,29 @@
             [destionationVC setCoordinatesForCreatedSpot:_longPressCoordinates];
         }
     }
+}
+
+#pragma mark MapKit Delegate Methods
+
+-(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    
+    _selectedAnnotation = view.annotation;
+    
+    if (![_selectedAnnotation isEqual: _mapView.userLocation]) {
+        [self setCustomMapCalloutAttributes:_selectedAnnotation.spotAtAnnotation];
+        [self.navigationController setNavigationBarHidden:TRUE];
+        [self centerMapOnSelectedAnnotation:_selectedAnnotation];
+        [self showCustomMapCallout];
+    }
+    
+}
+
+-(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+    [self.navigationController setNavigationBarHidden:FALSE];
+    [_mapAnnotationCallout removeFromSuperview];
+//    _mapAnnotationCallout.frame = CGRectMake(0, 0, 0, 0);
+//    _mapAnnotationCallout.bounds = CGRectMake(0, 0, 0, 0);
+//    [_mapAnnotationCallout.view removeFromSuperview];
 }
 
 #pragma mark IBActions

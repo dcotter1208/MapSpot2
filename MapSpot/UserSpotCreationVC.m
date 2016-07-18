@@ -20,6 +20,7 @@
 #pragma mark Lifecycle methods
 
 - (void)viewDidLoad {
+    [self.navigationController setNavigationBarHidden:FALSE];
     [super viewDidLoad];
     
 }

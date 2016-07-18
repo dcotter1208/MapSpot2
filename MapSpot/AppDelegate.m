@@ -26,6 +26,8 @@
     
     [FIRApp configure];
     
+    [FIRDatabase database].persistenceEnabled = YES;
+    
     [[FIRAuth auth] addAuthStateDidChangeListener:^(FIRAuth *auth,
                                                     FIRUser *user) {
         

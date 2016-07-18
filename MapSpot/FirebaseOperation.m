@@ -49,7 +49,6 @@
 -(void)listenForChildNodeChanges:(NSString *)child completion:(void(^)(CurrentUser *updatedCurrentUser))completion {
     if ([child isEqualToString:@"users"]) {
         [self queryUpdatedUserProfile:child completion:^(FIRDataSnapshot *snapshot) {
-
             completion([self updateCurrentUserInfo:snapshot]);
         }];
     } else {

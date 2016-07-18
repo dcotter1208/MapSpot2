@@ -55,14 +55,26 @@
     }
 }
 
+//Removes all whitespace or only leading and trailing of a given string.
+-(NSString *)removeallWhiteSpace:(NSString *)string {
+    NSString *newString = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *noWhiteSpaceString = [newString stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    return noWhiteSpaceString;
+}
+
 //Logs the user into Firebase or displays an error message using the loginFailedAlerView func if there was an error.
 -(void)loginUserWithFirebaseAuth {
-    [[FIRAuth auth] signInWithEmail:_emailTF.text password:_passwordTF.text completion:^(FIRUser *user, NSError *error) {
+    
+    NSString *email = [self removeallWhiteSpace:_emailTF.text];
+    NSString *password = [self removeallWhiteSpace:_passwordTF.text];
+    
+    [[FIRAuth auth] signInWithEmail:email password:password completion:^(FIRUser *user, NSError *error) {
         if (error) {
             
             //Not a valid email.
             if (error.code == 17999) {
-                [_alertView genericAlert:@"Login Failed" message:[NSString stringWithFormat:@"%@ doesn't appear to be an existing email", _emailTF.text] presentingViewController:self];
+                [_alertView genericAlert:@"Login Failed" message:[NSString stringWithFormat:@"%@ doesn't appear to be an existing email", email] presentingViewController:self];
                 
                 //Password incorrect
             } else if (error.code == 17009) {
