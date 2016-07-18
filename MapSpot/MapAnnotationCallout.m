@@ -20,7 +20,9 @@
         [_mediaCollectionView registerNib:[UINib nibWithNibName:@"MediaPreviewCell" bundle:nil] forCellWithReuseIdentifier:@"mediaCell"];
         
         _mediaCollectionView.backgroundColor = [UIColor clearColor];
-        
+        _view.layer.borderColor = [[UIColor grayColor]CGColor];
+        _view.layer.borderWidth = 1.0;
+        self.layer.backgroundColor = [[UIColor clearColor]CGColor];
         
         self.bounds = _view.bounds;
         
@@ -35,7 +37,6 @@
     _userProfileImageView.layer.borderWidth = 1.0;
     _userProfileImageView.layer.borderColor = [[UIColor blackColor]CGColor];
     _userProfileImageView.layer.masksToBounds = TRUE;
-
 }
 
 #pragma mark : Collection View Datasource
@@ -45,7 +46,6 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     return CGSizeMake(65, 65);
 }
 
@@ -53,7 +53,7 @@
     
     MediaPreviewCell *cell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"mediaCell" forIndexPath:indexPath];
     
-     UIImageView *mediaImageView = (UIImageView *)[cell viewWithTag:100];
+    UIImageView *mediaImageView = (UIImageView *)[cell viewWithTag:100];
 
     mediaImageView.image = [_previewImages objectAtIndex:indexPath.item];
     

@@ -140,7 +140,7 @@
 
 -(void)showCustomMapCallout {
     _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
-    _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
+   _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
     [self.view addSubview:_mapAnnotationCallout];
 }
 
@@ -248,6 +248,9 @@
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
     [self.navigationController setNavigationBarHidden:FALSE];
     [_mapAnnotationCallout removeFromSuperview];
+//    _mapAnnotationCallout.frame = CGRectMake(0, 0, 0, 0);
+//    _mapAnnotationCallout.bounds = CGRectMake(0, 0, 0, 0);
+//    [_mapAnnotationCallout.view removeFromSuperview];
 }
 
 #pragma mark IBActions
