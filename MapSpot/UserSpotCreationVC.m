@@ -36,18 +36,10 @@
     _manager = [[PHImageManager alloc] init];
     [super viewDidLoad];
     
-//    [self setCollectionViewCellSize];
+    [self checkForPhotoLibraryPermission];
+
     [self collectionViewSetUp];
-    
-    [self accessDevicePhotoLibrary:^(PHFetchResult *cameraRollAssets) {
-        
-        _imageAssests = cameraRollAssets;
 
-        //DO I NEED THIS????????????????????
-        [_photoLibraryCollectionView reloadData];
-
-    }];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -77,21 +69,28 @@
     return [dateFormatter stringFromDate:date];
 }
 
+-(void)checkForPhotoLibraryPermission {
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+       
+        if (status == PHAuthorizationStatusAuthorized) {
+            [self accessDevicePhotoLibrary:^(PHFetchResult *cameraRollAssets) {
+                _imageAssests = cameraRollAssets;
+                
+                [_photoLibraryCollectionView reloadData];
+            }];
+        } else {
+            NSLog(@"Permission Denied.");
+        }
+        
+    }];
+}
+
 -(void)accessDevicePhotoLibrary:(void(^)(PHFetchResult *cameraRollAssets))completion {
     PHFetchOptions *fetchOptions = [[PHFetchOptions alloc]init];
-    
-    _requestOptions = [[PHImageRequestOptions alloc]init];
-    _requestOptions.resizeMode   = PHImageRequestOptionsResizeModeExact;
-    _requestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
-    self.requestOptions.synchronous = true;
-    
-    PHFetchResult *result = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:fetchOptions];
-    
-    PHAssetCollection *cameraRoll = result.firstObject;
-    
-    PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:cameraRoll options:fetchOptions];
+    fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:FALSE]];
+    PHFetchResult *allPhotos = [PHAsset fetchAssetsWithOptions:fetchOptions];
 
-    completion(assets);
+    completion(allPhotos);
 
 }
 
@@ -133,7 +132,7 @@
 
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(_photoLibraryCollectionView.frame.size.width/4, _photoLibraryCollectionView.frame.size.width/4);
+    return CGSizeMake(_photoLibraryCollectionView.frame.size.width/3, _photoLibraryCollectionView.frame.size.width/3);
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -154,9 +153,12 @@
         
         UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView dequeueReusableCellWithReuseIdentifier:@"photoLibraryCell" forIndexPath:indexPath];
         
-        _assetThumbnailSize = CGSizeMake(100,100);
+        CGRect screenSize = [[UIScreen mainScreen] bounds];
+
+        _assetThumbnailSize = CGSizeMake(screenSize.size.width / 3, screenSize.size.height / 3);
         
         UIImageView *photoLibraryCellImageView = (UIImageView *)[photoLibraryCell viewWithTag:200];
+        photoLibraryCellImageView.layer.masksToBounds = TRUE;
 
         [_manager requestImageForAsset:asset
                                      targetSize:_assetThumbnailSize
