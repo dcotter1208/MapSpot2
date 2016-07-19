@@ -24,6 +24,7 @@
 @property (nonatomic, strong) PHImageRequestOptions *requestOptions;
 @property (nonatomic, strong) PHFetchResult *imageAssests;
 @property (nonatomic, strong) PHImageManager *manager;
+@property (nonnull, strong) NSMutableArray *selectedImagesForSpot;
 
 @end
 
@@ -34,6 +35,7 @@
 - (void)viewDidLoad {
     [self.navigationController setNavigationBarHidden:FALSE];
     _manager = [[PHImageManager alloc] init];
+    _selectedImagesForSpot = [[NSMutableArray alloc]init];
     [super viewDidLoad];
     
     [self checkForPhotoLibraryPermission];
@@ -94,6 +96,26 @@
 
 }
 
+- (UIImage *)image:(UIImage*)originalImage scaledToSize:(CGSize)size {
+    //avoid redundant drawing
+    if (CGSizeEqualToSize(originalImage.size, size)) {
+        return originalImage;
+    }
+    
+    //create drawing context
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0f);
+    
+    //draw
+    [originalImage drawInRect:CGRectMake(0.0f, 0.0f, size.width, size.height)];
+    
+    //capture resultant image
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    //return image
+    return image;
+}
+
 #pragma mark Firebase Helper Methods
 
 /*
@@ -145,6 +167,30 @@
     
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    if (collectionView.tag == 1) {
+        
+        PHAsset *selectedImage = [_imageAssests objectAtIndex:indexPath.item];
+        CGRect screen = [[UIScreen mainScreen] bounds];
+        CGSize screenSize = CGSizeMake(screen.size.width, screen.size.height);
+        
+        
+        [_manager requestImageForAsset:selectedImage
+                            targetSize:selectedImage.accessibilityFrame.size
+                           contentMode:PHImageContentModeAspectFill
+                               options:nil
+                         resultHandler:^(UIImage *result, NSDictionary *info) {
+                             UIImage *image = [self image:result scaledToSize:screenSize];
+                             NSLog(@"Image: %@", image.description);
+                             [_selectedImagesForSpot addObject:image];
+                             NSLog(@"Image Array Count: %lu", _selectedImagesForSpot.count);
+        }];
+        
+    }
+
+}
+
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if (collectionView.tag == 1) {
@@ -160,6 +206,15 @@
         UIImageView *photoLibraryCellImageView = (UIImageView *)[photoLibraryCell viewWithTag:200];
         photoLibraryCellImageView.layer.masksToBounds = TRUE;
 
+        
+        //This may be helpful for retrieving video assets...
+        
+//        if (asset.mediaType == PHAssetMediaTypeImage) {
+//            
+//        } else if (asset.mediaType == PHAssetMediaTypeVideo) {
+//        
+//        }
+       
         [_manager requestImageForAsset:asset
                                      targetSize:_assetThumbnailSize
                                     contentMode:PHImageContentModeAspectFill
