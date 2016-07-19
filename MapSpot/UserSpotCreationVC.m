@@ -12,11 +12,13 @@
 @import Photos;
 
 @interface UserSpotCreationVC ()
+
+#pragma mark IBOutlets
 @property (weak, nonatomic) IBOutlet UITextView *messageTF;
 @property (weak, nonatomic) IBOutlet UICollectionView *mediaCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionView *photoLibraryCollectionView;
 
-@property (nonatomic, strong) PHAssetCollection *photoLibrary;
+#pragma mark Properties
 @property (nonatomic, strong) NSMutableArray *spotMediaItems;
 @property (nonatomic) CGSize assetThumbnailSize;
 @property (nonatomic, strong) PHImageRequestOptions *requestOptions;
@@ -34,10 +36,14 @@
     _manager = [[PHImageManager alloc] init];
     [super viewDidLoad];
     
+//    [self setCollectionViewCellSize];
+    [self collectionViewSetUp];
+    
     [self accessDevicePhotoLibrary:^(PHFetchResult *cameraRollAssets) {
         
         _imageAssests = cameraRollAssets;
-        
+
+        //DO I NEED THIS????????????????????
         [_photoLibraryCollectionView reloadData];
 
     }];
@@ -117,6 +123,19 @@
 
 #pragma mark Photo Library CollectionView
 
+-(void)collectionViewSetUp {
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [flowLayout setMinimumInteritemSpacing:0.0f];
+    [flowLayout setMinimumLineSpacing:0.0f];
+    [flowLayout setSectionInset: UIEdgeInsetsMake(20, 0, 10, 0)];
+    [_photoLibraryCollectionView setCollectionViewLayout:flowLayout];
+}
+
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(_photoLibraryCollectionView.frame.size.width/4, _photoLibraryCollectionView.frame.size.width/4);
+}
+
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
     if (collectionView.tag == 1) {
@@ -147,7 +166,6 @@
                                       // Set the cell's thumbnail image if it's still showing the same asset.
                                       photoLibraryCellImageView.image = result;
                                   }];
-        
 
         return photoLibraryCell;
 
