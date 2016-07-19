@@ -509,7 +509,7 @@
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="message" translatesAutoresizingMaskIntoConstraints="NO" id="SjI-XZ-Bme">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="144"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="144" id="bug-gv-UQZ"/>
                                 </constraints>
@@ -517,32 +517,38 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="myO-oR-4zo">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="myO-oR-4zo">
                                 <rect key="frame" x="0.0" y="144" width="600" height="126"/>
-                                <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="126" id="fAK-e0-0nr"/>
                                 </constraints>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SJ9-7V-nFz">
-                                    <size key="itemSize" width="114" height="114"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SJ9-7V-nFz">
+                                    <size key="itemSize" width="115" height="115"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="spotMediaCell" id="NrV-ik-3SE">
-                                        <rect key="frame" x="0.0" y="0.0" width="114" height="114"/>
+                                        <rect key="frame" x="0.0" y="6" width="115" height="115"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="114" height="114"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="115" height="115"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VPz-Er-amZ">
-                                                    <rect key="frame" x="0.0" y="0.0" width="114" height="114"/>
+                                                <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VPz-Er-amZ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="115" height="115"/>
                                                 </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="VPz-Er-amZ" firstAttribute="leading" secondItem="NrV-ik-3SE" secondAttribute="leading" id="KV6-fu-pua"/>
+                                            <constraint firstAttribute="bottom" secondItem="VPz-Er-amZ" secondAttribute="bottom" id="ZAE-FA-226"/>
+                                            <constraint firstAttribute="trailing" secondItem="VPz-Er-amZ" secondAttribute="trailing" id="gh5-JS-DIK"/>
+                                            <constraint firstItem="VPz-Er-amZ" firstAttribute="top" secondItem="NrV-ik-3SE" secondAttribute="top" id="lUm-KP-hew"/>
+                                        </constraints>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
@@ -567,7 +573,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="85" height="85"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" tag="200" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WtS-8U-5oN">
+                                                <imageView userInteractionEnabled="NO" tag="200" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WtS-8U-5oN">
                                                     <rect key="frame" x="0.0" y="0.0" width="85" height="85"/>
                                                 </imageView>
                                             </subviews>
@@ -602,7 +608,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.51121367520000005" blue="1" alpha="0.77400323280000005" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="lav-ow-g64" firstAttribute="leading" secondItem="cKv-KY-HgG" secondAttribute="leadingMargin" id="YwI-YC-Fdf"/>
                                     <constraint firstAttribute="bottom" secondItem="lav-ow-g64" secondAttribute="bottom" constant="10" id="kGF-xz-UnF"/>
@@ -645,7 +651,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w8A-Mt-Pfo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="766" y="-92"/>
+            <point key="canvasLocation" x="766" y="-91.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7s4-fm-uRk">

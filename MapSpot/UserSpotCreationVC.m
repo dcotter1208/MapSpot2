@@ -24,7 +24,6 @@
 @property (nonatomic, strong) PHImageRequestOptions *requestOptions;
 @property (nonatomic, strong) PHFetchResult *imageAssests;
 @property (nonatomic, strong) PHImageManager *manager;
-@property (nonnull, strong) NSMutableArray *selectedImagesForSpot;
 
 @end
 
@@ -35,7 +34,7 @@
 - (void)viewDidLoad {
     [self.navigationController setNavigationBarHidden:FALSE];
     _manager = [[PHImageManager alloc] init];
-    _selectedImagesForSpot = [[NSMutableArray alloc]init];
+    _spotMediaItems = [[NSMutableArray alloc]init];
     [super viewDidLoad];
     
     [self checkForPhotoLibraryPermission];
@@ -56,7 +55,7 @@
     _mediaCollectionView.layer.borderWidth = 1.0;
     _mediaCollectionView.layer.borderColor = [[UIColor blackColor]CGColor];
     _mediaCollectionView.layer.backgroundColor = [[UIColor whiteColor]CGColor];
-    
+
 }
 
 /*
@@ -69,6 +68,14 @@
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     return [dateFormatter stringFromDate:date];
+}
+
+-(BOOL)imageIsPortrait:(UIImage *)image {
+    if (image.size.height > image.size.width) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 -(void)checkForPhotoLibraryPermission {
@@ -88,6 +95,7 @@
 }
 
 -(void)accessDevicePhotoLibrary:(void(^)(PHFetchResult *cameraRollAssets))completion {
+    
     PHFetchOptions *fetchOptions = [[PHFetchOptions alloc]init];
     fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:FALSE]];
     PHFetchResult *allPhotos = [PHAsset fetchAssetsWithOptions:fetchOptions];
@@ -154,7 +162,17 @@
 
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+//    if (collectionView.tag == 1) {
+//        return CGSizeMake(_photoLibraryCollectionView.frame.size.width/3, _photoLibraryCollectionView.frame.size.width/3);
+//    } else {
+//        UICollectionViewCell *spotMediaCell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"spotMediaCell" forIndexPath:indexPath];
+//        return CGSizeMake(spotMediaCell.frame.size.width, spotMediaCell.frame.size.height);
+//    }
+    
     return CGSizeMake(_photoLibraryCollectionView.frame.size.width/3, _photoLibraryCollectionView.frame.size.width/3);
+
+    
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -172,21 +190,21 @@
     if (collectionView.tag == 1) {
         
         PHAsset *selectedImage = [_imageAssests objectAtIndex:indexPath.item];
-        CGRect screen = [[UIScreen mainScreen] bounds];
-        CGSize screenSize = CGSizeMake(screen.size.width, screen.size.height);
         
-        
+        _requestOptions = [[PHImageRequestOptions alloc]init];
+        _requestOptions.synchronous = TRUE;
+        _requestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
+
         [_manager requestImageForAsset:selectedImage
-                            targetSize:selectedImage.accessibilityFrame.size
+                            targetSize:PHImageManagerMaximumSize
                            contentMode:PHImageContentModeAspectFill
-                               options:nil
+                               options:_requestOptions
                          resultHandler:^(UIImage *result, NSDictionary *info) {
-                             UIImage *image = [self image:result scaledToSize:screenSize];
-                             NSLog(@"Image: %@", image.description);
-                             [_selectedImagesForSpot addObject:image];
-                             NSLog(@"Image Array Count: %lu", _selectedImagesForSpot.count);
+                             [_spotMediaItems addObject:result];
+                             [_mediaCollectionView reloadData];
+                             
+                             NSLog(@"Image Array Count: %lu", _spotMediaItems.count);
         }];
-        
     }
 
 }
@@ -227,8 +245,15 @@
         return photoLibraryCell;
 
         } else {
+           
+            UICollectionViewCell *spotMediaCell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"spotMediaCell" forIndexPath:indexPath];
+            UIImageView *spotMediaCellImageView = (UIImageView *)[spotMediaCell viewWithTag:100];
+            spotMediaCellImageView.layer.masksToBounds = TRUE;
+            spotMediaCellImageView.layer.cornerRadius = spotMediaCellImageView.frame.size.height/2;
+ 
+            spotMediaCellImageView.image = _spotMediaItems[indexPath.row];
             
-        return nil;
+        return spotMediaCell;
     }
     
 }
