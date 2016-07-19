@@ -576,14 +576,21 @@
                                                 <imageView userInteractionEnabled="NO" tag="200" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WtS-8U-5oN">
                                                     <rect key="frame" x="0.0" y="0.0" width="85" height="85"/>
                                                 </imageView>
+                                                <imageView userInteractionEnabled="NO" tag="201" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Taj-tm-gZY">
+                                                    <rect key="frame" x="60" y="0.0" width="25" height="25"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="WtS-8U-5oN" firstAttribute="top" secondItem="T8W-x8-owb" secondAttribute="top" id="6qa-ez-BmT"/>
-                                            <constraint firstAttribute="trailing" secondItem="WtS-8U-5oN" secondAttribute="trailing" id="MHS-ol-ncQ"/>
-                                            <constraint firstItem="WtS-8U-5oN" firstAttribute="leading" secondItem="T8W-x8-owb" secondAttribute="leading" id="RMJ-YT-C9v"/>
-                                            <constraint firstAttribute="bottom" secondItem="WtS-8U-5oN" secondAttribute="bottom" id="jdh-mi-Byx"/>
+                                            <constraint firstItem="WtS-8U-5oN" firstAttribute="top" secondItem="Taj-tm-gZY" secondAttribute="top" id="DUY-Lq-6Wq"/>
+                                            <constraint firstItem="WtS-8U-5oN" firstAttribute="leading" secondItem="T8W-x8-owb" secondAttribute="leading" id="HUa-qR-wx4"/>
+                                            <constraint firstItem="Taj-tm-gZY" firstAttribute="leading" secondItem="T8W-x8-owb" secondAttribute="leadingMargin" constant="52" id="P5h-q3-oQI"/>
+                                            <constraint firstItem="WtS-8U-5oN" firstAttribute="top" secondItem="T8W-x8-owb" secondAttribute="top" id="mbG-vP-qkM"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="Taj-tm-gZY" secondAttribute="bottom" constant="52" id="qH5-Yn-NrK"/>
+                                            <constraint firstAttribute="bottom" secondItem="WtS-8U-5oN" secondAttribute="bottom" id="rK6-AN-M7w"/>
+                                            <constraint firstItem="WtS-8U-5oN" firstAttribute="trailing" secondItem="Taj-tm-gZY" secondAttribute="trailing" id="rWz-xt-2bH"/>
+                                            <constraint firstAttribute="trailing" secondItem="Taj-tm-gZY" secondAttribute="trailing" id="z8g-Se-FY5"/>
                                         </constraints>
                                     </collectionViewCell>
                                 </cells>
@@ -651,7 +658,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w8A-Mt-Pfo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="766" y="-91.5"/>
+            <point key="canvasLocation" x="766" y="-92"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7s4-fm-uRk">
