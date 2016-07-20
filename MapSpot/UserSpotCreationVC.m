@@ -286,11 +286,15 @@
                                options:nil
                          resultHandler:^(UIImage *result, NSDictionary *info) {
                              
-                             UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/6, result.size.height/6)];
-                             
-                             NSData *imageData = UIImagePNGRepresentation(resizedImage);
-                             
-                             [firebaseOperation uploadToFirebase:imageData];
+                             if (result.size.width > 750 && result.size.height > 1334) {
+                                 UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/10, result.size.height/10)];
+                                 NSData *imageData = UIImagePNGRepresentation(resizedImage);
+                                 [firebaseOperation uploadToFirebase:imageData];
+                             } else {
+                                 UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/4, result.size.height/4)];
+                                 NSData *imageData = UIImagePNGRepresentation(resizedImage);
+                                 [firebaseOperation uploadToFirebase:imageData];
+                             }
 
                          }];
     }
