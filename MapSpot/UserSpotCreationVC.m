@@ -171,17 +171,6 @@
             }];
 }
 
--(void)isCellSelected:(UICollectionViewCell *)cell {
-
-    if (cell.selected) {
-        cell.layer.borderWidth = 4.0;
-        cell.layer.borderColor = [[UIColor greenColor]CGColor];
-    } else {
-        cell.layer.borderWidth = 0.0;
-        cell.layer.borderColor = [[UIColor clearColor]CGColor];
-    }
-}
-
 -(BOOL)checkMediaArrayCapacity {
     if ([_spotMediaItems count] == 10) {
         return TRUE;
@@ -213,54 +202,22 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if (collectionView.tag == 1) {
-        UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView cellForItemAtIndexPath:indexPath];
         PHAsset *selectedImage = [_imageAssests objectAtIndex:indexPath.item];
 
         if (![self checkMediaArrayCapacity]) {
             if (![_spotMediaItems containsObject:selectedImage]) {
-                photoLibraryCell.layer.borderWidth = 4.0;
-                photoLibraryCell.layer.borderColor = [[UIColor greenColor]CGColor];
                 [_spotMediaItems addObject:selectedImage];
                 [_mediaCollectionView reloadData];
             }
         }
         
     } else {
-        UICollectionViewCell *spotMediaCell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"spotMediaCell" forIndexPath:indexPath];
-        
-        UIButton *mediaCellButton = (UIButton *)[spotMediaCell viewWithTag:201];
-        
-        if (mediaCellButton.selected) {
-            [mediaCellButton setSelected:TRUE];
-
-            NSLog(@"Button Selected");
-        }
-        
-        
-        if (mediaCellButton.state == UIControlStateSelected) {
-            NSLog(@"Delete Button Selected");
-        }
+        PHAsset *selectedImage = [_spotMediaItems objectAtIndex:indexPath.item];
 
     }
 
 }
 
--(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-
-    if (collectionView.tag == 1) {
-        UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView cellForItemAtIndexPath:indexPath];
-        
-        PHAsset *deSelectedImage = [_imageAssests objectAtIndex:indexPath.item];
-        if ([_spotMediaItems containsObject:deSelectedImage]) {
-            [_spotMediaItems removeObject:deSelectedImage];
-            [_mediaCollectionView reloadData];
-            photoLibraryCell.layer.borderWidth = 0.0;
-            photoLibraryCell.layer.borderColor = [[UIColor clearColor]CGColor];
-        }
-
-    }
-    
-}
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -276,8 +233,6 @@
         UIImageView *photoLibraryCellImageView = (UIImageView *)[photoLibraryCell viewWithTag:200];
         photoLibraryCellImageView.layer.masksToBounds = TRUE;
         
-        [self isCellSelected:photoLibraryCell];
-
         [self setImageForCellImageViewWithAsset:asset imageView:photoLibraryCellImageView];
 
     return photoLibraryCell;
@@ -305,25 +260,15 @@
 
 -(IBAction)deleteSelectedSpotMedia:(id)sender event:(id)event {
     
+    //Gets position of touch in the collectionView. This is used to grab the indexPath
     NSSet *touches = [event allTouches];
-    
     UITouch *touch = [touches anyObject];
-    
     CGPoint currentTouchPosition = [touch locationInView:_mediaCollectionView];
     
     NSIndexPath *indexPath = [_mediaCollectionView indexPathForItemAtPoint: currentTouchPosition];
     
     [_spotMediaItems removeObjectAtIndex:indexPath.item];
     [_mediaCollectionView reloadData];
-}
-
-- (void)deleteMedia:(NSIndexPath *)IndexPath {
-    
-    PHAsset *assetToRemove = [_spotMediaItems objectAtIndex:IndexPath.item];
-    NSLog(@"Asset To Remove: %@", assetToRemove.description);
-    
-    NSLog(@"button clicked");
-    
 }
 
 #pragma mark IBActions
