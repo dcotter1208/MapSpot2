@@ -169,10 +169,13 @@
 //        UICollectionViewCell *spotMediaCell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"spotMediaCell" forIndexPath:indexPath];
 //        return CGSizeMake(spotMediaCell.frame.size.width, spotMediaCell.frame.size.height);
 //    }
-    
-    return CGSizeMake(_photoLibraryCollectionView.frame.size.width/3, _photoLibraryCollectionView.frame.size.width/3);
 
-    
+    if (collectionView.tag == 1) {
+        return CGSizeMake(_photoLibraryCollectionView.frame.size.width/3, _photoLibraryCollectionView.frame.size.width/3);
+    } else {
+        return CGSizeMake(_mediaCollectionView.frame.size.width/3.5, _mediaCollectionView.frame.size.width/3.5);
+    }
+
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -191,20 +194,25 @@
         
         PHAsset *selectedImage = [_imageAssests objectAtIndex:indexPath.item];
         
-        _requestOptions = [[PHImageRequestOptions alloc]init];
-        _requestOptions.synchronous = TRUE;
-        _requestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
+        [_spotMediaItems addObject:selectedImage];
+        
+        [_mediaCollectionView reloadData];
 
-        [_manager requestImageForAsset:selectedImage
-                            targetSize:PHImageManagerMaximumSize
-                           contentMode:PHImageContentModeAspectFill
-                               options:_requestOptions
-                         resultHandler:^(UIImage *result, NSDictionary *info) {
-                             [_spotMediaItems addObject:result];
-                             [_mediaCollectionView reloadData];
-                             
-                             NSLog(@"Image Array Count: %lu", _spotMediaItems.count);
-        }];
+        
+//        _requestOptions = [[PHImageRequestOptions alloc]init];
+//        _requestOptions.synchronous = TRUE;
+//        _requestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
+//
+//        [_manager requestImageForAsset:selectedImage
+//                            targetSize:PHImageManagerMaximumSize
+//                           contentMode:PHImageContentModeAspectFill
+//                               options:_requestOptions
+//                         resultHandler:^(UIImage *result, NSDictionary *info) {
+//                             
+//                             [_spotMediaItems addObject:result];
+//                             [_mediaCollectionView reloadData];
+//
+//        }];
     }
 
 }
@@ -217,22 +225,32 @@
         
         UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView dequeueReusableCellWithReuseIdentifier:@"photoLibraryCell" forIndexPath:indexPath];
         
-        CGRect screenSize = [[UIScreen mainScreen] bounds];
-
-        _assetThumbnailSize = CGSizeMake(screenSize.size.width / 3, screenSize.size.height / 3);
-        
         UIImageView *photoLibraryCellImageView = (UIImageView *)[photoLibraryCell viewWithTag:200];
         photoLibraryCellImageView.layer.masksToBounds = TRUE;
 
         
-        //This may be helpful for retrieving video assets...
+        if (indexPath.item == 0) {
+            photoLibraryCellImageView.image = [UIImage imageNamed:@"old_english_D"];
+        } else if (indexPath.item == 1) {
         
+        } else if (indexPath.item == 2) {
+        
+        }
+        
+        
+        CGRect screenSize = [[UIScreen mainScreen] bounds];
+
+        _assetThumbnailSize = CGSizeMake(screenSize.size.width / 3, screenSize.size.height / 3);
+
+        
+//        This may be helpful for retrieving video assets...
+//        
 //        if (asset.mediaType == PHAssetMediaTypeImage) {
 //            
 //        } else if (asset.mediaType == PHAssetMediaTypeVideo) {
 //        
 //        }
-       
+//       
         [_manager requestImageForAsset:asset
                                      targetSize:_assetThumbnailSize
                                     contentMode:PHImageContentModeAspectFill
@@ -246,12 +264,24 @@
 
         } else {
            
+            PHAsset *asset = _spotMediaItems[indexPath.item];
+            
             UICollectionViewCell *spotMediaCell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"spotMediaCell" forIndexPath:indexPath];
             UIImageView *spotMediaCellImageView = (UIImageView *)[spotMediaCell viewWithTag:100];
             spotMediaCellImageView.layer.masksToBounds = TRUE;
             spotMediaCellImageView.layer.cornerRadius = spotMediaCellImageView.frame.size.height/2;
  
-            spotMediaCellImageView.image = _spotMediaItems[indexPath.row];
+            [_manager requestImageForAsset:asset
+                                targetSize:_assetThumbnailSize
+                               contentMode:PHImageContentModeAspectFill
+                                   options:nil
+                             resultHandler:^(UIImage *result, NSDictionary *info) {
+                                 // Set the cell's thumbnail image if it's still showing the same asset.
+                                 spotMediaCellImageView.image = result;
+                             }];
+            
+            
+//            spotMediaCellImageView.image = _spotMediaItems[indexPath.row];
             
         return spotMediaCell;
     }
