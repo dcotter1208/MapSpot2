@@ -6,12 +6,6 @@
 //  Copyright © 2016 DetroitLabs. All rights reserved.
 //
 
-/*
- 
- MKAnnotationView.image is that image property that will return whatver image we want and not the pin. This is what we can set to the user's selected pin image.
- 
- */
-
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
 #import "MapAnnotationCallout.h"
@@ -232,6 +226,30 @@
 
 #pragma mark MapKit Delegate Methods
 
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    
+    if ([annotation isKindOfClass:[MKUserLocation class]]) {
+        return nil;
+    }
+    
+    if ([annotation isKindOfClass:[Annotation class]]) {
+
+        static NSString *const identifier = @"customAnnotation";
+        MKAnnotationView *annotationView = [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+
+        if (annotationView) {
+            annotationView.annotation = annotation;
+        } else {
+            annotationView = [[MKAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:(identifier)];
+        }
+        annotationView.image = [UIImage imageNamed:@"pin"];
+        annotationView.canShowCallout = FALSE;
+        
+        return annotationView;
+    }
+    return nil;
+}
+
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     
     _selectedAnnotation = view.annotation;
@@ -246,11 +264,10 @@
 }
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+    
     [self.navigationController setNavigationBarHidden:FALSE];
     [_mapAnnotationCallout removeFromSuperview];
-//    _mapAnnotationCallout.frame = CGRectMake(0, 0, 0, 0);
-//    _mapAnnotationCallout.bounds = CGRectMake(0, 0, 0, 0);
-//    [_mapAnnotationCallout.view removeFromSuperview];
+    
 }
 
 #pragma mark IBActions
