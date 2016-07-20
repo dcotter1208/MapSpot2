@@ -29,6 +29,10 @@
 
 -(void)updateChildNode:(NSString *)child nodeToUpdate:(NSDictionary *)nodeToUpdate;
 
+-(void)savePhotosToFirebase:(NSMutableArray *)imageArray;
+
+-(void)uploadToFirebase:(NSData *)imageData;
+
 -(instancetype)init;
 
 @end

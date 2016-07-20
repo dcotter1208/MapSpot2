@@ -88,4 +88,31 @@
     return currentUser;
 }
 
+-(void)savePhotosToFirebase:(NSMutableArray *)imageArray {
+    
+    for (UIImage *image in imageArray) {
+        NSData *imageData = UIImagePNGRepresentation(image);
+        [self uploadToFirebase:imageData];
+    }
+    
+}
+
+-(void)uploadToFirebase:(NSData *)imageData {
+    //Create a uniqueID for the image and add it to the end of the images reference.
+    NSString *uniqueID = [[NSUUID UUID]UUIDString];
+    NSString *newImageReference = [NSString stringWithFormat:@"images/%@.jpg", uniqueID];
+    //imagesRef creates a reference for the images folder and then adds a child to that folder, which will be every time a photo is taken.
+    FIRStorageReference *imagesRef = [_firebaseDatabaseService.firebaseStorageRef child:newImageReference];
+    //This uploads the photo's NSData onto Firebase Storage.
+    FIRStorageUploadTask *uploadTask = [imagesRef putData:imageData metadata:nil completion:^(FIRStorageMetadata *metadata, NSError *error) {
+        if (error) {
+            NSLog(@"ERROR: %@", error.description);
+        } else {
+            NSLog(@"METADATA-URL: %@", metadata.downloadURL);
+            //THIS IS WHERE WE WILL SAVE UPDATE THE URLS FOR THE CREATED SPOT:
+        }
+    }];
+    [uploadTask resume];
+}
+
 @end

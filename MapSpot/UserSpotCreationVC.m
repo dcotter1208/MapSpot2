@@ -36,7 +36,8 @@
     _manager = [[PHImageManager alloc] init];
     _spotMediaItems = [[NSMutableArray alloc]init];
     [super viewDidLoad];
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+
     [self checkForPhotoLibraryPermission];
 
     [self collectionViewSetUp];
@@ -275,6 +276,25 @@
 
 //This creates the spot by calling the createSpotWithUsername func.
 - (IBAction)createSpotButtonPressed:(id)sender {
+    
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    for (PHAsset *asset in _spotMediaItems) {
+        [_manager requestImageForAsset:asset
+                            targetSize:PHImageManagerMaximumSize
+                           contentMode:PHImageContentModeAspectFill
+                               options:nil
+                         resultHandler:^(UIImage *result, NSDictionary *info) {
+                             
+                             UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/6, result.size.height/6)];
+                             
+                             NSData *imageData = UIImagePNGRepresentation(resizedImage);
+                             
+                             [firebaseOperation uploadToFirebase:imageData];
+
+                         }];
+    }
+    
     
     NSString *latAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude];
     NSString *longAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude];
