@@ -193,10 +193,16 @@
     if (collectionView.tag == 1) {
         
         PHAsset *selectedImage = [_imageAssests objectAtIndex:indexPath.item];
+
+        if ([_spotMediaItems containsObject:selectedImage]) {
+            [_spotMediaItems removeObject:selectedImage];
+            [_mediaCollectionView reloadData];
+        } else {
+            [_spotMediaItems addObject:selectedImage];
+            [_mediaCollectionView reloadData];
+        }
         
-        [_spotMediaItems addObject:selectedImage];
-        
-        [_mediaCollectionView reloadData];
+
 
         
 //        _requestOptions = [[PHImageRequestOptions alloc]init];
