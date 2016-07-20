@@ -172,14 +172,11 @@
 }
 
 -(void)isCellSelected:(UICollectionViewCell *)cell {
-    UIImageView *photoLibraryCellImageView = (UIImageView *)[cell viewWithTag:200];
 
     if (cell.selected) {
-        photoLibraryCellImageView.alpha = .50;
-        cell.layer.borderWidth = 2.0;
+        cell.layer.borderWidth = 4.0;
         cell.layer.borderColor = [[UIColor greenColor]CGColor];
     } else {
-        photoLibraryCellImageView.alpha = 1.0;
         cell.layer.borderWidth = 0.0;
         cell.layer.borderColor = [[UIColor clearColor]CGColor];
     }
@@ -217,23 +214,17 @@
     
     if (collectionView.tag == 1) {
         UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView cellForItemAtIndexPath:indexPath];
-        UIImageView *photoLibraryCellImageView = (UIImageView *)[photoLibraryCell viewWithTag:200];
         PHAsset *selectedImage = [_imageAssests objectAtIndex:indexPath.item];
 
         if (![self checkMediaArrayCapacity]) {
             if (![_spotMediaItems containsObject:selectedImage]) {
-                photoLibraryCell.layer.borderWidth = 2.0;
+                photoLibraryCell.layer.borderWidth = 4.0;
                 photoLibraryCell.layer.borderColor = [[UIColor greenColor]CGColor];
-                photoLibraryCellImageView.alpha = .50;
                 [_spotMediaItems addObject:selectedImage];
                 [_mediaCollectionView reloadData];
             }
         }
         
-        if ([self checkMediaArrayCapacity]) {
-            [_photoLibraryCollectionView setAlpha:.50];
-            NSLog(@"Array Count: %lu", _spotMediaItems.count);
-        }
     }
 
 }
@@ -242,7 +233,6 @@
 
     if (collectionView.tag == 1) {
         UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView cellForItemAtIndexPath:indexPath];
-        UIImageView *photoLibraryCellImageView = (UIImageView *)[photoLibraryCell viewWithTag:200];
         
         PHAsset *deSelectedImage = [_imageAssests objectAtIndex:indexPath.item];
         if ([_spotMediaItems containsObject:deSelectedImage]) {
@@ -250,12 +240,8 @@
             [_mediaCollectionView reloadData];
             photoLibraryCell.layer.borderWidth = 0.0;
             photoLibraryCell.layer.borderColor = [[UIColor clearColor]CGColor];
-            photoLibraryCellImageView.alpha = 1.0;
         }
-        
-        if (![self checkMediaArrayCapacity]) {
-            [_photoLibraryCollectionView setAlpha:1.0];
-        }
+
     }
     
 }
