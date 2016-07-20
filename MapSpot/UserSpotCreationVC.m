@@ -158,17 +158,11 @@
     [flowLayout setMinimumLineSpacing:0.0f];
     [flowLayout setSectionInset: UIEdgeInsetsMake(20, 0, 10, 0)];
     [_photoLibraryCollectionView setCollectionViewLayout:flowLayout];
+    _photoLibraryCollectionView.allowsMultipleSelection = TRUE;
 }
 
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-//    if (collectionView.tag == 1) {
-//        return CGSizeMake(_photoLibraryCollectionView.frame.size.width/3, _photoLibraryCollectionView.frame.size.width/3);
-//    } else {
-//        UICollectionViewCell *spotMediaCell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"spotMediaCell" forIndexPath:indexPath];
-//        return CGSizeMake(spotMediaCell.frame.size.width, spotMediaCell.frame.size.height);
-//    }
 
     if (collectionView.tag == 1) {
         return CGSizeMake(_photoLibraryCollectionView.frame.size.width/3, _photoLibraryCollectionView.frame.size.width/3);
@@ -190,36 +184,39 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
+    UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView cellForItemAtIndexPath:indexPath];
+    
+        photoLibraryCell.layer.borderWidth = 2.0;
+        photoLibraryCell.layer.borderColor = [[UIColor greenColor]CGColor];
+    
     if (collectionView.tag == 1) {
         
         PHAsset *selectedImage = [_imageAssests objectAtIndex:indexPath.item];
 
-        if ([_spotMediaItems containsObject:selectedImage]) {
-            [_spotMediaItems removeObject:selectedImage];
-            [_mediaCollectionView reloadData];
-        } else {
+        if (![_spotMediaItems containsObject:selectedImage]) {
             [_spotMediaItems addObject:selectedImage];
             [_mediaCollectionView reloadData];
+        } else {
+
         }
-        
 
-
-        
-//        _requestOptions = [[PHImageRequestOptions alloc]init];
-//        _requestOptions.synchronous = TRUE;
-//        _requestOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
-//
-//        [_manager requestImageForAsset:selectedImage
-//                            targetSize:PHImageManagerMaximumSize
-//                           contentMode:PHImageContentModeAspectFill
-//                               options:_requestOptions
-//                         resultHandler:^(UIImage *result, NSDictionary *info) {
-//                             
-//                             [_spotMediaItems addObject:result];
-//                             [_mediaCollectionView reloadData];
-//
-//        }];
     }
+
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView cellForItemAtIndexPath:indexPath];
+    
+    PHAsset *deSelectedImage = [_imageAssests objectAtIndex:indexPath.item];
+    if ([_spotMediaItems containsObject:deSelectedImage]) {
+        [_spotMediaItems removeObject:deSelectedImage];
+        [_mediaCollectionView reloadData];
+        photoLibraryCell.layer.borderWidth = 0.0;
+        photoLibraryCell.layer.borderColor = [[UIColor clearColor]CGColor];
+    }
+    
+
 
 }
 
@@ -233,6 +230,14 @@
         
         UIImageView *photoLibraryCellImageView = (UIImageView *)[photoLibraryCell viewWithTag:200];
         photoLibraryCellImageView.layer.masksToBounds = TRUE;
+        
+        if (photoLibraryCell.selected) {
+            photoLibraryCell.layer.borderWidth = 2.0;
+            photoLibraryCell.layer.borderColor = [[UIColor greenColor]CGColor];
+        } else {
+            photoLibraryCell.layer.borderWidth = 0.0;
+            photoLibraryCell.layer.borderColor = [[UIColor clearColor]CGColor];
+        }
 
         
         if (indexPath.item == 0) {
