@@ -540,6 +540,10 @@
                                                 <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VPz-Er-amZ">
                                                     <rect key="frame" x="0.0" y="0.0" width="107" height="107"/>
                                                 </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ac7-Wh-DrI">
+                                                    <rect key="frame" x="76" y="0.0" width="31" height="28"/>
+                                                    <state key="normal" title="Button" image="delete-1"/>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -676,6 +680,7 @@
     <resources>
         <image name="default_background_photo" width="1194" height="718"/>
         <image name="default_profile_photo" width="256" height="256"/>
+        <image name="delete-1" width="370" height="336"/>
         <image name="spotMaker" width="24" height="24"/>
     </resources>
 </document>
