@@ -225,6 +225,22 @@
             }
         }
         
+    } else {
+        UICollectionViewCell *spotMediaCell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"spotMediaCell" forIndexPath:indexPath];
+        
+        UIButton *mediaCellButton = (UIButton *)[spotMediaCell viewWithTag:201];
+        
+        if (mediaCellButton.selected) {
+            [mediaCellButton setSelected:TRUE];
+
+            NSLog(@"Button Selected");
+        }
+        
+        
+        if (mediaCellButton.state == UIControlStateSelected) {
+            NSLog(@"Delete Button Selected");
+        }
+
     }
 
 }
@@ -275,11 +291,38 @@
         spotMediaCellImageView.layer.masksToBounds = TRUE;
         spotMediaCellImageView.layer.cornerRadius = spotMediaCellImageView.frame.size.height/2;
         
+        UIButton *mediaCellButton = (UIButton *)[spotMediaCell viewWithTag:201];
+        
+        [mediaCellButton addTarget:self action:@selector(deleteSelectedSpotMedia:event:) forControlEvents:UIControlEventTouchUpInside];
+        
         [self setImageForCellImageViewWithAsset:asset imageView:spotMediaCellImageView];
 
     return spotMediaCell;
         
     }
+    
+}
+
+-(IBAction)deleteSelectedSpotMedia:(id)sender event:(id)event {
+    
+    NSSet *touches = [event allTouches];
+    
+    UITouch *touch = [touches anyObject];
+    
+    CGPoint currentTouchPosition = [touch locationInView:_mediaCollectionView];
+    
+    NSIndexPath *indexPath = [_mediaCollectionView indexPathForItemAtPoint: currentTouchPosition];
+    
+    [_spotMediaItems removeObjectAtIndex:indexPath.item];
+    [_mediaCollectionView reloadData];
+}
+
+- (void)deleteMedia:(NSIndexPath *)IndexPath {
+    
+    PHAsset *assetToRemove = [_spotMediaItems objectAtIndex:IndexPath.item];
+    NSLog(@"Asset To Remove: %@", assetToRemove.description);
+    
+    NSLog(@"button clicked");
     
 }
 
@@ -294,5 +337,6 @@
     [self createSpotWithMessage:_messageTF.text latitude: latAsString longitude:longAsString];
     
 }
+
 
 @end
