@@ -158,7 +158,6 @@
     [flowLayout setMinimumLineSpacing:0.0f];
     [flowLayout setSectionInset: UIEdgeInsetsMake(20, 0, 10, 0)];
     [_photoLibraryCollectionView setCollectionViewLayout:flowLayout];
-    _photoLibraryCollectionView.allowsMultipleSelection = TRUE;
 }
 
 
@@ -190,18 +189,6 @@
 
     if (collectionView.tag == 1) {
         
-//        UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView dequeueReusableCellWithReuseIdentifier:@"photoLibraryCell" forIndexPath:indexPath];
-        
-        UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView cellForItemAtIndexPath:indexPath];
-
-        
-        if (photoLibraryCell.selected) {
-            NSLog(@"Selected- didSelectItem");
-            photoLibraryCell.layer.borderWidth = 5.0;
-            photoLibraryCell.layer.borderColor = [[UIColor greenColor]CGColor];
-
-        }
-
         PHAsset *selectedImage = [_imageAssests objectAtIndex:indexPath.item];
         
         _requestOptions = [[PHImageRequestOptions alloc]init];
@@ -222,22 +209,6 @@
 
 }
 
--(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (collectionView.tag == 1) {
-//        UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView dequeueReusableCellWithReuseIdentifier:@"photoLibraryCell" forIndexPath:indexPath];
-        
-        UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView cellForItemAtIndexPath:indexPath];
-        
-            NSLog(@"DEselected- did**DE**selectItem");
-            photoLibraryCell.layer.borderWidth = 0.0;
-            photoLibraryCell.layer.borderColor = [[UIColor clearColor]CGColor];
-
-    }
-    
-
-}
-
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if (collectionView.tag == 1) {
@@ -245,17 +216,6 @@
         PHAsset *asset = _imageAssests[indexPath.item];
         
         UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView dequeueReusableCellWithReuseIdentifier:@"photoLibraryCell" forIndexPath:indexPath];
-        
-        if (photoLibraryCell.selected) {
-            photoLibraryCell.layer.borderWidth = 5.0;
-            photoLibraryCell.layer.borderColor = [[UIColor greenColor]CGColor];
-
-        } else {
-            photoLibraryCell.layer.borderWidth = 0.0;
-            photoLibraryCell.layer.borderColor = [[UIColor clearColor]CGColor];
-
-        }
-        
         
         CGRect screenSize = [[UIScreen mainScreen] bounds];
 
