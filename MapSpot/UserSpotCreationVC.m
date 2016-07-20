@@ -185,6 +185,14 @@
     }
 }
 
+-(BOOL)checkMediaArrayCapacity {
+    if ([_spotMediaItems count] == 10) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     if (collectionView.tag == 1) {
@@ -219,6 +227,11 @@
             [_spotMediaItems addObject:selectedImage];
             [_mediaCollectionView reloadData];
         }
+        
+        if ([self checkMediaArrayCapacity]) {
+            [_photoLibraryCollectionView setAlpha:.50];
+            NSLog(@"Array Count: %lu", _spotMediaItems.count);
+        }
     }
 
 }
@@ -237,10 +250,12 @@
             photoLibraryCell.layer.borderColor = [[UIColor clearColor]CGColor];
             photoLibraryCellImageView.alpha = 1.0;
         }
+        
+        if (![self checkMediaArrayCapacity]) {
+            [_photoLibraryCollectionView setAlpha:1.0];
+        }
     }
     
-
-
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -258,6 +273,7 @@
         photoLibraryCellImageView.layer.masksToBounds = TRUE;
         
         [self isCellSelected:photoLibraryCell];
+
         [self setImageForCellImageViewWithAsset:asset imageView:photoLibraryCellImageView];
 
     return photoLibraryCell;
