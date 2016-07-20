@@ -88,16 +88,7 @@
     return currentUser;
 }
 
--(void)savePhotosToFirebase:(NSMutableArray *)imageArray {
-    
-    for (UIImage *image in imageArray) {
-        NSData *imageData = UIImagePNGRepresentation(image);
-        [self uploadToFirebase:imageData];
-    }
-    
-}
-
--(void)uploadToFirebase:(NSData *)imageData {
+-(void)uploadToFirebase:(NSData *)imageData completion:(void(^)(NSString *imageDownloadURL))completion {
     //Create a uniqueID for the image and add it to the end of the images reference.
     NSString *uniqueID = [[NSUUID UUID]UUIDString];
     NSString *newImageReference = [NSString stringWithFormat:@"images/%@.jpg", uniqueID];
@@ -108,8 +99,7 @@
         if (error) {
             NSLog(@"ERROR: %@", error.description);
         } else {
-            NSLog(@"METADATA-URL: %@", metadata.downloadURL);
-            //THIS IS WHERE WE WILL SAVE UPDATE THE URLS FOR THE CREATED SPOT:
+            completion([metadata.downloadURL absoluteString]);
         }
     }];
     [uploadTask resume];

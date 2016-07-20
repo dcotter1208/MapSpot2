@@ -131,19 +131,26 @@
  Used to create a spot when the createSpotButton is pressed.
  It then saves the spot to Firebase.
 */
--(void)createSpotWithMessage:(NSString *)message latitude:(NSString *)latitude longitude:(NSString *)longitude {
+-(void)createSpotWithMessage:(NSString *)message imageURLArray:(NSMutableArray *)imageURLArray latitude:(NSString *)latitude longitude:(NSString *)longitude {
     NSDate *now = [NSDate date];
 
     FIRUser *currentUserAuth = [[FIRAuth auth]currentUser];
     CurrentUser *currentUser = [CurrentUser sharedInstance];
+    NSMutableDictionary *imageURLDict = [[NSMutableDictionary alloc]init];
     
+    for (NSString *imageURLString in imageURLArray) {
+        NSString *key = [[NSNumber numberWithUnsignedInteger:[imageURLArray indexOfObject:imageURLString]]stringValue];
+        [imageURLDict setValue:imageURLString forKey:key];
+    }
+
     NSDictionary *spot = @{@"userId": currentUserAuth.uid,
                            @"username": currentUser.username,
                            @"email": currentUserAuth.email,
                            @"latitude":latitude,
                            @"longitude": longitude,
                            @"message": message,
-                           @"createdAt": [self dateToStringFormatter:now]};
+                           @"createdAt": [self dateToStringFormatter:now],
+                           @"images": imageURLDict};
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
@@ -278,6 +285,10 @@
 - (IBAction)createSpotButtonPressed:(id)sender {
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    NSMutableArray *imageURLArray = [NSMutableArray arrayWithCapacity:[_spotMediaItems count]];
+    NSString *latAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude];
+    NSString *longAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude];
+    
     
     for (PHAsset *asset in _spotMediaItems) {
         [_manager requestImageForAsset:asset
@@ -289,23 +300,35 @@
                              if (result.size.width > 750 && result.size.height > 1334) {
                                  UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/10, result.size.height/10)];
                                  NSData *imageData = UIImagePNGRepresentation(resizedImage);
-                                 [firebaseOperation uploadToFirebase:imageData];
+                                 [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
+                                     [imageURLArray addObject:imageDownloadURL];
+                                     
+                                     if (imageURLArray.count == _spotMediaItems.count) {
+                                         [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
+                                     }
+                                     
+                                 }];
                              } else {
                                  UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/4, result.size.height/4)];
                                  NSData *imageData = UIImagePNGRepresentation(resizedImage);
-                                 [firebaseOperation uploadToFirebase:imageData];
+                                 [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
+                                     [imageURLArray addObject:imageDownloadURL];
+                                     
+                                     if (imageURLArray.count == _spotMediaItems.count) {
+                                         [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
+                                     }
+                                     
+                                 }];
                              }
 
                          }];
     }
     
     
-    NSString *latAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude];
-    NSString *longAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude];
-    
-    [self createSpotWithMessage:_messageTF.text latitude: latAsString longitude:longAsString];
+
     
 }
+
 
 
 @end
