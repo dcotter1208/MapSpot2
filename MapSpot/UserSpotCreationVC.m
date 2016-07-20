@@ -220,12 +220,14 @@
         UIImageView *photoLibraryCellImageView = (UIImageView *)[photoLibraryCell viewWithTag:200];
         PHAsset *selectedImage = [_imageAssests objectAtIndex:indexPath.item];
 
-        if (![_spotMediaItems containsObject:selectedImage]) {
-            photoLibraryCell.layer.borderWidth = 2.0;
-            photoLibraryCell.layer.borderColor = [[UIColor greenColor]CGColor];
-            photoLibraryCellImageView.alpha = .50;
-            [_spotMediaItems addObject:selectedImage];
-            [_mediaCollectionView reloadData];
+        if (![self checkMediaArrayCapacity]) {
+            if (![_spotMediaItems containsObject:selectedImage]) {
+                photoLibraryCell.layer.borderWidth = 2.0;
+                photoLibraryCell.layer.borderColor = [[UIColor greenColor]CGColor];
+                photoLibraryCellImageView.alpha = .50;
+                [_spotMediaItems addObject:selectedImage];
+                [_mediaCollectionView reloadData];
+            }
         }
         
         if ([self checkMediaArrayCapacity]) {
