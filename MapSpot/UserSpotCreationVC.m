@@ -37,6 +37,7 @@
     _manager = [[PHImageManager alloc] init];
     _spotMediaItems = [[NSMutableArray alloc]init];
     [super viewDidLoad];
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     [self checkForPhotoLibraryPermission];
@@ -132,17 +133,21 @@
     _imagePicker = [[UIImagePickerController alloc] init];
     [_imagePicker setDelegate:self];
     [_imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
-    [self presentViewController:_imagePicker animated:true completion:nil];
+    [self presentViewController:_imagePicker animated:TRUE completion:nil];
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    
+    [self dismissViewControllerAnimated:TRUE completion:nil];
     
     NSData *imageData = UIImageJPEGRepresentation([info objectForKey:@"UIImagePickerControllerOriginalImage"], 1);
     
     UIImage *image = [UIImage imageWithData:imageData];
     
+    [_spotMediaItems addObject:image];
+    NSLog(@"Spot Media Items Array Count: %lu", _spotMediaItems.count);
+    [_mediaCollectionView reloadData];
     
-
 }
 
 #pragma mark Firebase Helper Methods
@@ -190,6 +195,7 @@
 }
 
 -(void)setImageForCellImageViewWithAsset:(PHAsset *)asset imageView:(UIImageView *)imageView {
+
     [_manager requestImageForAsset:asset
                     targetSize:_assetThumbnailSize
                    contentMode:PHImageContentModeAspectFill
@@ -231,7 +237,7 @@
     
     if (collectionView.tag == 1) {
         PHAsset *selectedImage = [_imageAssests objectAtIndex:indexPath.item];
-
+        
         if (![self checkMediaArrayCapacity]) {
             if (![_spotMediaItems containsObject:selectedImage]) {
                 [_spotMediaItems addObject:selectedImage];
@@ -266,9 +272,7 @@
     return photoLibraryCell;
 
     } else {
-           
-        PHAsset *asset = _spotMediaItems[indexPath.item];
-        
+
         UICollectionViewCell *spotMediaCell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"spotMediaCell" forIndexPath:indexPath];
         UIImageView *spotMediaCellImageView = (UIImageView *)[spotMediaCell viewWithTag:100];
         spotMediaCellImageView.layer.masksToBounds = TRUE;
@@ -278,10 +282,24 @@
         
         [mediaCellButton addTarget:self action:@selector(deleteSelectedSpotMedia:event:) forControlEvents:UIControlEventTouchUpInside];
         
-        [self setImageForCellImageViewWithAsset:asset imageView:spotMediaCellImageView];
-
-    return spotMediaCell;
+        //***********************************************************************************************
         
+        id image = _spotMediaItems[indexPath.item];
+        
+            if ([image isMemberOfClass:[UIImage class]]) {
+                UIImage *image = _spotMediaItems[indexPath.item];
+                NSLog(@"IMAGE: %@", image.description);
+                spotMediaCellImageView.image = image;
+            } else {
+                PHAsset *asset = _spotMediaItems[indexPath.item];
+                NSLog(@"Asset: %@", asset.description);
+                [self setImageForCellImageViewWithAsset:asset imageView:spotMediaCellImageView];
+        }
+        
+        //***********************************************************************************************
+
+        
+    return spotMediaCell;
     }
     
 }
