@@ -11,7 +11,7 @@
 #import "CurrentUser.h"
 @import Photos;
 
-@interface UserSpotCreationVC ()
+@interface UserSpotCreationVC () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 #pragma mark IBOutlets
 @property (weak, nonatomic) IBOutlet UITextView *messageTF;
@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *photoLibraryCollectionView;
 
 #pragma mark Properties
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
 @property (nonatomic, strong) NSMutableArray *spotMediaItems;
 @property (nonatomic) CGSize assetThumbnailSize;
 @property (nonatomic, strong) PHImageRequestOptions *requestOptions;
@@ -123,6 +124,25 @@
     
     //return image
     return image;
+}
+
+#pragma mark Camera Methods
+
+-(void)presentCamera {
+    _imagePicker = [[UIImagePickerController alloc] init];
+    [_imagePicker setDelegate:self];
+    [_imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    [self presentViewController:_imagePicker animated:true completion:nil];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    
+    NSData *imageData = UIImageJPEGRepresentation([info objectForKey:@"UIImagePickerControllerOriginalImage"], 1);
+    
+    UIImage *image = [UIImage imageWithData:imageData];
+    
+    
+
 }
 
 #pragma mark Firebase Helper Methods
@@ -290,7 +310,6 @@
     NSString *longAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude];
     
     PHImageRequestOptions *fetchOptions = [PHImageRequestOptions new];
-    
     fetchOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
     fetchOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
     
@@ -324,18 +343,16 @@
                          NSLog(@"Image Array Count - 2: %lu", imageURLArray.count);
                          [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
                      }
-                     
                  }];
              }
-
          }];
     }
-    
-    
-
-    
 }
 
+- (IBAction)cameraButtonPressed:(id)sender {
+    
+    [self presentCamera];
+}
 
 
 @end
