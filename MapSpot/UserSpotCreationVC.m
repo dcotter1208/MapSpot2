@@ -145,7 +145,6 @@
     UIImage *image = [UIImage imageWithData:imageData];
     
     [_spotMediaItems addObject:image];
-    NSLog(@"Spot Media Items Array Count: %lu", _spotMediaItems.count);
     [_mediaCollectionView reloadData];
     
 }
@@ -281,24 +280,17 @@
         UIButton *mediaCellButton = (UIButton *)[spotMediaCell viewWithTag:201];
         
         [mediaCellButton addTarget:self action:@selector(deleteSelectedSpotMedia:event:) forControlEvents:UIControlEventTouchUpInside];
-        
-        //***********************************************************************************************
-        
+
         id image = _spotMediaItems[indexPath.item];
         
             if ([image isMemberOfClass:[UIImage class]]) {
                 UIImage *image = _spotMediaItems[indexPath.item];
-                NSLog(@"IMAGE: %@", image.description);
                 spotMediaCellImageView.image = image;
             } else {
                 PHAsset *asset = _spotMediaItems[indexPath.item];
-                NSLog(@"Asset: %@", asset.description);
                 [self setImageForCellImageViewWithAsset:asset imageView:spotMediaCellImageView];
         }
-        
-        //***********************************************************************************************
 
-        
     return spotMediaCell;
     }
     
@@ -321,7 +313,7 @@
 
 //This creates the spot by calling the createSpotWithUsername func.
 - (IBAction)createSpotButtonPressed:(id)sender {
-    
+
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     NSMutableArray *imageURLArray = [NSMutableArray arrayWithCapacity:[_spotMediaItems count]];
     NSString *latAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude];
@@ -331,39 +323,70 @@
     fetchOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
     fetchOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
     
-    for (PHAsset *asset in _spotMediaItems) {
+    for (id photo in _spotMediaItems) {
         
-        [_manager requestImageForAsset:asset
-            targetSize:PHImageManagerMaximumSize
-           contentMode:PHImageContentModeAspectFill
-               options:fetchOptions
-         resultHandler:^(UIImage *result, NSDictionary *info) {
-             
-             if (result.size.width > 750 && result.size.height > 1334) {
-                 UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/10, result.size.height/10)];
-                 NSData *imageData = UIImagePNGRepresentation(resizedImage);
-                 [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
-                     [imageURLArray addObject:imageDownloadURL];
-                     
-                     if (imageURLArray.count == _spotMediaItems.count) {
-                         NSLog(@"Image Array Count - 1: %lu", imageURLArray.count);
-                         [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
-                     }
-                     
-                 }];
-             } else {
-                 UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/4, result.size.height/4)];
-                 NSData *imageData = UIImagePNGRepresentation(resizedImage);
-                 [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
-                     [imageURLArray addObject:imageDownloadURL];
-                     
-                     if (imageURLArray.count == _spotMediaItems.count) {
-                         NSLog(@"Image Array Count - 2: %lu", imageURLArray.count);
-                         [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
-                     }
-                 }];
-             }
-         }];
+        if ([photo isMemberOfClass:[PHAsset class]]) {
+      
+    [_manager requestImageForAsset:photo
+                        targetSize:PHImageManagerMaximumSize
+                       contentMode:PHImageContentModeAspectFill
+                           options:fetchOptions
+                     resultHandler:^(UIImage *result, NSDictionary *info) {
+                         
+                         if (result.size.width > 750 && result.size.height > 1334) {
+                             UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/10, result.size.height/10)];
+                             NSData *imageData = UIImagePNGRepresentation(resizedImage);
+                             [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
+                                 [imageURLArray addObject:imageDownloadURL];
+                                 
+                                 if (imageURLArray.count == _spotMediaItems.count) {
+                                     
+                                     
+                                     NSLog(@"Asset 1 - %lu", imageURLArray.count);
+
+                                     
+                                     [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
+                                     [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
+                                 }
+                                 
+                             }];
+                         } else {
+                             UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/4, result.size.height/4)];
+                             NSData *imageData = UIImagePNGRepresentation(resizedImage);
+                             [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
+                                 [imageURLArray addObject:imageDownloadURL];
+                                 
+                                 if (imageURLArray.count == _spotMediaItems.count) {
+                                     
+                                     NSLog(@"Asset 2 - %lu", imageURLArray.count);
+
+                                     
+                                     [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
+                                     [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
+                                 }
+                             }];
+                         }
+                     }];
+        } else {
+            NSLog(@"ELSE STATEMENT HIT");
+            UIImage *image = photo;
+            UIImage *resizedImage = [self image:image scaledToSize:CGSizeMake(image.size.width/10, image.size.height/10)];
+            NSData *imageData = UIImagePNGRepresentation(resizedImage);
+
+            [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
+                [imageURLArray addObject:imageDownloadURL];
+                
+                
+                if (imageURLArray.count == _spotMediaItems.count) {
+                    NSLog(@"IMAGE - %lu", imageURLArray.count);
+                    [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
+                    [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
+                    
+                }
+                
+            }];
+
+        }
     }
 }
 

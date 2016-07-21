@@ -654,9 +654,11 @@
                         <outlet property="mediaCollectionView" destination="myO-oR-4zo" id="92O-gm-vr7"/>
                         <outlet property="messageTF" destination="SjI-XZ-Bme" id="XY1-cL-hUI"/>
                         <outlet property="photoLibraryCollectionView" destination="EL8-1A-sOF" id="9JG-4t-EIr"/>
+                        <segue destination="z0a-52-W9t" kind="unwind" identifier="unwindToMapSpotMapVCSegue" unwindAction="unwindToMapSpotMapVC:" id="dlc-iH-V3q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w8A-Mt-Pfo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="z0a-52-W9t" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-118" y="-220"/>
         </scene>
