@@ -37,13 +37,13 @@
     _manager = [[PHImageManager alloc] init];
     _spotMediaItems = [[NSMutableArray alloc]init];
     [super viewDidLoad];
-    
+
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     [self checkForPhotoLibraryPermission];
 
     [self collectionViewSetUp];
-
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -65,7 +65,6 @@
  Accepts a date and turns it into a string.
  We use this to store date on Firebase as a string because Firebase doesn't accept NSDate.
  */
-
  -(NSString *)dateToStringFormatter:(NSDate *)date {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
@@ -81,6 +80,7 @@
     }
 }
 
+//Checks if the user has given permission to access the device's photo library.
 -(void)checkForPhotoLibraryPermission {
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
        
@@ -97,6 +97,10 @@
     }];
 }
 
+/*
+ Fetchs the photos from the device's library and sorts them by most recent creationDate.
+ Called in 'checkForPhotoLibraryPermission'.
+ */
 -(void)accessDevicePhotoLibrary:(void(^)(PHFetchResult *cameraRollAssets))completion {
     
     PHFetchOptions *fetchOptions = [[PHFetchOptions alloc]init];
@@ -107,6 +111,10 @@
 
 }
 
+/*
+ Reduces the image's size. If the size to scale down to is the size of
+ the original image then just return the original image.
+ */
 - (UIImage *)image:(UIImage*)originalImage scaledToSize:(CGSize)size {
     //avoid redundant drawing
     if (CGSizeEqualToSize(originalImage.size, size)) {
@@ -129,6 +137,7 @@
 
 #pragma mark Camera Methods
 
+//Sets up the image picker to present the camera. Called in the IBAction for the camera button.
 -(void)presentCamera {
     _imagePicker = [[UIImagePickerController alloc] init];
     [_imagePicker setDelegate:self];
@@ -136,6 +145,11 @@
     [self presentViewController:_imagePicker animated:TRUE completion:nil];
 }
 
+/*
+ Once the camera finishes taking the photo then the photo's NSData is turned into a UIImage.
+ This image is then added to the _spotMediaItems array. This array is used to populate the UICollectionView
+ that contains the media the user will post to their spot.
+ */
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
     [self dismissViewControllerAnimated:TRUE completion:nil];
@@ -151,6 +165,17 @@
 
 #pragma mark Firebase Helper Methods
 
+-(NSDictionary *)createImageURLDict:(NSMutableArray *)imageURLArray {
+    NSMutableDictionary *imageURLDict = [[NSMutableDictionary alloc]init];
+    
+    for (NSString *imageURLString in imageURLArray) {
+        NSString *key = [[NSNumber numberWithUnsignedInteger:[imageURLArray indexOfObject:imageURLString]]stringValue];
+        
+        [imageURLDict setValue:imageURLString forKey:key];
+    }
+    
+    return imageURLDict;
+}
 /*
  Used to create a spot when the createSpotButton is pressed.
  It then saves the spot to Firebase.
@@ -160,12 +185,6 @@
 
     FIRUser *currentUserAuth = [[FIRAuth auth]currentUser];
     CurrentUser *currentUser = [CurrentUser sharedInstance];
-    NSMutableDictionary *imageURLDict = [[NSMutableDictionary alloc]init];
-    
-    for (NSString *imageURLString in imageURLArray) {
-        NSString *key = [[NSNumber numberWithUnsignedInteger:[imageURLArray indexOfObject:imageURLString]]stringValue];
-        [imageURLDict setValue:imageURLString forKey:key];
-    }
 
     NSDictionary *spot = @{@"userId": currentUserAuth.uid,
                            @"username": currentUser.username,
@@ -174,10 +193,9 @@
                            @"longitude": longitude,
                            @"message": message,
                            @"createdAt": [self dateToStringFormatter:now],
-                           @"images": imageURLDict};
+                           @"images": [self createImageURLDict:imageURLArray]};
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    
     [firebaseOperation setValueForFirebaseChild:@"spots" value:spot];
 
 }
@@ -246,7 +264,6 @@
         
     } else {
         PHAsset *selectedImage = [_spotMediaItems objectAtIndex:indexPath.item];
-
     }
 
 }
