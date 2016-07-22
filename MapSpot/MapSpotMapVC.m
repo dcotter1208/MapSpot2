@@ -136,6 +136,7 @@
     _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
    _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
     [self.view addSubview:_mapAnnotationCallout];
+    //This is important otherwise the callout's collectionview won't reload.
      [_mapAnnotationCallout.mediaCollectionView reloadData];
 }
 
@@ -174,9 +175,11 @@
         
         NSDictionary *dict = snapshot.value[@"images"];
         
+        NSLog(@"DICT: %@", dict.description);
+        
         for (NSString *photoURL in dict) {
             [spot.spotImagesURLs addObject:photoURL];
-            NSLog(@"Spot IMage URLS count: %lu", spot.spotImagesURLs.count);
+            NSLog(@"Spot IMage URLS count: %@", spot.spotImagesURLs.description);
         }
 
         [self addSpotToMap:spot];

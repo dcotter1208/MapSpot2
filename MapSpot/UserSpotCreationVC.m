@@ -266,10 +266,13 @@
  if we have all of our imageDownloadURLs back from Firebase then we
  create the spot using the 'createSpotWithMessage' function and perform the unwindSegue back to the MapSpotMapVC.
  */
--(void)uploadImageToFirebase:(UIImage *)image withSize:(CGSize)size withFirebaseOperation:(FirebaseOperation *)firebaseOperation {
+-(void)uploadImageToFirebase:(UIImage *)image withIndex:(NSUInteger)index withSize:(CGSize)size withFirebaseOperation:(FirebaseOperation *)firebaseOperation {
     NSData *imageData = [self convertImageToNSData:[self image:image scaledToSize:size]];
     [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
-        [_imageURLArray addObject:imageDownloadURL];
+
+        //Add photo at specified index.
+        _imageURLArray[index] = imageDownloadURL;
+//        [_imageURLArray addObject:imageDownloadURL];
         if ([self arrayIsAtCapacity:_imageURLArray]) {
             [self createSpotWithMessage:_messageTF.text imageURLArray: _imageURLArray latitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude] longitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude]];
             [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
@@ -411,13 +414,21 @@
 
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     _imageURLArray = [NSMutableArray arrayWithCapacity:[_spotMediaItems count]];
+    
+    for (int i = 0; i < _spotMediaItems.count; i++) {
+        NSString *empty = @"";
+        [_imageURLArray addObject:empty];
+    }
+    
+    NSLog(@"IMAGEURLARRAY COUNT: %lu", _imageURLArray.count);
+    PHImageRequestOptions *fetchOptions = [self setPHImageRequestOptions];
 
     for (id photo in _spotMediaItems) {
         
-        PHImageRequestOptions *fetchOptions = [self setPHImageRequestOptions];
+        NSUInteger index = [_spotMediaItems indexOfObject:photo];
         
         if ([photo isMemberOfClass:[PHAsset class]]) {
-      
+            
             [_manager requestImageForAsset:photo
                     targetSize:PHImageManagerMaximumSize
                    contentMode:PHImageContentModeAspectFill
@@ -425,15 +436,18 @@
                  resultHandler:^(UIImage *result, NSDictionary *info) {
                      
                      if ([self imageIsiPhoneScreenShot:result]) {
-                         [self uploadImageToFirebase:result withSize:CGSizeMake(result.size.width/4, result.size.height/4) withFirebaseOperation:firebaseOperation];
+
+                         [self uploadImageToFirebase:result withIndex:index withSize:CGSizeMake(result.size.width/4, result.size.height/4) withFirebaseOperation:firebaseOperation];
                      } else {
-                         [self uploadImageToFirebase:result withSize:CGSizeMake(result.size.width/10, result.size.height/10) withFirebaseOperation:firebaseOperation];
+
+                         [self uploadImageToFirebase:result withIndex:index withSize:CGSizeMake(result.size.width/10, result.size.height/10) withFirebaseOperation:firebaseOperation];
                      }
                  }];
             
         } else {
             UIImage *image = photo;
-            [self uploadImageToFirebase:image withSize:CGSizeMake(image.size.width/10, image.size.height/10) withFirebaseOperation:firebaseOperation];
+
+            [self uploadImageToFirebase:image withIndex:index withSize:CGSizeMake(image.size.width/10, image.size.height/10) withFirebaseOperation:firebaseOperation];
         }
     }
 }
