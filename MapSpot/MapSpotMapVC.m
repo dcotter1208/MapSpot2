@@ -140,7 +140,7 @@
 
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
     _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"belleIsle-1"], [UIImage imageNamed:@"belleIsle-2"], [UIImage imageNamed:@"old_english_D"], [UIImage imageNamed:@"belleIsle-3"], [UIImage imageNamed:@"belleIsle-4"], [UIImage imageNamed:@"belleIsle-5"], nil];
-    
+
     _mapAnnotationCallout.usernameLabel.text = spot.user;
     _mapAnnotationCallout.messageTextView.text = spot.message;
 
@@ -171,6 +171,13 @@
                       createdAt:snapshot.value[@"createdAt"]];
         spot.message = snapshot.value[@"message"];
         
+        NSDictionary *dict = snapshot.value[@"images"];
+        
+        for (NSString *photoURL in dict) {
+            [spot.spotImagesURLs addObject:photoURL];
+            
+        }
+
         [self addSpotToMap:spot];
     }];
 }

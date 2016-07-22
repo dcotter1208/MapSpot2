@@ -25,12 +25,13 @@
 @property (nonatomic, strong) PHImageRequestOptions *requestOptions;
 @property (nonatomic, strong) PHFetchResult *imageAssests;
 @property (nonatomic, strong) PHImageManager *manager;
+@property (nonatomic, strong) NSMutableArray *imageURLArray;
 
 @end
 
 @implementation UserSpotCreationVC
 
-#pragma mark Lifecycle methods
+#pragma mark Lifecycle Methods
 
 - (void)viewDidLoad {
     [self.navigationController setNavigationBarHidden:FALSE];
@@ -61,6 +62,18 @@
 
 }
 
+//Creates a dictionary from an array of imageURLs.
+-(NSDictionary *)createImageURLDict:(NSMutableArray *)imageURLArray {
+    NSMutableDictionary *imageURLDict = [[NSMutableDictionary alloc]init];
+    
+    for (NSString *imageURLString in imageURLArray) {
+        NSString *key = [[NSNumber numberWithUnsignedInteger:[imageURLArray indexOfObject:imageURLString]]stringValue];
+        
+        [imageURLDict setValue:imageURLString forKey:key];
+    }
+    return imageURLDict;
+}
+
 /*
  Accepts a date and turns it into a string.
  We use this to store date on Firebase as a string because Firebase doesn't accept NSDate.
@@ -71,6 +84,90 @@
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     return [dateFormatter stringFromDate:date];
 }
+
+
+//Sets up Photo Library's Collection View
+-(void)collectionViewSetUp {
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [flowLayout setMinimumInteritemSpacing:0.0f];
+    [flowLayout setMinimumLineSpacing:0.0f];
+    [flowLayout setSectionInset: UIEdgeInsetsMake(20, 0, 10, 0)];
+    [_photoLibraryCollectionView setCollectionViewLayout:flowLayout];
+    _photoLibraryCollectionView.allowsMultipleSelection = TRUE;
+}
+
+//Checks the capacity of my spot media's array.
+-(BOOL)checkMediaArrayCapacity {
+    if ([_spotMediaItems count] == 10) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+/*
+ this is used to check if the imageURLArray is at its capacity.
+ This is necessary to make sure we have all of our downloadImageURLs back
+ from Firebase before creating a spot.
+ */
+-(BOOL)arrayIsAtCapacity:(NSMutableArray *)array {
+    if (array.count == _spotMediaItems.count) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+
+#pragma mark Image Processing Methods
+//converts an image to NSData
+-(NSData *)convertImageToNSData:(UIImage *)image {
+    NSData *imageData = UIImagePNGRepresentation(image);
+    return imageData;
+}
+
+//Determine if the image to upload is was a screenshot from the phone or not.
+-(BOOL)imageIsiPhoneScreenShot:(UIImage *)image {
+    CGRect screenSize = [[UIScreen mainScreen] bounds];
+    
+    if (image.size.width <= (screenSize.size.width * 2) && image.size.height <= (screenSize.size.height * 2)) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+/*
+ Sets the image view for the cell by turning a PHAsset
+ into a UIImage.
+ */
+-(void)setImageForCellImageViewWithAsset:(PHAsset *)asset imageView:(UIImageView *)imageView {
+    
+    [_manager requestImageForAsset:asset
+                        targetSize:_assetThumbnailSize
+                       contentMode:PHImageContentModeAspectFill
+                           options:nil
+                     resultHandler:^(UIImage *result, NSDictionary *info) {
+                         imageView.image = result;
+                     }];
+}
+
+//Sets up imageView for the UICollectionViewCell
+-(UIImageView *)setUpImageViewForCell:(UICollectionViewCell *)cell withTag:(NSInteger)tag {
+    UIImageView *cellImageView = (UIImageView *)[cell viewWithTag:tag];
+    cellImageView.layer.masksToBounds = TRUE;
+    return cellImageView;
+}
+
+//Establish PHImageRequestOptions
+-(PHImageRequestOptions *)setPHImageRequestOptions {
+    PHImageRequestOptions *fetchOptions = [[PHImageRequestOptions alloc]init];
+    fetchOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
+    fetchOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+    
+    return fetchOptions;
+}
+
 
 -(BOOL)imageIsPortrait:(UIImage *)image {
     if (image.size.height > image.size.width) {
@@ -83,7 +180,7 @@
 //Checks if the user has given permission to access the device's photo library.
 -(void)checkForPhotoLibraryPermission {
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-       
+        
         if (status == PHAuthorizationStatusAuthorized) {
             [self accessDevicePhotoLibrary:^(PHFetchResult *cameraRollAssets) {
                 _imageAssests = cameraRollAssets;
@@ -106,9 +203,9 @@
     PHFetchOptions *fetchOptions = [[PHFetchOptions alloc]init];
     fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:FALSE]];
     PHFetchResult *allPhotos = [PHAsset fetchAssetsWithOptions:fetchOptions];
-
+    
     completion(allPhotos);
-
+    
 }
 
 /*
@@ -165,17 +262,21 @@
 
 #pragma mark Firebase Helper Methods
 
--(NSDictionary *)createImageURLDict:(NSMutableArray *)imageURLArray {
-    NSMutableDictionary *imageURLDict = [[NSMutableDictionary alloc]init];
-    
-    for (NSString *imageURLString in imageURLArray) {
-        NSString *key = [[NSNumber numberWithUnsignedInteger:[imageURLArray indexOfObject:imageURLString]]stringValue];
-        
-        [imageURLDict setValue:imageURLString forKey:key];
-    }
-    
-    return imageURLDict;
+/*Takes an image and uploads it to Firebase storage with the correct size.
+ if we have all of our imageDownloadURLs back from Firebase then we
+ create the spot using the 'createSpotWithMessage' function and perform the unwindSegue back to the MapSpotMapVC.
+ */
+-(void)uploadImageToFirebase:(UIImage *)image withSize:(CGSize)size withFirebaseOperation:(FirebaseOperation *)firebaseOperation {
+    NSData *imageData = [self convertImageToNSData:[self image:image scaledToSize:size]];
+    [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
+        [_imageURLArray addObject:imageDownloadURL];
+        if ([self arrayIsAtCapacity:_imageURLArray]) {
+            [self createSpotWithMessage:_messageTF.text imageURLArray: _imageURLArray latitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude] longitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude]];
+            [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
+        }
+    }];
 }
+
 /*
  Used to create a spot when the createSpotButton is pressed.
  It then saves the spot to Firebase.
@@ -200,36 +301,9 @@
 
 }
 
-#pragma mark Photo Library CollectionView
+#pragma mark UICollectionView DataSource
 
--(void)collectionViewSetUp {
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [flowLayout setMinimumInteritemSpacing:0.0f];
-    [flowLayout setMinimumLineSpacing:0.0f];
-    [flowLayout setSectionInset: UIEdgeInsetsMake(20, 0, 10, 0)];
-    [_photoLibraryCollectionView setCollectionViewLayout:flowLayout];
-    _photoLibraryCollectionView.allowsMultipleSelection = TRUE;
-}
-
--(void)setImageForCellImageViewWithAsset:(PHAsset *)asset imageView:(UIImageView *)imageView {
-
-    [_manager requestImageForAsset:asset
-                    targetSize:_assetThumbnailSize
-                   contentMode:PHImageContentModeAspectFill
-                       options:nil
-                 resultHandler:^(UIImage *result, NSDictionary *info) {
-                     imageView.image = result;
-            }];
-}
-
--(BOOL)checkMediaArrayCapacity {
-    if ([_spotMediaItems count] == 10) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
-}
-
+//sets the size of the cells in both collection views.
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     if (collectionView.tag == 1) {
@@ -240,6 +314,7 @@
 
 }
 
+//numberOfItemsInSection
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
     if (collectionView.tag == 1) {
@@ -250,6 +325,11 @@
     
 }
 
+/*
+ didSelectRow - Takes the selected PHAsset from the device's photo library,
+ checks if it is already in the array for the Spot's Media Items and if it isn't then
+ it adds it to the array.
+ */
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if (collectionView.tag == 1) {
@@ -262,12 +342,11 @@
             }
         }
         
-    } else {
+    } else { //Will use this else statement to see the photo in full view.
         PHAsset *selectedImage = [_spotMediaItems objectAtIndex:indexPath.item];
     }
 
 }
-
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -280,22 +359,21 @@
         PHAsset *asset = _imageAssests[indexPath.item];
         
         UICollectionViewCell *photoLibraryCell = [_photoLibraryCollectionView dequeueReusableCellWithReuseIdentifier:@"photoLibraryCell" forIndexPath:indexPath];
-        UIImageView *photoLibraryCellImageView = (UIImageView *)[photoLibraryCell viewWithTag:200];
-        photoLibraryCellImageView.layer.masksToBounds = TRUE;
+        
+        UIImageView *photoLibraryCellImageView = [self setUpImageViewForCell:photoLibraryCell withTag:200];
         
         [self setImageForCellImageViewWithAsset:asset imageView:photoLibraryCellImageView];
 
     return photoLibraryCell;
 
-    } else {
+    } else { //do the _mediaCollectionView
 
         UICollectionViewCell *spotMediaCell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"spotMediaCell" forIndexPath:indexPath];
-        UIImageView *spotMediaCellImageView = (UIImageView *)[spotMediaCell viewWithTag:100];
-        spotMediaCellImageView.layer.masksToBounds = TRUE;
+        
+        UIImageView *spotMediaCellImageView = [self setUpImageViewForCell:spotMediaCell withTag:100];
         spotMediaCellImageView.layer.cornerRadius = spotMediaCellImageView.frame.size.height/2;
         
         UIButton *mediaCellButton = (UIButton *)[spotMediaCell viewWithTag:201];
-        
         [mediaCellButton addTarget:self action:@selector(deleteSelectedSpotMedia:event:) forControlEvents:UIControlEventTouchUpInside];
 
         id image = _spotMediaItems[indexPath.item];
@@ -307,12 +385,14 @@
                 PHAsset *asset = _spotMediaItems[indexPath.item];
                 [self setImageForCellImageViewWithAsset:asset imageView:spotMediaCellImageView];
         }
-
     return spotMediaCell;
     }
     
 }
 
+#pragma mark IBActions
+
+//Called when the spotMediaCell's delete button is pressed. This removes that selected cell from the array.
 -(IBAction)deleteSelectedSpotMedia:(id)sender event:(id)event {
     
     //Gets position of touch in the collectionView. This is used to grab the indexPath
@@ -326,83 +406,34 @@
     [_mediaCollectionView reloadData];
 }
 
-#pragma mark IBActions
-
 //This creates the spot by calling the createSpotWithUsername func.
 - (IBAction)createSpotButtonPressed:(id)sender {
 
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    NSMutableArray *imageURLArray = [NSMutableArray arrayWithCapacity:[_spotMediaItems count]];
-    NSString *latAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude];
-    NSString *longAsString = [NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude];
-    
-    PHImageRequestOptions *fetchOptions = [PHImageRequestOptions new];
-    fetchOptions.resizeMode = PHImageRequestOptionsResizeModeExact;
-    fetchOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
-    
+    _imageURLArray = [NSMutableArray arrayWithCapacity:[_spotMediaItems count]];
+
     for (id photo in _spotMediaItems) {
+        
+        PHImageRequestOptions *fetchOptions = [self setPHImageRequestOptions];
         
         if ([photo isMemberOfClass:[PHAsset class]]) {
       
-    [_manager requestImageForAsset:photo
-                        targetSize:PHImageManagerMaximumSize
-                       contentMode:PHImageContentModeAspectFill
-                           options:fetchOptions
-                     resultHandler:^(UIImage *result, NSDictionary *info) {
-                         
-                         if (result.size.width > 750 && result.size.height > 1334) {
-                             UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/10, result.size.height/10)];
-                             NSData *imageData = UIImagePNGRepresentation(resizedImage);
-                             [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
-                                 [imageURLArray addObject:imageDownloadURL];
-                                 
-                                 if (imageURLArray.count == _spotMediaItems.count) {
-                                     
-                                     
-                                     NSLog(@"Asset 1 - %lu", imageURLArray.count);
-
-                                     
-                                     [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
-                                     [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
-                                 }
-                                 
-                             }];
-                         } else {
-                             UIImage *resizedImage = [self image:result scaledToSize:CGSizeMake(result.size.width/4, result.size.height/4)];
-                             NSData *imageData = UIImagePNGRepresentation(resizedImage);
-                             [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
-                                 [imageURLArray addObject:imageDownloadURL];
-                                 
-                                 if (imageURLArray.count == _spotMediaItems.count) {
-                                     
-                                     NSLog(@"Asset 2 - %lu", imageURLArray.count);
-
-                                     
-                                     [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
-                                     [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
-                                 }
-                             }];
-                         }
-                     }];
+            [_manager requestImageForAsset:photo
+                    targetSize:PHImageManagerMaximumSize
+                   contentMode:PHImageContentModeAspectFill
+                       options:fetchOptions
+                 resultHandler:^(UIImage *result, NSDictionary *info) {
+                     
+                     if ([self imageIsiPhoneScreenShot:result]) {
+                         [self uploadImageToFirebase:result withSize:CGSizeMake(result.size.width/4, result.size.height/4) withFirebaseOperation:firebaseOperation];
+                     } else {
+                         [self uploadImageToFirebase:result withSize:CGSizeMake(result.size.width/10, result.size.height/10) withFirebaseOperation:firebaseOperation];
+                     }
+                 }];
+            
         } else {
-            NSLog(@"ELSE STATEMENT HIT");
             UIImage *image = photo;
-            UIImage *resizedImage = [self image:image scaledToSize:CGSizeMake(image.size.width/10, image.size.height/10)];
-            NSData *imageData = UIImagePNGRepresentation(resizedImage);
-
-            [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
-                [imageURLArray addObject:imageDownloadURL];
-                
-                
-                if (imageURLArray.count == _spotMediaItems.count) {
-                    NSLog(@"IMAGE - %lu", imageURLArray.count);
-                    [self createSpotWithMessage:_messageTF.text imageURLArray: imageURLArray latitude: latAsString longitude:longAsString];
-                    [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
-                    
-                }
-                
-            }];
-
+            [self uploadImageToFirebase:image withSize:CGSizeMake(image.size.width/10, image.size.height/10) withFirebaseOperation:firebaseOperation];
         }
     }
 }
