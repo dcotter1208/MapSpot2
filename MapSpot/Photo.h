@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) NSString *downloadURL;
 @property (nonatomic) NSUInteger index;
+@property (nonatomic, strong) NSString *photoReference;
 @property (nonatomic, strong) NSString *spotReference;
 
 -(instancetype)initWithDownloadURL:(NSString *)downloadURL andIndex:(NSUInteger)index;

@@ -70,7 +70,9 @@
     for (Photo *photo in photoArray) {
         NSString *key = [[NSNumber numberWithUnsignedInteger:[photoArray indexOfObject:photo]]stringValue];
         
-        [photoRefDict setValue:photo.spotReference forKey:key];
+        NSLog(@"photo spotRef: %@", photo.photoReference);
+        
+        [photoRefDict setValue:photo.photoReference forKey:key];
     }
     return photoRefDict;
 }

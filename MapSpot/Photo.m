@@ -15,6 +15,7 @@
     if (self) {
         _downloadURL = downloadURL;
         _index = index;
+        _photoReference = [[NSUUID UUID]UUIDString];
     }
     return self;
 }
