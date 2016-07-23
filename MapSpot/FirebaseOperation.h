@@ -15,6 +15,7 @@
 @interface FirebaseOperation : NSObject
 
 @property (nonatomic, strong) FirebaseDatabaseService *firebaseDatabaseService;
+@property (nonatomic, strong) NSString *childID;
 
 //Queries all child nodes of a specified reference with no constraints.
 -(void)queryFirebaseWithNoConstraintsForChild:(NSString *)child andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion;

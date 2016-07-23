@@ -41,7 +41,10 @@
 -(void)setValueForFirebaseChild:(NSString *)child value:(NSDictionary *)value {
     
     FIRDatabaseReference *childRef = [_firebaseDatabaseService.ref child:child].childByAutoId;
-
+    
+    NSString *childRefString = [NSString stringWithFormat:@"%@", childRef];
+    _childID = [childRefString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"https://mapspotios.firebaseio.com/%@/", child] withString:@""];
+    
     [childRef setValue:value];
     
 }

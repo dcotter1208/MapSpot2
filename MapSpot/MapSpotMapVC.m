@@ -142,7 +142,6 @@
 
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
     _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImagesURLs];
-    NSLog(@"callout previewImages: %@", _mapAnnotationCallout.previewImages.description);
     _mapAnnotationCallout.usernameLabel.text = spot.user;
     _mapAnnotationCallout.messageTextView.text = spot.message;
 
@@ -172,15 +171,12 @@
                       user:snapshot.value[@"username"]
                       createdAt:snapshot.value[@"createdAt"]];
         spot.message = snapshot.value[@"message"];
+        spot.spotImagesURLs = snapshot.value[@"images"];
         
-        NSDictionary *dict = snapshot.value[@"images"];
-        
-        NSLog(@"DICT: %@", dict.description);
-        
-        for (NSString *photoURL in dict) {
-            [spot.spotImagesURLs addObject:photoURL];
-            NSLog(@"Spot IMage URLS count: %@", spot.spotImagesURLs.description);
-        }
+//        for (NSString *photoURL in dict) {
+//            [spot.spotImagesURLs addObject:photoURL];
+//            NSLog(@"Spot IMage URLS count: %@", spot.spotImagesURLs.description);
+//        }
 
         [self addSpotToMap:spot];
     }];

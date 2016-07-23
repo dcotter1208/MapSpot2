@@ -9,6 +9,7 @@
 #import "UserSpotCreationVC.h"
 #import "FirebaseOperation.h"
 #import "CurrentUser.h"
+#import "Photo.h"
 @import Photos;
 
 @interface UserSpotCreationVC () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -25,7 +26,7 @@
 @property (nonatomic, strong) PHImageRequestOptions *requestOptions;
 @property (nonatomic, strong) PHFetchResult *imageAssests;
 @property (nonatomic, strong) PHImageManager *manager;
-@property (nonatomic, strong) NSMutableArray *imageURLArray;
+@property (nonatomic, strong) NSMutableArray *photoArray;
 
 @end
 
@@ -63,15 +64,15 @@
 }
 
 //Creates a dictionary from an array of imageURLs.
--(NSDictionary *)createImageURLDict:(NSMutableArray *)imageURLArray {
-    NSMutableDictionary *imageURLDict = [[NSMutableDictionary alloc]init];
+-(NSDictionary *)createPhotoRefDict:(NSMutableArray *)photoArray {
+    NSMutableDictionary *photoRefDict = [[NSMutableDictionary alloc]init];
     
-    for (NSString *imageURLString in imageURLArray) {
-        NSString *key = [[NSNumber numberWithUnsignedInteger:[imageURLArray indexOfObject:imageURLString]]stringValue];
+    for (Photo *photo in photoArray) {
+        NSString *key = [[NSNumber numberWithUnsignedInteger:[photoArray indexOfObject:photo]]stringValue];
         
-        [imageURLDict setValue:imageURLString forKey:key];
+        [photoRefDict setValue:photo.spotReference forKey:key];
     }
-    return imageURLDict;
+    return photoRefDict;
 }
 
 /*
@@ -270,21 +271,40 @@
     NSData *imageData = [self convertImageToNSData:[self image:image scaledToSize:size]];
     [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
 
-        //Add photo at specified index.
-        _imageURLArray[index] = imageDownloadURL;
-//        [_imageURLArray addObject:imageDownloadURL];
-        if ([self arrayIsAtCapacity:_imageURLArray]) {
-            [self createSpotWithMessage:_messageTF.text imageURLArray: _imageURLArray latitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude] longitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude]];
-            [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
+        Photo *photo = [[Photo alloc]initWithDownloadURL:imageDownloadURL andIndex:index];
+        [_photoArray addObject:photo];
+        
+        if ([self arrayIsAtCapacity:_photoArray]) {
+            
+            
+            [self createSpotWithMessage:_messageTF.text photoArray:_photoArray latitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude] longitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude]completion:^(NSString *childID) {
+                
+                for (Photo *photo in _photoArray) {
+                    photo.spotReference = childID;
+                    [self savePhotoToFirebaseDatabase:photo];
+                }
+            }];
         }
     }];
+}
+
+-(void)savePhotoToFirebaseDatabase:(Photo *)photo {
+    
+    NSNumber *photoIndex = [NSNumber numberWithUnsignedInteger:photo.index];
+    
+    NSDictionary *photoToSave = @{@"downloadURL": photo.downloadURL,
+                            @"index":photoIndex,
+                            @"spot:": photo.spotReference};
+    
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    [firebaseOperation setValueForFirebaseChild:@"photos" value:photoToSave];
 }
 
 /*
  Used to create a spot when the createSpotButton is pressed.
  It then saves the spot to Firebase.
 */
--(void)createSpotWithMessage:(NSString *)message imageURLArray:(NSMutableArray *)imageURLArray latitude:(NSString *)latitude longitude:(NSString *)longitude {
+-(void)createSpotWithMessage:(NSString *)message photoArray:(NSMutableArray *)photoArray latitude:(NSString *)latitude longitude:(NSString *)longitude completion:(void(^)(NSString *childID))completion {
     NSDate *now = [NSDate date];
 
     FIRUser *currentUserAuth = [[FIRAuth auth]currentUser];
@@ -297,11 +317,13 @@
                            @"longitude": longitude,
                            @"message": message,
                            @"createdAt": [self dateToStringFormatter:now],
-                           @"images": [self createImageURLDict:imageURLArray]};
+                           @"images": [self createPhotoRefDict:photoArray]};
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     [firebaseOperation setValueForFirebaseChild:@"spots" value:spot];
-
+    
+    completion(firebaseOperation.childID);
+    
 }
 
 #pragma mark UICollectionView DataSource
@@ -413,14 +435,8 @@
 - (IBAction)createSpotButtonPressed:(id)sender {
 
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    _imageURLArray = [NSMutableArray arrayWithCapacity:[_spotMediaItems count]];
+    _photoArray = [NSMutableArray arrayWithCapacity:[_spotMediaItems count]];
     
-    for (int i = 0; i < _spotMediaItems.count; i++) {
-        NSString *empty = @"";
-        [_imageURLArray addObject:empty];
-    }
-    
-    NSLog(@"IMAGEURLARRAY COUNT: %lu", _imageURLArray.count);
     PHImageRequestOptions *fetchOptions = [self setPHImageRequestOptions];
 
     for (id photo in _spotMediaItems) {
@@ -450,6 +466,9 @@
             [self uploadImageToFirebase:image withIndex:index withSize:CGSizeMake(image.size.width/10, image.size.height/10) withFirebaseOperation:firebaseOperation];
         }
     }
+    
+    [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
+
 }
 
 - (IBAction)cameraButtonPressed:(id)sender {
