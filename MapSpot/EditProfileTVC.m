@@ -92,7 +92,7 @@
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
-    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"username" queryEqualToValue:username andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
         completion(snapshot);
     }];
     

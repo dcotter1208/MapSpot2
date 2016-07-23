@@ -40,8 +40,9 @@
 
 //Gets the current user's profile from Firebase.
 -(void)getCurrentUserProfileFromFirebase {
+    
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
         [self setCurrentUser:snapshot];
     }];
 }

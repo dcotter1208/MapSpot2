@@ -21,7 +21,7 @@
 -(void)queryFirebaseWithNoConstraintsForChild:(NSString *)child andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion;
 
 //Used to query a child node with the constraints of orderByChild and queryEqualToValue
--(void)queryFirebaseWithConstraintsForChild:(NSString *)child queryOrderedByChild:(NSString *)childKey queryEqualToValue:(NSString *)value andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion;
+-(void)queryFirebaseWithConstraintsForChild:(NSString *)child queryOrderedByChild:(NSString *)childKey queryEqualToValue:(NSString *)value andFIRDataEventType:(FIRDataEventType)FIRDataEventType observeSingleEventType:(BOOL)observeSingleEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion;
 
 //Used to create a child node.
 -(void)setValueForFirebaseChild:(NSString *)child value:(NSDictionary *)value;

@@ -50,7 +50,7 @@
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
-    
+
 }
 
 
@@ -164,13 +164,13 @@
 
 -(void)queryPhotosFromFirebaseForSpot:(Spot *)spot {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    [firebaseOperation queryFirebaseWithConstraintsForChild:@"photos" queryOrderedByChild:@"spot" queryEqualToValue:spot.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded completion:^(FIRDataSnapshot *snapshot) {
-        
+    
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"photos" queryOrderedByChild:@"spot" queryEqualToValue:spot.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
         [spot.spotImagesURLs addObject:snapshot.value[@"downloadURL"]];
-        
         NSLog(@"SNAPSHOT: %@", snapshot);
-        
+
     }];
+
 }
 
 //Queries ALL the spots from Firebase
@@ -186,11 +186,6 @@
         spot.spotReference = snapshot.value[@"spotReference"];
         
         [self queryPhotosFromFirebaseForSpot:spot];
-        
-//        for (NSString *photoURL in dict) {
-//            [spot.spotImagesURLs addObject:photoURL];
-//            NSLog(@"Spot IMage URLS count: %@", spot.spotImagesURLs.description);
-//        }
 
         [self addSpotToMap:spot];
     }];
@@ -213,7 +208,8 @@
  */
 -(void)getCurrentUserProfileFromFirebase {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
+    
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
         [self setCurrentUser:snapshot];
     }];
 }

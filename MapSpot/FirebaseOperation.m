@@ -29,13 +29,20 @@
     }];
 }
 
--(void)queryFirebaseWithConstraintsForChild:(NSString *)child queryOrderedByChild:(NSString *)childKey queryEqualToValue:(NSString *)value andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion {
+-(void)queryFirebaseWithConstraintsForChild:(NSString *)child queryOrderedByChild:(NSString *)childKey queryEqualToValue:(NSString *)value andFIRDataEventType:(FIRDataEventType)FIRDataEventType observeSingleEventType:(BOOL)observeSingleEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion {
     
     FIRDatabaseQuery *query = [[[_firebaseDatabaseService.ref child:child]queryOrderedByChild:childKey] queryEqualToValue:value];
     
-    [query observeSingleEventOfType:FIRDataEventType withBlock:^(FIRDataSnapshot *snapshot) {
-        completion(snapshot);
-    }];
+    if (observeSingleEventType) {
+        [query observeSingleEventOfType:FIRDataEventType withBlock:^(FIRDataSnapshot *snapshot) {
+            completion(snapshot);
+        }];
+    } else {
+        [query observeEventType:FIRDataEventType withBlock:^(FIRDataSnapshot *snapshot) {
+            completion(snapshot);
+        }];
+    }
+    
 }
 
 -(void)setValueForFirebaseChild:(NSString *)child value:(NSDictionary *)value {
