@@ -70,8 +70,6 @@
     for (Photo *photo in photoArray) {
         NSString *key = [[NSNumber numberWithUnsignedInteger:[photoArray indexOfObject:photo]]stringValue];
         
-        NSLog(@"photo spotRef: %@", photo.photoReference);
-        
         [photoRefDict setValue:photo.photoReference forKey:key];
     }
     return photoRefDict;
@@ -279,10 +277,10 @@
         if ([self arrayIsAtCapacity:_photoArray]) {
             
             
-            [self createSpotWithMessage:_messageTF.text photoArray:_photoArray latitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude] longitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude]completion:^(NSString *childID) {
+            [self createSpotWithMessage:_messageTF.text photoArray:_photoArray latitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude] longitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude]completion:^(NSString *spotReference) {
                 
                 for (Photo *photo in _photoArray) {
-                    photo.spotReference = childID;
+                    photo.spotReference = spotReference;
                     [self savePhotoToFirebaseDatabase:photo];
                 }
             }];
@@ -296,7 +294,7 @@
     
     NSDictionary *photoToSave = @{@"downloadURL": photo.downloadURL,
                             @"index":photoIndex,
-                            @"spot:": photo.spotReference};
+                            @"spot": photo.spotReference};
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     [firebaseOperation setValueForFirebaseChild:@"photos" value:photoToSave];
@@ -306,25 +304,28 @@
  Used to create a spot when the createSpotButton is pressed.
  It then saves the spot to Firebase.
 */
--(void)createSpotWithMessage:(NSString *)message photoArray:(NSMutableArray *)photoArray latitude:(NSString *)latitude longitude:(NSString *)longitude completion:(void(^)(NSString *childID))completion {
+-(void)createSpotWithMessage:(NSString *)message photoArray:(NSMutableArray *)photoArray latitude:(NSString *)latitude longitude:(NSString *)longitude completion:(void(^)(NSString *spotReference))completion {
     NSDate *now = [NSDate date];
 
     FIRUser *currentUserAuth = [[FIRAuth auth]currentUser];
     CurrentUser *currentUser = [CurrentUser sharedInstance];
 
+    NSString *spotReference = [[NSUUID UUID]UUIDString];
+    
     NSDictionary *spot = @{@"userId": currentUserAuth.uid,
                            @"username": currentUser.username,
                            @"email": currentUserAuth.email,
                            @"latitude":latitude,
                            @"longitude": longitude,
                            @"message": message,
+                           @"spotReference": spotReference,
                            @"createdAt": [self dateToStringFormatter:now],
                            @"images": [self createPhotoRefDict:photoArray]};
-    
+
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     [firebaseOperation setValueForFirebaseChild:@"spots" value:spot];
     
-    completion(firebaseOperation.childID);
+    completion(spotReference);
     
 }
 

@@ -162,6 +162,17 @@
 
 #pragma mark Firebase Helper Methods
 
+-(void)queryPhotosFromFirebaseForSpot:(Spot *)spot {
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"photos" queryOrderedByChild:@"spot" queryEqualToValue:spot.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded completion:^(FIRDataSnapshot *snapshot) {
+        
+        [spot.spotImagesURLs addObject:snapshot.value[@"downloadURL"]];
+        
+        NSLog(@"SNAPSHOT: %@", snapshot);
+        
+    }];
+}
+
 //Queries ALL the spots from Firebase
 -(void)querySpotsFromFirebase {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
@@ -171,7 +182,10 @@
                       user:snapshot.value[@"username"]
                       createdAt:snapshot.value[@"createdAt"]];
         spot.message = snapshot.value[@"message"];
-        spot.spotImagesURLs = snapshot.value[@"images"];
+//        spot.spotImagesURLs = snapshot.value[@"images"];
+        spot.spotReference = snapshot.value[@"spotReference"];
+        
+        [self queryPhotosFromFirebaseForSpot:spot];
         
 //        for (NSString *photoURL in dict) {
 //            [spot.spotImagesURLs addObject:photoURL];
