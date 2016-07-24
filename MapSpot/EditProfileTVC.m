@@ -86,6 +86,8 @@
     _bioTextView.text = currentUser.bio;
     _DOBTF.text = currentUser.DOB;
     
+    //REFACTOR TO DOWNLOAD PROFILE IMAGE OR BACKGROUND IMAGE OR BOTH DEPENDING ON WHAT IS = NIL
+    
     if (currentUser.profilePhoto != nil) {
         _profilePhotoImageView.image = currentUser.profilePhoto;
         _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
@@ -163,17 +165,44 @@
 
     NSData *imageData = UIImageJPEGRepresentation([info objectForKey:@"UIImagePickerControllerOriginalImage"], 1);
     UIImage *image = [UIImage imageWithData:imageData];
+    UIImage *reducedImage = [self image:image scaledToSize:CGSizeMake(image.size.width / 5, image.size.height/5)];
+    NSData *reducedData = UIImageJPEGRepresentation(reducedImage, 1.0);
+    
     
     if (_profilePhotoSelected) {
         _profilePhotoChanged = TRUE;
-        _profilePhotoData = imageData;
-        _profilePhotoImageView.image = image;
+        _profilePhotoData = reducedData;
+        _profilePhotoImageView.image = reducedImage;
     } else {
         _backgroundProfilePhotoChanged = TRUE;
-        _backgroundPhotoData = imageData;
-        _backgroundProfilePhotoImageView.image = image;
+        _backgroundPhotoData = reducedData;
+        _backgroundProfilePhotoImageView.image = reducedImage;
     }
 
+}
+
+/*
+ Reduces the image's size. If the size to scale down to is the size of
+ the original image then just return the original image.
+ */
+- (UIImage *)image:(UIImage*)originalImage scaledToSize:(CGSize)size {
+    //avoid redundant drawing
+    if (CGSizeEqualToSize(originalImage.size, size)) {
+        return originalImage;
+    }
+    
+    //create drawing context
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0f);
+    
+    //draw
+    [originalImage drawInRect:CGRectMake(0.0f, 0.0f, size.width, size.height)];
+    
+    //capture resultant image
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    //return image
+    return image;
 }
 
 #pragma mark IBActions
@@ -220,17 +249,12 @@
             [_alertView genericAlert:@"Whoops!" message:@"Username must be at least 5 characters (no white space.)" presentingViewController:self];
         } else {
             if (_profilePhotoChanged && _backgroundProfilePhotoChanged) {
-                
-                NSLog(@"BOTH PHOTOS CHANGED");
 
-                
                 [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
                     
                     NSString *profilePhotoDownloadURL = imageDownloadURL;
                     
                     [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
-                        
-                        NSLog(@"NOW BACKGROUND PHOTO");
                         
                         NSString *backgroundProfilePhotoDownloadURL = imageDownloadURL;
                         NSDictionary *userProfileToUpdate = @{@"username": username,
@@ -247,10 +271,7 @@
                     }];
                 }];
             } else if (_profilePhotoChanged) {
-                
-                NSLog(@"PROFILE PHOTO ONLY");
 
-                
                 [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
                     NSDictionary *userProfileToUpdate = @{@"username": username,
                                                           @"email": _currentUser.email,
@@ -265,9 +286,7 @@
                     [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
                 }];
             } else if (_backgroundProfilePhotoChanged) {
-                
-                NSLog(@"BACKPHOTO ONLY");
-                
+
                 [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
                     NSDictionary *userProfileToUpdate = @{@"username": username,
                                                           @"email": _currentUser.email,
