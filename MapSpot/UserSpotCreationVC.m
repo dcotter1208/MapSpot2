@@ -439,6 +439,12 @@
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     _photoArray = [NSMutableArray arrayWithCapacity:[_spotMediaItems count]];
     
+    if (_spotMediaItems.count == 0) {
+        [self createSpotWithMessage:_messageTF.text photoArray:nil latitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude] longitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude] completion:^(NSString *spotReference) {
+
+        }];
+    }
+    
     PHImageRequestOptions *fetchOptions = [self setPHImageRequestOptions];
 
     for (id photo in _spotMediaItems) {

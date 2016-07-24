@@ -92,8 +92,8 @@
         _profilePhotoImageView.image = currentUser.profilePhoto;
         _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
     } else {
-        [_profilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.profilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
-        [_backgroundProfilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.backgroundProfilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
+//        [_profilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.profilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
+//        [_backgroundProfilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.backgroundProfilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
     }
     
 }
@@ -233,7 +233,14 @@
     NSString *location = [self removeLeadingAndTrailingWhitespace:_locationTF.text removeAllWhiteSpace:false];
     NSString *DOB = [self removeLeadingAndTrailingWhitespace:_DOBTF.text removeAllWhiteSpace:true];
     NSString *bio = [self removeLeadingAndTrailingWhitespace:_bioTextView.text removeAllWhiteSpace:false];
+    
+    //******************************************************* DELETE THIS ONCE I GIVE DEFAULT USER A DEFAULT URL ON SIGN UP.
+    
+    
     NSString *backgroundURL = @"";
+    
+    
+    //*************************************************************************************************
     
     [self validateUsernameUniqueness:username completion:^(FIRDataSnapshot *snapshot) {
         
