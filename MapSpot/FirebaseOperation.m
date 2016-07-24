@@ -8,6 +8,8 @@
 
 #import "FirebaseOperation.h"
 #import "CurrentUser.h"
+#import "AFNetworking.h"
+
 @import FirebaseAuth;
 
 @implementation FirebaseOperation
@@ -116,5 +118,6 @@
     }];
     [uploadTask resume];
 }
+
 
 @end

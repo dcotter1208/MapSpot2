@@ -47,9 +47,6 @@
     _firebaseOperation = [[FirebaseOperation alloc]init];
     [self listenForChangesToUserProfileOnFirebase:_currentUser];
     _alertView = [[AlertView alloc]init];
-    NSLog(@"downloadURL: %@", _currentUser.backgroundProfilePhotoDownloadURL);
-    [_profilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.profilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
-    [_backgroundProfilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.backgroundProfilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
     [super viewDidLoad];
     
     //This creates a whie space at the bottom where there are no more cells so there are no ghost cells present.
@@ -89,10 +86,13 @@
     _bioTextView.text = currentUser.bio;
     _DOBTF.text = currentUser.DOB;
     
-//    if (currentUser.profilePhoto != nil) {
-//        _profilePhotoImageView.image = currentUser.profilePhoto;
-//        _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
-//    }
+    if (currentUser.profilePhoto != nil) {
+        _profilePhotoImageView.image = currentUser.profilePhoto;
+        _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
+    } else {
+        [_profilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.profilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
+        [_backgroundProfilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.backgroundProfilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
+    }
     
 }
 
