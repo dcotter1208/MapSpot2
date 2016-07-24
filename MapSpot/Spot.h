@@ -22,7 +22,7 @@
 @property(nonatomic, strong) NSString *createdAt;
 @property(nonatomic) CLLocationCoordinate2D spotCoordinates;
 @property(nonatomic, strong) NSString *message;
-@property(nonatomic, strong) NSMutableArray *spotImagesURLs;
+@property(nonatomic, strong) NSMutableArray *spotImages;
 @property(nonatomic, strong) NSString *spotReference;
 
 -(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt;

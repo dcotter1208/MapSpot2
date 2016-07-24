@@ -12,11 +12,11 @@
 @interface Photo : NSObject
 
 @property (nonatomic, strong) NSString *downloadURL;
-@property (nonatomic) NSUInteger index;
+@property (nonatomic) int index;
 @property (nonatomic, strong) NSString *photoReference;
 @property (nonatomic, strong) NSString *spotReference;
 
--(instancetype)initWithDownloadURL:(NSString *)downloadURL andIndex:(NSUInteger)index;
+-(instancetype)initWithDownloadURL:(NSString *)downloadURL andIndex:(int)index;
 
 
 

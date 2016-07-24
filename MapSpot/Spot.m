@@ -18,7 +18,7 @@
         _spotCoordinates = spotCoordinates;
         _user = user;
         _createdAt = createdAt;
-        _spotImagesURLs = [[NSMutableArray alloc]init];
+        _spotImages = [[NSMutableArray alloc]init];
     }
     return self;
 }

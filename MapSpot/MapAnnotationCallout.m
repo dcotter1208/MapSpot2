@@ -8,6 +8,7 @@
 
 #import "MapAnnotationCallout.h"
 #import "UIImageView+AFNetworking.h"
+#import "Photo.h"
 
 @implementation MapAnnotationCallout
 
@@ -54,11 +55,11 @@
     
     MediaPreviewCell *cell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"mediaCell" forIndexPath:indexPath];
     
-    NSString *downloadURL = _previewImages[indexPath.item];
+    Photo *photo = _previewImages[indexPath.item];
     
     UIImageView *mediaImageView = (UIImageView *)[cell viewWithTag:100];
     
-    [mediaImageView setImageWithURL:[NSURL URLWithString:downloadURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    [mediaImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
     
     return cell;
 }

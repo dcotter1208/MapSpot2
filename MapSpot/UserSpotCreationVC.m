@@ -276,7 +276,6 @@
         
         if ([self arrayIsAtCapacity:_photoArray]) {
             
-            
             [self createSpotWithMessage:_messageTF.text photoArray:_photoArray latitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude] longitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude]completion:^(NSString *spotReference) {
                 
                 for (Photo *photo in _photoArray) {

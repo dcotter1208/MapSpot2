@@ -13,6 +13,7 @@
 #import "FirebaseOperation.h"
 #import "Annotation.h"
 #import "CurrentUser.h"
+#import "Photo.h"
 @import FirebaseAuth;
 @import FirebaseDatabase;
 @import MapKit;
@@ -141,7 +142,7 @@
 }
 
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
-    _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImagesURLs];
+    _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImages];
     _mapAnnotationCallout.usernameLabel.text = spot.user;
     _mapAnnotationCallout.messageTextView.text = spot.message;
 
@@ -160,15 +161,34 @@
 //    [_mapView setRegion:currentRegion];
 }
 
+-(void)sortArray:(NSMutableArray *)array {
+    [array sortedArrayUsingComparator:^NSComparisonResult(Photo *photo1, Photo *photo2) {
+        if (photo1.index > photo2.index) {
+            return NSOrderedAscending;
+        } else {
+            return NSOrderedDescending;
+        }
+    }];
+    NSLog(@"Array: %@", array);
+}
+
 #pragma mark Firebase Helper Methods
 
+/*
+ Makes a call to the photos in the Firebase database based on which spot is passed in.
+ It then obtains the downloadURLs from those photo objects and adds them to the spotImagesURLs array.
+ */
 -(void)queryPhotosFromFirebaseForSpot:(Spot *)spot {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"photos" queryOrderedByChild:@"spot" queryEqualToValue:spot.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
-        [spot.spotImagesURLs addObject:snapshot.value[@"downloadURL"]];
-        NSLog(@"SNAPSHOT: %@", snapshot);
-
+        
+        //Make a new photo object from the snapshot's values. Add the photo to the spot's spotImage's array (change array name to spotPhotos) and then in the cellForItemAtIndexPath do Photo *photo = array[itemPath.item] and then use the photo.downloadURL to download the image.
+        
+        Photo *photo = [[Photo alloc]initWithDownloadURL:snapshot.value[@"downloadURL"] andIndex:(int)snapshot.value[@"index"]];
+        
+        [spot.spotImages addObject:photo];
+        
     }];
 
 }
@@ -182,7 +202,6 @@
                       user:snapshot.value[@"username"]
                       createdAt:snapshot.value[@"createdAt"]];
         spot.message = snapshot.value[@"message"];
-//        spot.spotImagesURLs = snapshot.value[@"images"];
         spot.spotReference = snapshot.value[@"spotReference"];
         
         [self queryPhotosFromFirebaseForSpot:spot];

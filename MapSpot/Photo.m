@@ -10,7 +10,7 @@
 
 @implementation Photo
 
--(instancetype)initWithDownloadURL:(NSString *)downloadURL andIndex:(NSUInteger)index {
+-(instancetype)initWithDownloadURL:(NSString *)downloadURL andIndex:(int)index {
     self = [super init];
     if (self) {
         _downloadURL = downloadURL;
