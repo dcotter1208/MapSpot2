@@ -267,7 +267,7 @@
  if we have all of our imageDownloadURLs back from Firebase then we
  create the spot using the 'createSpotWithMessage' function and perform the unwindSegue back to the MapSpotMapVC.
  */
--(void)uploadImageToFirebase:(UIImage *)image withIndex:(NSUInteger)index withSize:(CGSize)size withFirebaseOperation:(FirebaseOperation *)firebaseOperation {
+-(void)uploadImageToFirebase:(UIImage *)image withIndex:(int)index withSize:(CGSize)size withFirebaseOperation:(FirebaseOperation *)firebaseOperation {
     NSData *imageData = [self convertImageToNSData:[self image:image scaledToSize:size]];
     [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
 
@@ -439,11 +439,17 @@
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     _photoArray = [NSMutableArray arrayWithCapacity:[_spotMediaItems count]];
     
+    if (_spotMediaItems.count == 0) {
+        [self createSpotWithMessage:_messageTF.text photoArray:nil latitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.latitude] longitude:[NSString stringWithFormat:@"%f", _coordinatesForCreatedSpot.longitude] completion:^(NSString *spotReference) {
+
+        }];
+    }
+    
     PHImageRequestOptions *fetchOptions = [self setPHImageRequestOptions];
 
     for (id photo in _spotMediaItems) {
         
-        NSUInteger index = [_spotMediaItems indexOfObject:photo];
+        int index = (int)[_spotMediaItems indexOfObject:photo];
         
         if ([photo isMemberOfClass:[PHAsset class]]) {
             

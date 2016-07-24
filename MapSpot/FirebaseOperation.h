@@ -32,6 +32,8 @@
 
 -(void)uploadToFirebase:(NSData *)imageData completion:(void(^)(NSString *imageDownloadURL))completion;
 
+//-(void)downloadImageFromFirebaseWithAFNetworking:(NSString *)imageURL completion:(void(^)(UIImage *image))completion;
+
 -(instancetype)init;
 
 @end

@@ -8,6 +8,8 @@
 
 #import "FirebaseOperation.h"
 #import "CurrentUser.h"
+#import "AFNetworking.h"
+
 @import FirebaseAuth;
 
 @implementation FirebaseOperation
@@ -94,6 +96,8 @@
                 currentUser.bio = snapshot.value[@"bio"];
                 currentUser.location = snapshot.value[@"location"];
                 currentUser.DOB = snapshot.value[@"DOB"];
+                currentUser.profilePhotoDownloadURL = snapshot.value[@"profilePhotoDownloadURL"];
+                currentUser.backgroundProfilePhotoDownloadURL = snapshot.value[@"backgroundProfilePhotoDownloadURL"];
     
     return currentUser;
 }
@@ -114,5 +118,6 @@
     }];
     [uploadTask resume];
 }
+
 
 @end

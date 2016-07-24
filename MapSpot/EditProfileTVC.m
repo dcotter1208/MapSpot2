@@ -10,9 +10,11 @@
 #import "FirebaseOperation.h"
 #import "CurrentUser.h"
 #import "AlertView.h"
+#import "UIImageView+AFNetworking.h"
+
 @import FirebaseAuth;
 
-@interface EditProfileTVC ()
+@interface EditProfileTVC () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 #pragma mark IBOutlets
 @property (weak, nonatomic) IBOutlet UIImageView *profilePhotoImageView;
@@ -27,6 +29,12 @@
 @property (nonatomic, strong) CurrentUser *currentUser;
 @property (nonatomic, strong) FirebaseOperation *firebaseOperation;
 @property (nonatomic, strong) AlertView *alertView;
+@property (nonatomic, strong) NSData *profilePhotoData;
+@property (nonatomic, strong) NSData *backgroundPhotoData;
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
+@property (nonatomic) BOOL profilePhotoSelected;
+@property (nonatomic) BOOL profilePhotoChanged;
+@property (nonatomic) BOOL backgroundProfilePhotoChanged;
 
 @end
 
@@ -78,9 +86,14 @@
     _bioTextView.text = currentUser.bio;
     _DOBTF.text = currentUser.DOB;
     
+    //REFACTOR TO DOWNLOAD PROFILE IMAGE OR BACKGROUND IMAGE OR BOTH DEPENDING ON WHAT IS = NIL
+    
     if (currentUser.profilePhoto != nil) {
         _profilePhotoImageView.image = currentUser.profilePhoto;
         _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
+    } else {
+//        [_profilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.profilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
+//        [_backgroundProfilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.backgroundProfilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
     }
     
 }
@@ -112,15 +125,97 @@
     
 }
 
+-(void)presentCamera {
+    _imagePicker = [[UIImagePickerController alloc] init];
+    [_imagePicker setDelegate:self];
+    [_imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    [self presentViewController:_imagePicker animated:TRUE completion:nil];
+}
+
+-(void)presentPhotoLibrary {
+    _imagePicker = [[UIImagePickerController alloc] init];
+    [_imagePicker setDelegate:self];
+    [_imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    [self presentViewController:_imagePicker animated:TRUE completion:nil];
+}
+
+-(void)displayChnagePhotoActionSheetWithTitle:(NSString *)title {
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:title message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    [self presentViewController:actionSheet animated:TRUE completion:nil];
+    
+    UIAlertAction *presentCamera = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self presentCamera];
+    }];
+    
+    UIAlertAction *presentPhotoLibrary = [UIAlertAction actionWithTitle:@"Choose From Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self presentPhotoLibrary];
+    }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    
+    [actionSheet addAction:presentCamera];
+    [actionSheet addAction:presentPhotoLibrary];
+    [actionSheet addAction:cancel];
+    
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    [self dismissViewControllerAnimated:TRUE completion:nil];
+
+    NSData *imageData = UIImageJPEGRepresentation([info objectForKey:@"UIImagePickerControllerOriginalImage"], 1);
+    UIImage *image = [UIImage imageWithData:imageData];
+    UIImage *reducedImage = [self image:image scaledToSize:CGSizeMake(image.size.width / 5, image.size.height/5)];
+    NSData *reducedData = UIImageJPEGRepresentation(reducedImage, 1.0);
+    
+    
+    if (_profilePhotoSelected) {
+        _profilePhotoChanged = TRUE;
+        _profilePhotoData = reducedData;
+        _profilePhotoImageView.image = reducedImage;
+    } else {
+        _backgroundProfilePhotoChanged = TRUE;
+        _backgroundPhotoData = reducedData;
+        _backgroundProfilePhotoImageView.image = reducedImage;
+    }
+
+}
+
+/*
+ Reduces the image's size. If the size to scale down to is the size of
+ the original image then just return the original image.
+ */
+- (UIImage *)image:(UIImage*)originalImage scaledToSize:(CGSize)size {
+    //avoid redundant drawing
+    if (CGSizeEqualToSize(originalImage.size, size)) {
+        return originalImage;
+    }
+    
+    //create drawing context
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0f);
+    
+    //draw
+    [originalImage drawInRect:CGRectMake(0.0f, 0.0f, size.width, size.height)];
+    
+    //capture resultant image
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    //return image
+    return image;
+}
+
 #pragma mark IBActions
 
 - (IBAction)profilePhotoSelected:(id)sender {
-    NSLog(@"Profile Photo");
+    _profilePhotoSelected = TRUE;
+    [self displayChnagePhotoActionSheetWithTitle:@"Edit Profile Photo"];
 }
 
 
 - (IBAction)backgroundProfilePhotoSelected:(id)sender {
-    NSLog(@"Background Phaoto");
+    _profilePhotoSelected = FALSE;
+    [self displayChnagePhotoActionSheetWithTitle:@"Edit Background Profile Photo"];
 }
 
 - (IBAction)signOutPressed:(id)sender {
@@ -133,12 +228,19 @@
 
 //saves the profile changes.
 - (IBAction)savePressed:(id)sender {
-    
     NSString *username = [self removeLeadingAndTrailingWhitespace:_usernameTF.text removeAllWhiteSpace:false];
     NSString *fullName = [self removeLeadingAndTrailingWhitespace:_nameTF.text removeAllWhiteSpace:false];
     NSString *location = [self removeLeadingAndTrailingWhitespace:_locationTF.text removeAllWhiteSpace:false];
     NSString *DOB = [self removeLeadingAndTrailingWhitespace:_DOBTF.text removeAllWhiteSpace:true];
     NSString *bio = [self removeLeadingAndTrailingWhitespace:_bioTextView.text removeAllWhiteSpace:false];
+    
+    //******************************************************* DELETE THIS ONCE I GIVE DEFAULT USER A DEFAULT URL ON SIGN UP.
+    
+    
+    NSString *backgroundURL = @"";
+    
+    
+    //*************************************************************************************************
     
     [self validateUsernameUniqueness:username completion:^(FIRDataSnapshot *snapshot) {
         
@@ -153,15 +255,59 @@
         } else if (username.length < 5 || [username containsString:@" "]) {
             [_alertView genericAlert:@"Whoops!" message:@"Username must be at least 5 characters (no white space.)" presentingViewController:self];
         } else {
-            NSDictionary *userProfileToUpdate = @{@"username": username,
-                                                  @"email": _currentUser.email,
-                                                  @"userId": _currentUser.userId,
-                                                  @"fullName": fullName,
-                                                  @"bio": bio,
-                                                  @"location": location,
-                                                  @"DOB": DOB};
-            
-            [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
+            if (_profilePhotoChanged && _backgroundProfilePhotoChanged) {
+
+                [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
+                    
+                    NSString *profilePhotoDownloadURL = imageDownloadURL;
+                    
+                    [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
+                        
+                        NSString *backgroundProfilePhotoDownloadURL = imageDownloadURL;
+                        NSDictionary *userProfileToUpdate = @{@"username": username,
+                                                              @"email": _currentUser.email,
+                                                              @"userId": _currentUser.userId,
+                                                              @"fullName": fullName,
+                                                              @"bio": bio,
+                                                              @"location": location,
+                                                              @"DOB": DOB,
+                                                              @"profilePhotoDownloadURL": profilePhotoDownloadURL,
+                                                              @"backgroundProfilePhotoDownloadURL": backgroundProfilePhotoDownloadURL};
+                        
+                        [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
+                    }];
+                }];
+            } else if (_profilePhotoChanged) {
+
+                [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
+                    NSDictionary *userProfileToUpdate = @{@"username": username,
+                                                          @"email": _currentUser.email,
+                                                          @"userId": _currentUser.userId,
+                                                          @"fullName": fullName,
+                                                          @"bio": bio,
+                                                          @"location": location,
+                                                          @"DOB": DOB,
+                                                          @"profilePhotoDownloadURL": imageDownloadURL,
+                                                          @"backgroundProfilePhotoDownloadURL": backgroundURL};
+                    
+                    [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
+                }];
+            } else if (_backgroundProfilePhotoChanged) {
+
+                [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
+                    NSDictionary *userProfileToUpdate = @{@"username": username,
+                                                          @"email": _currentUser.email,
+                                                          @"userId": _currentUser.userId,
+                                                          @"fullName": fullName,
+                                                          @"bio": bio,
+                                                          @"location": location,
+                                                          @"DOB": DOB,
+                                                          @"profilePhotoDownloadURL": _currentUser.profilePhotoDownloadURL,
+                                                          @"backgroundProfilePhotoDownloadURL": imageDownloadURL};
+                    
+                    [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
+                }];
+            }
         }
     }];
     
