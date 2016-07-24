@@ -12,7 +12,7 @@
 #import "AlertView.h"
 @import FirebaseAuth;
 
-@interface EditProfileTVC ()
+@interface EditProfileTVC () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 #pragma mark IBOutlets
 @property (weak, nonatomic) IBOutlet UIImageView *profilePhotoImageView;
@@ -27,6 +27,7 @@
 @property (nonatomic, strong) CurrentUser *currentUser;
 @property (nonatomic, strong) FirebaseOperation *firebaseOperation;
 @property (nonatomic, strong) AlertView *alertView;
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
 
 @end
 
@@ -112,10 +113,46 @@
     
 }
 
+-(void)presentCamera {
+    _imagePicker = [[UIImagePickerController alloc] init];
+    [_imagePicker setDelegate:self];
+    [_imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    [self presentViewController:_imagePicker animated:TRUE completion:nil];
+}
+
+-(void)presentPhotoLibrary {
+    _imagePicker = [[UIImagePickerController alloc] init];
+    [_imagePicker setDelegate:self];
+    [_imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    [self presentViewController:_imagePicker animated:TRUE completion:nil];
+}
+
+-(void)displayChnagePhotoActionSheetWithTitle:(NSString *)title {
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:title message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    [self presentViewController:actionSheet animated:TRUE completion:nil];
+    
+    UIAlertAction *presentCamera = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self presentCamera];
+    }];
+    
+    UIAlertAction *presentPhotoLibrary = [UIAlertAction actionWithTitle:@"Choose From Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self presentPhotoLibrary];
+    }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    
+    [actionSheet addAction:presentCamera];
+    [actionSheet addAction:presentPhotoLibrary];
+    [actionSheet addAction:cancel];
+    
+}
+
 #pragma mark IBActions
 
 - (IBAction)profilePhotoSelected:(id)sender {
-    NSLog(@"Profile Photo");
+    [self displayChnagePhotoActionSheetWithTitle:@"Edit Profile Photo"];
+//    NSLog(@"Profile Photo");
 }
 
 
