@@ -10,6 +10,8 @@
 #import "FirebaseOperation.h"
 #import "CurrentUser.h"
 #import "AlertView.h"
+#import "UIImageView+AFNetworking.h"
+
 @import FirebaseAuth;
 
 @interface EditProfileTVC () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -27,8 +29,12 @@
 @property (nonatomic, strong) CurrentUser *currentUser;
 @property (nonatomic, strong) FirebaseOperation *firebaseOperation;
 @property (nonatomic, strong) AlertView *alertView;
+@property (nonatomic, strong) NSData *profilePhotoData;
+@property (nonatomic, strong) NSData *backgroundPhotoData;
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
 @property (nonatomic) BOOL profilePhotoSelected;
+@property (nonatomic) BOOL profilePhotoChanged;
+@property (nonatomic) BOOL backgroundProfilePhotoChanged;
 
 @end
 
@@ -41,6 +47,9 @@
     _firebaseOperation = [[FirebaseOperation alloc]init];
     [self listenForChangesToUserProfileOnFirebase:_currentUser];
     _alertView = [[AlertView alloc]init];
+    NSLog(@"downloadURL: %@", _currentUser.backgroundProfilePhotoDownloadURL);
+    [_profilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.profilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
+    [_backgroundProfilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.backgroundProfilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
     [super viewDidLoad];
     
     //This creates a whie space at the bottom where there are no more cells so there are no ghost cells present.
@@ -80,10 +89,10 @@
     _bioTextView.text = currentUser.bio;
     _DOBTF.text = currentUser.DOB;
     
-    if (currentUser.profilePhoto != nil) {
-        _profilePhotoImageView.image = currentUser.profilePhoto;
-        _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
-    }
+//    if (currentUser.profilePhoto != nil) {
+//        _profilePhotoImageView.image = currentUser.profilePhoto;
+//        _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
+//    }
     
 }
 
@@ -156,8 +165,12 @@
     UIImage *image = [UIImage imageWithData:imageData];
     
     if (_profilePhotoSelected) {
+        _profilePhotoChanged = TRUE;
+        _profilePhotoData = imageData;
         _profilePhotoImageView.image = image;
     } else {
+        _backgroundProfilePhotoChanged = TRUE;
+        _backgroundPhotoData = imageData;
         _backgroundProfilePhotoImageView.image = image;
     }
 
@@ -186,12 +199,12 @@
 
 //saves the profile changes.
 - (IBAction)savePressed:(id)sender {
-    
     NSString *username = [self removeLeadingAndTrailingWhitespace:_usernameTF.text removeAllWhiteSpace:false];
     NSString *fullName = [self removeLeadingAndTrailingWhitespace:_nameTF.text removeAllWhiteSpace:false];
     NSString *location = [self removeLeadingAndTrailingWhitespace:_locationTF.text removeAllWhiteSpace:false];
     NSString *DOB = [self removeLeadingAndTrailingWhitespace:_DOBTF.text removeAllWhiteSpace:true];
     NSString *bio = [self removeLeadingAndTrailingWhitespace:_bioTextView.text removeAllWhiteSpace:false];
+    NSString *backgroundURL = @"";
     
     [self validateUsernameUniqueness:username completion:^(FIRDataSnapshot *snapshot) {
         
@@ -206,15 +219,69 @@
         } else if (username.length < 5 || [username containsString:@" "]) {
             [_alertView genericAlert:@"Whoops!" message:@"Username must be at least 5 characters (no white space.)" presentingViewController:self];
         } else {
-            NSDictionary *userProfileToUpdate = @{@"username": username,
-                                                  @"email": _currentUser.email,
-                                                  @"userId": _currentUser.userId,
-                                                  @"fullName": fullName,
-                                                  @"bio": bio,
-                                                  @"location": location,
-                                                  @"DOB": DOB};
-            
-            [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
+            if (_profilePhotoChanged && _backgroundProfilePhotoChanged) {
+                
+                NSLog(@"BOTH PHOTOS CHANGED");
+
+                
+                [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
+                    
+                    NSString *profilePhotoDownloadURL = imageDownloadURL;
+                    
+                    [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
+                        
+                        NSLog(@"NOW BACKGROUND PHOTO");
+                        
+                        NSString *backgroundProfilePhotoDownloadURL = imageDownloadURL;
+                        NSDictionary *userProfileToUpdate = @{@"username": username,
+                                                              @"email": _currentUser.email,
+                                                              @"userId": _currentUser.userId,
+                                                              @"fullName": fullName,
+                                                              @"bio": bio,
+                                                              @"location": location,
+                                                              @"DOB": DOB,
+                                                              @"profilePhotoDownloadURL": profilePhotoDownloadURL,
+                                                              @"backgroundProfilePhotoDownloadURL": backgroundProfilePhotoDownloadURL};
+                        
+                        [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
+                    }];
+                }];
+            } else if (_profilePhotoChanged) {
+                
+                NSLog(@"PROFILE PHOTO ONLY");
+
+                
+                [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
+                    NSDictionary *userProfileToUpdate = @{@"username": username,
+                                                          @"email": _currentUser.email,
+                                                          @"userId": _currentUser.userId,
+                                                          @"fullName": fullName,
+                                                          @"bio": bio,
+                                                          @"location": location,
+                                                          @"DOB": DOB,
+                                                          @"profilePhotoDownloadURL": imageDownloadURL,
+                                                          @"backgroundProfilePhotoDownloadURL": backgroundURL};
+                    
+                    [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
+                }];
+            } else if (_backgroundProfilePhotoChanged) {
+                
+                NSLog(@"BACKPHOTO ONLY");
+                
+                [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
+                    NSDictionary *userProfileToUpdate = @{@"username": username,
+                                                          @"email": _currentUser.email,
+                                                          @"userId": _currentUser.userId,
+                                                          @"fullName": fullName,
+                                                          @"bio": bio,
+                                                          @"location": location,
+                                                          @"DOB": DOB,
+                                                          @"profilePhotoDownloadURL": _currentUser.profilePhotoDownloadURL,
+                                                          @"backgroundProfilePhotoDownloadURL": imageDownloadURL};
+                    
+                    [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfileToUpdate];
+                }];
+            }
         }
     }];
     

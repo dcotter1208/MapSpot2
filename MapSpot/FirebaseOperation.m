@@ -94,6 +94,8 @@
                 currentUser.bio = snapshot.value[@"bio"];
                 currentUser.location = snapshot.value[@"location"];
                 currentUser.DOB = snapshot.value[@"DOB"];
+                currentUser.profilePhotoDownloadURL = snapshot.value[@"profilePhotoDownloadURL"];
+                currentUser.backgroundProfilePhotoDownloadURL = snapshot.value[@"backgroundProfilePhotoDownloadURL"];
     
     return currentUser;
 }
