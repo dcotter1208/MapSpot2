@@ -173,24 +173,14 @@
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"photos" queryOrderedByChild:@"spot" queryEqualToValue:spot.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
-        
-        //Make a new photo object from the snapshot's values. Add the photo to the spot's spotImage's array (change array name to spotPhotos) and then in the cellForItemAtIndexPath do Photo *photo = array[itemPath.item] and then use the photo.downloadURL to download the image.
-        
+
         Photo *photo = [[Photo alloc]initWithDownloadURL:snapshot.value[@"downloadURL"] andIndex:(int)snapshot.value[@"index"]];
         
         [spot.spotImages addObject:photo];
         
         NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
         [spot.spotImages sortUsingDescriptors:[NSArray arrayWithObject:sorter]];
-        for (Photo *photo in spot.spotImages) {
-            NSLog(@"Index: %i", photo.index);
-        }
-        
-//        spot.spotImages = [_photoArray sortedArrayUsingComparator:^NSComparisonResult(Photo *obj1, Photo *obj2) {
-//            NSUInteger photoIndex1 = obj1.index;
-//            NSUInteger photoIndex2 = obj2.index;
-//            return [photoIndex1 compre:photoIndex2];
-//        }];
+
     }];
 
 }
