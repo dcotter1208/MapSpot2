@@ -28,6 +28,7 @@
 @property (nonatomic, strong) FirebaseOperation *firebaseOperation;
 @property (nonatomic, strong) AlertView *alertView;
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
+@property (nonatomic) BOOL profilePhotoSelected;
 
 @end
 
@@ -148,16 +149,31 @@
     
 }
 
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    [self dismissViewControllerAnimated:TRUE completion:nil];
+
+    NSData *imageData = UIImageJPEGRepresentation([info objectForKey:@"UIImagePickerControllerOriginalImage"], 1);
+    UIImage *image = [UIImage imageWithData:imageData];
+    
+    if (_profilePhotoSelected) {
+        _profilePhotoImageView.image = image;
+    } else {
+        _backgroundProfilePhotoImageView.image = image;
+    }
+
+}
+
 #pragma mark IBActions
 
 - (IBAction)profilePhotoSelected:(id)sender {
+    _profilePhotoSelected = TRUE;
     [self displayChnagePhotoActionSheetWithTitle:@"Edit Profile Photo"];
-//    NSLog(@"Profile Photo");
 }
 
 
 - (IBAction)backgroundProfilePhotoSelected:(id)sender {
-    NSLog(@"Background Phaoto");
+    _profilePhotoSelected = FALSE;
+    [self displayChnagePhotoActionSheetWithTitle:@"Edit Background Profile Photo"];
 }
 
 - (IBAction)signOutPressed:(id)sender {
