@@ -36,6 +36,7 @@
 @property(nonatomic)CLLocationCoordinate2D longPressCoordinates;
 @property(nonatomic, strong) MapAnnotationCallout *mapAnnotationCallout;
 @property (nonatomic, strong) Annotation *selectedAnnotation;
+@property (nonnull, strong) NSMutableArray *photoArray;
 
 @end
 
@@ -46,6 +47,7 @@
 
 - (void)viewDidLoad {
     _mapAnnotationCallout = [[MapAnnotationCallout alloc]init];
+    _photoArray = [[NSMutableArray alloc]init];
     [self checkForCurrentUserValue];
     [super viewDidLoad];
     [self querySpotsFromFirebase];
@@ -161,17 +163,6 @@
 //    [_mapView setRegion:currentRegion];
 }
 
--(void)sortArray:(NSMutableArray *)array {
-    [array sortedArrayUsingComparator:^NSComparisonResult(Photo *photo1, Photo *photo2) {
-        if (photo1.index > photo2.index) {
-            return NSOrderedAscending;
-        } else {
-            return NSOrderedDescending;
-        }
-    }];
-    NSLog(@"Array: %@", array);
-}
-
 #pragma mark Firebase Helper Methods
 
 /*
@@ -189,6 +180,17 @@
         
         [spot.spotImages addObject:photo];
         
+        NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
+        [spot.spotImages sortUsingDescriptors:[NSArray arrayWithObject:sorter]];
+        for (Photo *photo in spot.spotImages) {
+            NSLog(@"Index: %i", photo.index);
+        }
+        
+//        spot.spotImages = [_photoArray sortedArrayUsingComparator:^NSComparisonResult(Photo *obj1, Photo *obj2) {
+//            NSUInteger photoIndex1 = obj1.index;
+//            NSUInteger photoIndex2 = obj2.index;
+//            return [photoIndex1 compre:photoIndex2];
+//        }];
     }];
 
 }
