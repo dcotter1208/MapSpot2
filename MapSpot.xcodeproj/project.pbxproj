@@ -32,6 +32,7 @@
 		43ACBB231D3812A20082FE0A /* MapAnnotationCalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43ACBB221D3812A20082FE0A /* MapAnnotationCalloutView.xib */; };
 		43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEB1D0104F00060D1BF /* LoginVC.m */; };
 		43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEE1D0105210060D1BF /* SignUpVC.m */; };
+		43F8226A1D43CFDA00C8AA06 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F822691D43CFDA00C8AA06 /* Photo.m */; };
 		FE717BA2A2685DF966FD7AD0 /* libPods-MapSpot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E4651FF2387130EC55898D /* libPods-MapSpot.a */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,8 @@
 		43D8DEEB1D0104F00060D1BF /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		43D8DEED1D0105210060D1BF /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
 		43D8DEEE1D0105210060D1BF /* SignUpVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpVC.m; sourceTree = "<group>"; };
+		43F822681D43CFDA00C8AA06 /* Photo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photo.h; sourceTree = "<group>"; };
+		43F822691D43CFDA00C8AA06 /* Photo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Photo.m; sourceTree = "<group>"; };
 		5BC4E31F1BC35754AC23F30F /* Pods-MapSpot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapSpot.release.xcconfig"; path = "Pods/Target Support Files/Pods-MapSpot/Pods-MapSpot.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -154,6 +157,8 @@
 				4374D3171D010ECA00C8FE5B /* User.m */,
 				43ACBAAC1D34095F0082FE0A /* CurrentUser.h */,
 				43ACBAAD1D34095F0082FE0A /* CurrentUser.m */,
+				43F822681D43CFDA00C8AA06 /* Photo.h */,
+				43F822691D43CFDA00C8AA06 /* Photo.m */,
 				43ACBAE81D35B40A0082FE0A /* AlertView.h */,
 				43ACBAE91D35B40A0082FE0A /* AlertView.m */,
 				43ACBB1F1D38125C0082FE0A /* MapAnnotationCallout.h */,
@@ -356,6 +361,7 @@
 				43ACBAAE1D34095F0082FE0A /* CurrentUser.m in Sources */,
 				43013AEB1D243A9C004D569F /* FirebaseDatabaseService.m in Sources */,
 				43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */,
+				43F8226A1D43CFDA00C8AA06 /* Photo.m in Sources */,
 				43ACBAEC1D36C5FA0082FE0A /* Schema.m in Sources */,
 				43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */,
 				43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */,

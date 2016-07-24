@@ -13,6 +13,7 @@
 #import "FirebaseOperation.h"
 #import "Annotation.h"
 #import "CurrentUser.h"
+#import "Photo.h"
 @import FirebaseAuth;
 @import FirebaseDatabase;
 @import MapKit;
@@ -35,6 +36,7 @@
 @property(nonatomic)CLLocationCoordinate2D longPressCoordinates;
 @property(nonatomic, strong) MapAnnotationCallout *mapAnnotationCallout;
 @property (nonatomic, strong) Annotation *selectedAnnotation;
+@property (nonnull, strong) NSMutableArray *photoArray;
 
 @end
 
@@ -45,12 +47,13 @@
 
 - (void)viewDidLoad {
     _mapAnnotationCallout = [[MapAnnotationCallout alloc]init];
+    _photoArray = [[NSMutableArray alloc]init];
     [self checkForCurrentUserValue];
     [super viewDidLoad];
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
-    
+
 }
 
 
@@ -136,11 +139,12 @@
     _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
    _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
     [self.view addSubview:_mapAnnotationCallout];
+    //This is important otherwise the callout's collectionview won't reload.
+     [_mapAnnotationCallout.mediaCollectionView reloadData];
 }
 
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
-    _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithObjects:[UIImage imageNamed:@"belleIsle-1"], [UIImage imageNamed:@"belleIsle-2"], [UIImage imageNamed:@"old_english_D"], [UIImage imageNamed:@"belleIsle-3"], [UIImage imageNamed:@"belleIsle-4"], [UIImage imageNamed:@"belleIsle-5"], nil];
-    
+    _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImages];
     _mapAnnotationCallout.usernameLabel.text = spot.user;
     _mapAnnotationCallout.messageTextView.text = spot.message;
 
@@ -156,10 +160,29 @@
     
     //sets the map's region to the current region.
     [_mapView setRegion:currentRegion animated:true];
-//    [_mapView setRegion:currentRegion];
 }
 
 #pragma mark Firebase Helper Methods
+
+/*
+ Makes a call to the photos in the Firebase database based on which spot is passed in.
+ It then obtains the downloadURLs from those photo objects and adds them to the spotImagesURLs array.
+ */
+-(void)queryPhotosFromFirebaseForSpot:(Spot *)spot {
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"photos" queryOrderedByChild:@"spot" queryEqualToValue:spot.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
+
+        Photo *photo = [[Photo alloc]initWithDownloadURL:snapshot.value[@"downloadURL"] andIndex:(int)snapshot.value[@"index"]];
+        
+        [spot.spotImages addObject:photo];
+        
+        NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
+        [spot.spotImages sortUsingDescriptors:[NSArray arrayWithObject:sorter]];
+
+    }];
+
+}
 
 //Queries ALL the spots from Firebase
 -(void)querySpotsFromFirebase {
@@ -170,7 +193,10 @@
                       user:snapshot.value[@"username"]
                       createdAt:snapshot.value[@"createdAt"]];
         spot.message = snapshot.value[@"message"];
+        spot.spotReference = snapshot.value[@"spotReference"];
         
+        [self queryPhotosFromFirebaseForSpot:spot];
+
         [self addSpotToMap:spot];
     }];
 }
@@ -192,7 +218,8 @@
  */
 -(void)getCurrentUserProfileFromFirebase {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue completion:^(FIRDataSnapshot *snapshot) {
+    
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
         [self setCurrentUser:snapshot];
     }];
 }

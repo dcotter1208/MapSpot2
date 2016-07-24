@@ -29,19 +29,29 @@
     }];
 }
 
--(void)queryFirebaseWithConstraintsForChild:(NSString *)child queryOrderedByChild:(NSString *)childKey queryEqualToValue:(NSString *)value andFIRDataEventType:(FIRDataEventType)FIRDataEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion {
+-(void)queryFirebaseWithConstraintsForChild:(NSString *)child queryOrderedByChild:(NSString *)childKey queryEqualToValue:(NSString *)value andFIRDataEventType:(FIRDataEventType)FIRDataEventType observeSingleEventType:(BOOL)observeSingleEventType completion:(void(^)(FIRDataSnapshot *snapshot))completion {
     
     FIRDatabaseQuery *query = [[[_firebaseDatabaseService.ref child:child]queryOrderedByChild:childKey] queryEqualToValue:value];
     
-    [query observeSingleEventOfType:FIRDataEventType withBlock:^(FIRDataSnapshot *snapshot) {
-        completion(snapshot);
-    }];
+    if (observeSingleEventType) {
+        [query observeSingleEventOfType:FIRDataEventType withBlock:^(FIRDataSnapshot *snapshot) {
+            completion(snapshot);
+        }];
+    } else {
+        [query observeEventType:FIRDataEventType withBlock:^(FIRDataSnapshot *snapshot) {
+            completion(snapshot);
+        }];
+    }
+    
 }
 
 -(void)setValueForFirebaseChild:(NSString *)child value:(NSDictionary *)value {
     
     FIRDatabaseReference *childRef = [_firebaseDatabaseService.ref child:child].childByAutoId;
-
+    
+    NSString *childRefString = [NSString stringWithFormat:@"%@", childRef];
+    _childID = [childRefString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"https://mapspotios.firebaseio.com/%@/", child] withString:@""];
+    
     [childRef setValue:value];
     
 }
@@ -86,6 +96,23 @@
                 currentUser.DOB = snapshot.value[@"DOB"];
     
     return currentUser;
+}
+
+-(void)uploadToFirebase:(NSData *)imageData completion:(void(^)(NSString *imageDownloadURL))completion {
+    //Create a uniqueID for the image and add it to the end of the images reference.
+    NSString *uniqueID = [[NSUUID UUID]UUIDString];
+    NSString *newImageReference = [NSString stringWithFormat:@"images/%@.jpg", uniqueID];
+    //imagesRef creates a reference for the images folder and then adds a child to that folder, which will be every time a photo is taken.
+    FIRStorageReference *imagesRef = [_firebaseDatabaseService.firebaseStorageRef child:newImageReference];
+    //This uploads the photo's NSData onto Firebase Storage.
+    FIRStorageUploadTask *uploadTask = [imagesRef putData:imageData metadata:nil completion:^(FIRStorageMetadata *metadata, NSError *error) {
+        if (error) {
+            NSLog(@"ERROR: %@", error.description);
+        } else {
+            completion([metadata.downloadURL absoluteString]);
+        }
+    }];
+    [uploadTask resume];
 }
 
 @end

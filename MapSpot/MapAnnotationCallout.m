@@ -7,6 +7,8 @@
 //
 
 #import "MapAnnotationCallout.h"
+#import "UIImageView+AFNetworking.h"
+#import "Photo.h"
 
 @implementation MapAnnotationCallout
 
@@ -27,7 +29,7 @@
         self.bounds = _view.bounds;
         
         [self addSubview:_view];
-        
+                
     }
     return self;
 }
@@ -53,9 +55,11 @@
     
     MediaPreviewCell *cell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"mediaCell" forIndexPath:indexPath];
     
+    Photo *photo = _previewImages[indexPath.item];
+    
     UIImageView *mediaImageView = (UIImageView *)[cell viewWithTag:100];
-
-    mediaImageView.image = [_previewImages objectAtIndex:indexPath.item];
+    
+    [mediaImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
     
     return cell;
 }

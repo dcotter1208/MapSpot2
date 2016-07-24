@@ -18,6 +18,7 @@
         _spotCoordinates = spotCoordinates;
         _user = user;
         _createdAt = createdAt;
+        _spotImages = [[NSMutableArray alloc]init];
     }
     return self;
 }

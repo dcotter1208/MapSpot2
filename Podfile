@@ -7,6 +7,7 @@ pod ‘Firebase’
 pod 'Firebase/Auth'
 pod 'Firebase/Database'
 pod 'Firebase/Storage'
+pod 'AFNetworking', '~> 3.0'
 
   # Uncomment this line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!

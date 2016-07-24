@@ -30,6 +30,8 @@
 
 -(void)initWithReference {
     _ref = [[FIRDatabase database] reference];
+    _firebaseStorage = [FIRStorage storage];
+    _firebaseStorageRef = [_firebaseStorage referenceForURL:@"gs://mapspotios.appspot.com"];
 }
 
 @end
