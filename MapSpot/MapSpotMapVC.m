@@ -160,7 +160,6 @@
     
     //sets the map's region to the current region.
     [_mapView setRegion:currentRegion animated:true];
-//    [_mapView setRegion:currentRegion];
 }
 
 #pragma mark Firebase Helper Methods
