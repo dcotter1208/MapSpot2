@@ -131,7 +131,7 @@
 */
  -(void)addSpotToMap:(Spot *)spot {
     Annotation *annotation = [Annotation initWithAnnotationSpot:spot coordinate:CLLocationCoordinate2DMake(spot.spotCoordinates.latitude, spot.spotCoordinates.longitude)];
-    annotation.title = spot.user;
+    annotation.title = spot.userID;
     annotation.subtitle = [NSString stringWithFormat:@"%@", spot.message];
     [_mapView addAnnotation:annotation];
 }
@@ -151,7 +151,7 @@
 //Sets the custom callout's attributes such as the username label, message and collectionView's datasource.
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
     _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImages];
-    _mapAnnotationCallout.usernameLabel.text = spot.user;
+    _mapAnnotationCallout.usernameLabel.text = spot.userID;
     _mapAnnotationCallout.messageTextView.text = spot.message;
 
 }
@@ -209,7 +209,7 @@
     [firebaseOperation queryFirebaseWithNoConstraintsForChild:@"spots" andFIRDataEventType:FIRDataEventTypeChildAdded completion:^(FIRDataSnapshot *snapshot) {
         Spot *spot = [[Spot alloc]
                       initWithSpotCoordinates:CLLocationCoordinate2DMake([snapshot.value[@"latitude"] doubleValue], [snapshot.value[@"longitude"] doubleValue])
-                      user:snapshot.value[@"username"]
+                      userID:snapshot.value[@"userId"]
                       createdAt:snapshot.value[@"createdAt"]];
         spot.message = snapshot.value[@"message"];
         spot.spotReference = snapshot.value[@"spotReference"];

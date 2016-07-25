@@ -258,12 +258,10 @@
     NSDate *now = [NSDate date];
 
     FIRUser *currentUserAuth = [[FIRAuth auth]currentUser];
-    CurrentUser *currentUser = [CurrentUser sharedInstance];
 
     NSString *spotReference = [[NSUUID UUID]UUIDString];
     
     NSDictionary *spot = @{@"userId": currentUserAuth.uid,
-                           @"username": currentUser.username,
                            @"email": currentUserAuth.email,
                            @"latitude":latitude,
                            @"longitude": longitude,

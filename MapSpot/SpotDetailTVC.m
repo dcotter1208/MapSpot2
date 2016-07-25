@@ -8,6 +8,7 @@
 
 #import "SpotDetailTVC.h"
 #import "Photo.h"
+#import "FirebaseOperation.h"
 #import "UIImageView+AFNetworking.h"
 
 @interface SpotDetailTVC () <UICollectionViewDelegate, UICollectionViewDataSource>
@@ -15,6 +16,9 @@
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UITextView *messageTextView;
 @property (weak, nonatomic) IBOutlet UICollectionView *mediaCollectionView;
+@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
+
+@property (nonatomic, strong) FirebaseOperation *firebaseOperation;
 
 @end
 
@@ -23,6 +27,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    _firebaseOperation = [[FirebaseOperation alloc]init];
+    NSLog(@"spot user: %@", _spot.userID);
+    
+    [self setSpotDetails];
     
 }
 
@@ -31,8 +39,34 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)viewWillLayoutSubviews {
+    _profileImageView.layer.cornerRadius = _profileImageView.layer.frame.size.height/2;
+    _profileImageView.layer.masksToBounds = TRUE;
+    _backgroundProfileImageView.layer.masksToBounds = TRUE;
+    _usernameLabel.layer.borderWidth = 1.0;
+    _usernameLabel.layer.masksToBounds = TRUE;
+    _usernameLabel.layer.cornerRadius = 8.0;
+}
+
+/************************************************
+
+USE THE _spot.userID to query the user profile for this spot.
+
+*****************************************************/
+
 -(void)setSpotDetails {
     
+    _messageTextView.text = _spot.message;
+    
+    [_firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:_spot.userID andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
+        
+        for (FIRDataSnapshot *child in snapshot.children) {
+            _usernameLabel.text = child.value[@"username"];
+
+            [_profileImageView setImageWithURL:[NSURL URLWithString:child.value[@"profilePhotoDownloadURL"]] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+            [_backgroundProfileImageView setImageWithURL:[NSURL URLWithString:child.value[@"backgroundProfilePhotoDownloadURL"]] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+        }
+    }];
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {

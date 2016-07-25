@@ -15,7 +15,7 @@
     
     if (self) {
         _spotAtAnnotation = spot;
-        _title = spot.user;
+        _title = spot.userID;
         _subtitle = spot.message;
         _coordinate = coordinate;
     }
