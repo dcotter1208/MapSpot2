@@ -11,6 +11,7 @@
 #import "MapAnnotationCallout.h"
 #import "Spot.h"
 #import "FirebaseOperation.h"
+#import "AFNetworkingOp.h"
 #import "Annotation.h"
 #import "CurrentUser.h"
 #import "Photo.h"
@@ -170,7 +171,20 @@
     [_mapView setRegion:currentRegion animated:true];
 }
 
-#pragma mark Firebase Helper Methods
+#pragma mark Networking Methods
+
+//Accepts a current user as an argument and then sets the profile photos for the current user.
+-(void)setProfilePhotosForCurrentUser:(CurrentUser *)currentUser {
+    
+    AFNetworkingOp *afnetworkingOp = [[AFNetworkingOp alloc]init];
+    
+    [afnetworkingOp downloadImageFromFirebaseWithAFNetworking:currentUser.profilePhotoDownloadURL completion:^(UIImage *image) {
+        currentUser.profilePhoto = image;
+    }];
+    [afnetworkingOp downloadImageFromFirebaseWithAFNetworking:currentUser.backgroundProfilePhotoDownloadURL completion:^(UIImage *image) {
+        currentUser.backgroundProfilePhoto = image;
+    }];
+}
 
 /*
  Makes a call to the photos in the Firebase database based on which spot is passed in.
@@ -239,12 +253,7 @@
     
     for (FIRDataSnapshot *child in snapshot.children) {
         [currentUser updateCurrentUser:child];
-        [currentUser downloadImageFromFirebaseWithAFNetworking:currentUser.profilePhotoDownloadURL completion:^(UIImage *image) {
-            currentUser.profilePhoto = image;
-        }];
-        [currentUser downloadImageFromFirebaseWithAFNetworking:currentUser.backgroundProfilePhotoDownloadURL completion:^(UIImage *image) {
-            currentUser.backgroundProfilePhoto = image;
-        }];
+        [self setProfilePhotosForCurrentUser:currentUser];
     }
 }
 

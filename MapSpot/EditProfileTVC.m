@@ -265,7 +265,7 @@
             [_alertView genericAlert:@"Whoops!" message:[NSString stringWithFormat:@"The username '%@' is taken.", username] presentingViewController:self];
         } else if (username.length < 5 || [username containsString:@" "]) {
             [_alertView genericAlert:@"Whoops!" message:@"Username must be at least 5 characters (no white space.)" presentingViewController:self];
-        } else {
+        } else { //If all the fields are clear then check if the profile photos changed.
             if (_profilePhotoChanged && _backgroundProfilePhotoChanged) {
                 [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
                     
@@ -291,10 +291,13 @@
             } else if (_backgroundProfilePhotoChanged) {
                 [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
                     
-                    NSDictionary *userProfile= [self createUserProfileToUpdate:_currentUser.profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:imageDownloadURL];
+                    NSDictionary *userProfile = [self createUserProfileToUpdate:_currentUser.profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:imageDownloadURL];
 
                     [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
                 }];
+            } else {
+                NSDictionary *userProfile = [self createUserProfileToUpdate:_currentUser.profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:_currentUser.backgroundProfilePhotoDownloadURL];
+                [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
             }
         }
     }];

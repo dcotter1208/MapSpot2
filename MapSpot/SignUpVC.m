@@ -10,6 +10,7 @@
 #import "FirebaseOperation.h"
 #import "CurrentUser.h"
 #import "AlertView.h"
+#import "AFNetworkingOp.h"
 @import FirebaseDatabase;
 @import Firebase;
 @import FirebaseAuth;
@@ -42,7 +43,7 @@
     [super didReceiveMemoryWarning];
 }
 
-#pragma mark Firebase Helper Methods
+#pragma mark Networking Methods
 
 //Creates a user profile on Firebase Database.
 -(void)addUserProfileInfo:(NSString *)userId username:(NSString *)username fullName:(NSString *)fullName email:(NSString *)email {
@@ -88,6 +89,18 @@
     }
 }
 
+-(void)setProfilePhotosForCurrentUser:(CurrentUser *)currentUser {
+    
+    AFNetworkingOp *afnetworkingOp = [[AFNetworkingOp alloc]init];
+    
+    [afnetworkingOp downloadImageFromFirebaseWithAFNetworking:currentUser.profilePhotoDownloadURL completion:^(UIImage *image) {
+        currentUser.profilePhoto = image;
+    }];
+    [afnetworkingOp downloadImageFromFirebaseWithAFNetworking:currentUser.backgroundProfilePhotoDownloadURL completion:^(UIImage *image) {
+        currentUser.backgroundProfilePhoto = image;
+    }];
+}
+
 #pragma mark Validation Helper Methods
 
 //Validates the user's email with regex.
@@ -121,12 +134,7 @@
     
     for (FIRDataSnapshot *child in snapshot.children) {
         [currentUser updateCurrentUser:child];
-        [currentUser downloadImageFromFirebaseWithAFNetworking:currentUser.profilePhotoDownloadURL completion:^(UIImage *image) {
-            currentUser.profilePhoto = image;
-        }];
-        [currentUser downloadImageFromFirebaseWithAFNetworking:currentUser.backgroundProfilePhotoDownloadURL completion:^(UIImage *image) {
-            currentUser.backgroundProfilePhoto = image;
-        }];
+        [self setProfilePhotosForCurrentUser:currentUser];
     }
 }
 
