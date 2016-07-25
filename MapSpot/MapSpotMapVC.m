@@ -8,6 +8,7 @@
 
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
+#import "SpotDetailTVC.h"
 #import "MapAnnotationCallout.h"
 #import "Spot.h"
 #import "FirebaseOperation.h"
@@ -267,6 +268,9 @@
         } else {
             [destionationVC setCoordinatesForCreatedSpot:_longPressCoordinates];
         }
+    } else if ([segue.identifier isEqualToString:@"segueToSpotDetailVC"]){
+        SpotDetailTVC *destionationVC = [segue destinationViewController];
+        destionationVC.spot = _selectedAnnotation.spotAtAnnotation;
     }
 }
 

@@ -32,7 +32,7 @@
 		43ACBB231D3812A20082FE0A /* MapAnnotationCalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43ACBB221D3812A20082FE0A /* MapAnnotationCalloutView.xib */; };
 		43D197BE1D4640F800245C58 /* AFNetworkingOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197BD1D4640F800245C58 /* AFNetworkingOp.m */; };
 		43D197C21D4658B200245C58 /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197C11D4658B200245C58 /* ImageProcessor.m */; };
-		43D197C81D4679F200245C58 /* SpotDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197C71D4679F200245C58 /* SpotDetailVC.m */; };
+		43D197C81D4679F200245C58 /* SpotDetailTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197C71D4679F200245C58 /* SpotDetailTVC.m */; };
 		43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEB1D0104F00060D1BF /* LoginVC.m */; };
 		43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEE1D0105210060D1BF /* SignUpVC.m */; };
 		43F8226A1D43CFDA00C8AA06 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F822691D43CFDA00C8AA06 /* Photo.m */; };
@@ -84,8 +84,8 @@
 		43D197BD1D4640F800245C58 /* AFNetworkingOp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkingOp.m; sourceTree = "<group>"; };
 		43D197C01D4658B200245C58 /* ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessor.h; sourceTree = "<group>"; };
 		43D197C11D4658B200245C58 /* ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageProcessor.m; sourceTree = "<group>"; };
-		43D197C61D4679F200245C58 /* SpotDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpotDetailVC.h; sourceTree = "<group>"; };
-		43D197C71D4679F200245C58 /* SpotDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotDetailVC.m; sourceTree = "<group>"; };
+		43D197C61D4679F200245C58 /* SpotDetailTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpotDetailTVC.h; sourceTree = "<group>"; };
+		43D197C71D4679F200245C58 /* SpotDetailTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotDetailTVC.m; sourceTree = "<group>"; };
 		43D8DEEA1D0104F00060D1BF /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		43D8DEEB1D0104F00060D1BF /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		43D8DEED1D0105210060D1BF /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
@@ -187,8 +187,8 @@
 				43280D971CF87BF900F726FE /* MapSpotMapVC.m */,
 				43AB329B1CFACCF300631D92 /* UserSpotCreationVC.h */,
 				43AB329C1CFACCF300631D92 /* UserSpotCreationVC.m */,
-				43D197C61D4679F200245C58 /* SpotDetailVC.h */,
-				43D197C71D4679F200245C58 /* SpotDetailVC.m */,
+				43D197C61D4679F200245C58 /* SpotDetailTVC.h */,
+				43D197C71D4679F200245C58 /* SpotDetailTVC.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -387,7 +387,7 @@
 				43013AEB1D243A9C004D569F /* FirebaseDatabaseService.m in Sources */,
 				43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */,
 				43F8226A1D43CFDA00C8AA06 /* Photo.m in Sources */,
-				43D197C81D4679F200245C58 /* SpotDetailVC.m in Sources */,
+				43D197C81D4679F200245C58 /* SpotDetailTVC.m in Sources */,
 				43ACBAEC1D36C5FA0082FE0A /* Schema.m in Sources */,
 				43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */,
 				43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */,
