@@ -7,7 +7,6 @@
 //
 
 #import "CurrentUser.h"
-#import "AFNetworking.h"
 
 @implementation CurrentUser
 
@@ -44,8 +43,6 @@
     self.profilePhotoDownloadURL = snapshot.value[@"profilePhotoDownloadURL"];
     self.backgroundProfilePhotoDownloadURL = snapshot.value[@"backgroundProfilePhotoDownloadURL"];
     self.profileKey = snapshot.key;
-    
-    //WILL HAVE TO UPDATE PHOTOS AND URLS HERE TOO...
     
 }
 

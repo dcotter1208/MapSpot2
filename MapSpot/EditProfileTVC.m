@@ -59,8 +59,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark Helper Methods
-
+#pragma mark View Helper Methods
 //Configure the profile photos.
 -(void)viewWillLayoutSubviews {
     _profilePhotoImageView.layer.borderWidth = 4.0;
@@ -68,14 +67,6 @@
     _profilePhotoImageView.layer.cornerRadius = _profilePhotoImageView.frame.size.height/2;
     _profilePhotoImageView.layer.masksToBounds = TRUE;
     _backgroundProfilePhotoImageView.layer.masksToBounds = TRUE;
-}
-
-//Updates the user profile on Firebase,
--(void)listenForChangesToUserProfileOnFirebase:(CurrentUser *)user {
-    
-    [_firebaseOperation listenForChildNodeChanges:@"users" completion:^(CurrentUser *updatedCurrentUser) {
-            [self setUserProfileFields:updatedCurrentUser];
-    }];
 }
 
 //Sets textfields, textview and UIImageViews with the user's profile info.
@@ -86,29 +77,10 @@
     _bioTextView.text = currentUser.bio;
     _DOBTF.text = currentUser.DOB;
     
-    //REFACTOR TO DOWNLOAD PROFILE IMAGE OR BACKGROUND IMAGE OR BOTH DEPENDING ON WHAT IS = NIL
-    
     if (currentUser.profilePhoto != nil) {
         _profilePhotoImageView.image = currentUser.profilePhoto;
         _backgroundProfilePhotoImageView.image = currentUser.backgroundProfilePhoto;
-    } else {
-//        [_profilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.profilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
-//        [_backgroundProfilePhotoImageView setImageWithURL:[NSURL URLWithString:_currentUser.backgroundProfilePhotoDownloadURL] placeholderImage:[UIImage imageNamed: @"placeholder"]];
     }
-    
-}
-
-/*
- -Validates if the username exists
- */
--(void)validateUsernameUniqueness:(NSString *)username completion:(void(^)(FIRDataSnapshot *snapshot))completion {
-    
-    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    
-    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
-        completion(snapshot);
-    }];
-    
 }
 
 //Removes all whitespace or only leading and trailing of a given string.
@@ -125,20 +97,8 @@
     
 }
 
--(void)presentCamera {
-    _imagePicker = [[UIImagePickerController alloc] init];
-    [_imagePicker setDelegate:self];
-    [_imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
-    [self presentViewController:_imagePicker animated:TRUE completion:nil];
-}
 
--(void)presentPhotoLibrary {
-    _imagePicker = [[UIImagePickerController alloc] init];
-    [_imagePicker setDelegate:self];
-    [_imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-    [self presentViewController:_imagePicker animated:TRUE completion:nil];
-}
-
+//Displays the action sheet to choose between taking a photo or selecting one from the photo library.
 -(void)displayChangePhotoActionSheetWithTitle:(NSString *)title {
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:title message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
     
@@ -160,6 +120,118 @@
     
 }
 
+#pragma mark Networking Methods
+//Updates the user profile on Firebase,
+-(void)listenForChangesToUserProfileOnFirebase:(CurrentUser *)user {
+    
+    [_firebaseOperation listenForChildNodeChanges:@"users" completion:^(CurrentUser *updatedCurrentUser) {
+        [self setUserProfileFields:updatedCurrentUser];
+    }];
+}
+
+//Updates if both user profile photo and background profile changed.
+-(void)updateUserProfileWithChangedProfileAndBackgroundProfilePhotos {
+    [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
+        
+        NSString *profilePhotoDownloadURL = imageDownloadURL;
+        
+        [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
+            
+            NSString *backgroundProfilePhotoDownloadURL = imageDownloadURL;
+            
+            NSDictionary *userProfile = [self createUserProfileToUpdate:profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:backgroundProfilePhotoDownloadURL];
+            
+            [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
+        }];
+    }];
+}
+
+
+//Updates only if user profile photo changed.
+-(void)updateUserProfileIfOnlyProfilePhotoChanged {
+    [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
+        
+        NSDictionary *userProfile = [self createUserProfileToUpdate:imageDownloadURL backgroundProfilePhotoDownloadURL:_currentUser.backgroundProfilePhotoDownloadURL];
+        
+        [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
+    }];
+}
+
+//updates only if background profile photo changed.
+-(void)updateUserProfileIfOnlyBackgroundProfilePhotoChanged {
+    [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
+        
+        NSDictionary *userProfile = [self createUserProfileToUpdate:_currentUser.profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:imageDownloadURL];
+        
+        [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
+    }];
+}
+
+//Updates if no profile photos were changed.
+-(void)updateIfNoProfilePhotosChanged {
+    NSDictionary *userProfile = [self createUserProfileToUpdate:_currentUser.profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:_currentUser.backgroundProfilePhotoDownloadURL];
+    [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
+}
+
+/*
+ -Validates if the username exists
+ */
+-(void)validateUsernameUniqueness:(NSString *)username completion:(void(^)(FIRDataSnapshot *snapshot))completion {
+    
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:[FIRAuth auth].currentUser.uid andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
+        completion(snapshot);
+    }];
+    
+}
+
+#pragma mark Helper Methods
+
+//Creates a dictionary for the user profile that we will update on Firebase.
+-(NSDictionary *)createUserProfileToUpdate:(NSString *)profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:(NSString *)backgroundProfilePhotoDownloadURL {
+    NSString *username = [self removeLeadingAndTrailingWhitespace:_usernameTF.text removeAllWhiteSpace:false];
+    NSString *fullName = [self removeLeadingAndTrailingWhitespace:_nameTF.text removeAllWhiteSpace:false];
+    NSString *location = [self removeLeadingAndTrailingWhitespace:_locationTF.text removeAllWhiteSpace:false];
+    NSString *DOB = [self removeLeadingAndTrailingWhitespace:_DOBTF.text removeAllWhiteSpace:true];
+    NSString *bio = [self removeLeadingAndTrailingWhitespace:_bioTextView.text removeAllWhiteSpace:false];
+    
+    NSDictionary *userProfileToUpdate = @{@"username": username,
+                                          @"email": _currentUser.email,
+                                          @"userId": _currentUser.userId,
+                                          @"fullName": fullName,
+                                          @"bio": bio,
+                                          @"location": location,
+                                          @"DOB": DOB,
+                                          @"profilePhotoDownloadURL": profilePhotoDownloadURL,
+                                          @"backgroundProfilePhotoDownloadURL": backgroundProfilePhotoDownloadURL};
+    
+    return userProfileToUpdate;
+}
+
+#pragma mark Camera Methods
+//Presents the camera
+-(void)presentCamera {
+    _imagePicker = [[UIImagePickerController alloc] init];
+    [_imagePicker setDelegate:self];
+    [_imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    [self presentViewController:_imagePicker animated:TRUE completion:nil];
+}
+
+//Presents the photo library
+-(void)presentPhotoLibrary {
+    _imagePicker = [[UIImagePickerController alloc] init];
+    [_imagePicker setDelegate:self];
+    [_imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    [self presentViewController:_imagePicker animated:TRUE completion:nil];
+}
+
+/*
+ Once the user is finished picking an image then it
+ determines if that image was for the profile photo or background profile photo
+ and sets the imageView along with the imageData appropriately. That imageData is then used to
+ save the image on Firebase.
+ */
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     [self dismissViewControllerAnimated:TRUE completion:nil];
 
@@ -167,7 +239,6 @@
     UIImage *image = [UIImage imageWithData:imageData];
     UIImage *reducedImage = [self image:image scaledToSize:CGSizeMake(image.size.width / 5, image.size.height/5)];
     NSData *reducedData = UIImageJPEGRepresentation(reducedImage, 1.0);
-    
     
     if (_profilePhotoSelected) {
         _profilePhotoChanged = TRUE;
@@ -207,17 +278,27 @@
 
 #pragma mark IBActions
 
+/*
+ Displays the action sheet with the appropriate title as well as
+ sets the property 'profilePhotoSelected' to TRUE. This BOOL property is used
+ in the 'didFinishPickingMediaWithInfo' method to determine which image to set.
+ */
 - (IBAction)profilePhotoSelected:(id)sender {
     _profilePhotoSelected = TRUE;
     [self displayChangePhotoActionSheetWithTitle:@"Edit Profile Photo"];
 }
 
-
+/*
+ Displays the action sheet with the appropriate title as well as
+ sets the property 'profilePhotoSelected' to FALSE. This BOOL property is used
+ in the 'didFinishPickingMediaWithInfo' method to determine which image to set.
+ */
 - (IBAction)backgroundProfilePhotoSelected:(id)sender {
     _profilePhotoSelected = FALSE;
     [self displayChangePhotoActionSheetWithTitle:@"Edit Background Profile Photo"];
 }
 
+//Signs the user out of the app by logging them out of Firebase.
 - (IBAction)signOutPressed:(id)sender {
     NSError *error;
     [[FIRAuth auth] signOut:&error];
@@ -226,25 +307,6 @@
     }
 }
 
--(NSDictionary *)createUserProfileToUpdate:(NSString *)profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:(NSString *)backgroundProfilePhotoDownloadURL {
-    NSString *username = [self removeLeadingAndTrailingWhitespace:_usernameTF.text removeAllWhiteSpace:false];
-    NSString *fullName = [self removeLeadingAndTrailingWhitespace:_nameTF.text removeAllWhiteSpace:false];
-    NSString *location = [self removeLeadingAndTrailingWhitespace:_locationTF.text removeAllWhiteSpace:false];
-    NSString *DOB = [self removeLeadingAndTrailingWhitespace:_DOBTF.text removeAllWhiteSpace:true];
-    NSString *bio = [self removeLeadingAndTrailingWhitespace:_bioTextView.text removeAllWhiteSpace:false];
-    
-    NSDictionary *userProfileToUpdate = @{@"username": username,
-                                          @"email": _currentUser.email,
-                                          @"userId": _currentUser.userId,
-                                          @"fullName": fullName,
-                                          @"bio": bio,
-                                          @"location": location,
-                                          @"DOB": DOB,
-                                          @"profilePhotoDownloadURL": profilePhotoDownloadURL,
-                                          @"backgroundProfilePhotoDownloadURL": backgroundProfilePhotoDownloadURL};
-    
-    return userProfileToUpdate;
-}
 
 //saves the profile changes.
 - (IBAction)savePressed:(id)sender {
@@ -265,39 +327,15 @@
             [_alertView genericAlert:@"Whoops!" message:[NSString stringWithFormat:@"The username '%@' is taken.", username] presentingViewController:self];
         } else if (username.length < 5 || [username containsString:@" "]) {
             [_alertView genericAlert:@"Whoops!" message:@"Username must be at least 5 characters (no white space.)" presentingViewController:self];
-        } else { //If all the fields are clear then check if the profile photos changed.
+        } else {
             if (_profilePhotoChanged && _backgroundProfilePhotoChanged) {
-                [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
-                    
-                    NSString *profilePhotoDownloadURL = imageDownloadURL;
-                    
-                    [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
-                        
-                        NSString *backgroundProfilePhotoDownloadURL = imageDownloadURL;
-                        
-                        NSDictionary *userProfile = [self createUserProfileToUpdate:profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:backgroundProfilePhotoDownloadURL];
-
-                        [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
-                    }];
-                }];
-                
+                [self updateUserProfileWithChangedProfileAndBackgroundProfilePhotos];
             } else if (_profilePhotoChanged) {
-                [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
-                    
-                    NSDictionary *userProfile = [self createUserProfileToUpdate:imageDownloadURL backgroundProfilePhotoDownloadURL:_currentUser.backgroundProfilePhotoDownloadURL];
-
-                    [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
-                }];
+                [self updateUserProfileIfOnlyProfilePhotoChanged];
             } else if (_backgroundProfilePhotoChanged) {
-                [_firebaseOperation uploadToFirebase:_backgroundPhotoData completion:^(NSString *imageDownloadURL) {
-                    
-                    NSDictionary *userProfile = [self createUserProfileToUpdate:_currentUser.profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:imageDownloadURL];
-
-                    [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
-                }];
+                [self updateUserProfileIfOnlyBackgroundProfilePhotoChanged];
             } else {
-                NSDictionary *userProfile = [self createUserProfileToUpdate:_currentUser.profilePhotoDownloadURL backgroundProfilePhotoDownloadURL:_currentUser.backgroundProfilePhotoDownloadURL];
-                [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
+                [self updateIfNoProfilePhotosChanged];
             }
         }
     }];
