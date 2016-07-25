@@ -28,7 +28,6 @@
     [super viewDidLoad];
 
     _firebaseOperation = [[FirebaseOperation alloc]init];
-    NSLog(@"spot user: %@", _spot.userID);
     
     [self setSpotDetails];
     
@@ -40,6 +39,8 @@
 }
 
 -(void)viewWillLayoutSubviews {
+    _profileImageView.layer.borderWidth = 4.0;
+    _profileImageView.layer.borderColor = [[UIColor whiteColor]CGColor];
     _profileImageView.layer.cornerRadius = _profileImageView.layer.frame.size.height/2;
     _profileImageView.layer.masksToBounds = TRUE;
     _backgroundProfileImageView.layer.masksToBounds = TRUE;
@@ -48,24 +49,25 @@
     _usernameLabel.layer.cornerRadius = 8.0;
 }
 
-/************************************************
-
-USE THE _spot.userID to query the user profile for this spot.
-
-*****************************************************/
-
 -(void)setSpotDetails {
     
     _messageTextView.text = _spot.message;
     
-    [_firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:_spot.userID andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
+    [self downloadSpotUserProfile:^(FIRDataSnapshot *snapshot) {
         
         for (FIRDataSnapshot *child in snapshot.children) {
             _usernameLabel.text = child.value[@"username"];
-
             [_profileImageView setImageWithURL:[NSURL URLWithString:child.value[@"profilePhotoDownloadURL"]] placeholderImage:[UIImage imageNamed:@"placeholder"]];
             [_backgroundProfileImageView setImageWithURL:[NSURL URLWithString:child.value[@"backgroundProfilePhotoDownloadURL"]] placeholderImage:[UIImage imageNamed:@"placeholder"]];
         }
+    }];
+
+}
+
+-(void)downloadSpotUserProfile:(void(^)(FIRDataSnapshot *snapshot))completion {
+    [_firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:_spot.userID andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
+        
+        completion(snapshot);
     }];
 }
 

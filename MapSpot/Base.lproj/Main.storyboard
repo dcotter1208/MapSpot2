@@ -553,7 +553,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="86.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="message" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="SK1-sn-3kT">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="message" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="SK1-sn-3kT">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="86.5"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
