@@ -9,6 +9,7 @@
 #import "EditProfileTVC.h"
 #import "FirebaseOperation.h"
 #import "CurrentUser.h"
+#import "ImageProcessor.h"
 #import "AlertView.h"
 #import "UIImageView+AFNetworking.h"
 
@@ -32,6 +33,7 @@
 @property (nonatomic, strong) NSData *profilePhotoData;
 @property (nonatomic, strong) NSData *backgroundPhotoData;
 @property (nonatomic, strong) UIImagePickerController *imagePicker;
+@property (nonatomic, strong) ImageProcessor *imageProcessor;
 @property (nonatomic) BOOL profilePhotoSelected;
 @property (nonatomic) BOOL profilePhotoChanged;
 @property (nonatomic) BOOL backgroundProfilePhotoChanged;
@@ -47,6 +49,7 @@
     _firebaseOperation = [[FirebaseOperation alloc]init];
     [self listenForChangesToUserProfileOnFirebase:_currentUser];
     _alertView = [[AlertView alloc]init];
+    _imageProcessor = [[ImageProcessor alloc]init];
     [super viewDidLoad];
     
     //This creates a whie space at the bottom where there are no more cells so there are no ghost cells present.
@@ -237,43 +240,19 @@
 
     NSData *imageData = UIImageJPEGRepresentation([info objectForKey:@"UIImagePickerControllerOriginalImage"], 1);
     UIImage *image = [UIImage imageWithData:imageData];
-    UIImage *reducedImage = [self image:image scaledToSize:CGSizeMake(image.size.width / 5, image.size.height/5)];
-    NSData *reducedData = UIImageJPEGRepresentation(reducedImage, 1.0);
+    UIImage *resizedImage = [_imageProcessor scaleImage:image ToSize:CGSizeMake(image.size.width / 5, image.size.height/5)];
+    NSData *resizedImageData = [_imageProcessor convertImageToNSData:resizedImage];
     
     if (_profilePhotoSelected) {
         _profilePhotoChanged = TRUE;
-        _profilePhotoData = reducedData;
-        _profilePhotoImageView.image = reducedImage;
+        _profilePhotoData = resizedImageData;
+        _profilePhotoImageView.image = resizedImage;
     } else {
         _backgroundProfilePhotoChanged = TRUE;
-        _backgroundPhotoData = reducedData;
-        _backgroundProfilePhotoImageView.image = reducedImage;
+        _backgroundPhotoData = resizedImageData;
+        _backgroundProfilePhotoImageView.image = resizedImage;
     }
 
-}
-
-/*
- Reduces the image's size. If the size to scale down to is the size of
- the original image then just return the original image.
- */
-- (UIImage *)image:(UIImage*)originalImage scaledToSize:(CGSize)size {
-    //avoid redundant drawing
-    if (CGSizeEqualToSize(originalImage.size, size)) {
-        return originalImage;
-    }
-    
-    //create drawing context
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0f);
-    
-    //draw
-    [originalImage drawInRect:CGRectMake(0.0f, 0.0f, size.width, size.height)];
-    
-    //capture resultant image
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    //return image
-    return image;
 }
 
 #pragma mark IBActions

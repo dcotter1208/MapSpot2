@@ -31,6 +31,7 @@
 		43ACBB211D38125C0082FE0A /* MapAnnotationCallout.m in Sources */ = {isa = PBXBuildFile; fileRef = 43ACBB201D38125C0082FE0A /* MapAnnotationCallout.m */; };
 		43ACBB231D3812A20082FE0A /* MapAnnotationCalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43ACBB221D3812A20082FE0A /* MapAnnotationCalloutView.xib */; };
 		43D197BE1D4640F800245C58 /* AFNetworkingOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197BD1D4640F800245C58 /* AFNetworkingOp.m */; };
+		43D197C21D4658B200245C58 /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197C11D4658B200245C58 /* ImageProcessor.m */; };
 		43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEB1D0104F00060D1BF /* LoginVC.m */; };
 		43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEE1D0105210060D1BF /* SignUpVC.m */; };
 		43F8226A1D43CFDA00C8AA06 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F822691D43CFDA00C8AA06 /* Photo.m */; };
@@ -80,6 +81,8 @@
 		43ACBB221D3812A20082FE0A /* MapAnnotationCalloutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapAnnotationCalloutView.xib; sourceTree = "<group>"; };
 		43D197BC1D4640F800245C58 /* AFNetworkingOp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkingOp.h; sourceTree = "<group>"; };
 		43D197BD1D4640F800245C58 /* AFNetworkingOp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkingOp.m; sourceTree = "<group>"; };
+		43D197C01D4658B200245C58 /* ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessor.h; sourceTree = "<group>"; };
+		43D197C11D4658B200245C58 /* ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageProcessor.m; sourceTree = "<group>"; };
 		43D8DEEA1D0104F00060D1BF /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		43D8DEEB1D0104F00060D1BF /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		43D8DEED1D0105210060D1BF /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
@@ -130,6 +133,7 @@
 				43280D991CF87BF900F726FE /* Main.storyboard */,
 				43AB32A51CFBF9BD00631D92 /* ViewController */,
 				43AB32A41CFBF9B100631D92 /* Model */,
+				43D197BF1D4656C700245C58 /* View */,
 				43ACBAE71D35B23E0082FE0A /* Networking */,
 				43280D9C1CF87BF900F726FE /* Assets.xcassets */,
 				43280D9E1CF87BF900F726FE /* LaunchScreen.storyboard */,
@@ -164,12 +168,8 @@
 				43F822691D43CFDA00C8AA06 /* Photo.m */,
 				43ACBAE81D35B40A0082FE0A /* AlertView.h */,
 				43ACBAE91D35B40A0082FE0A /* AlertView.m */,
-				43ACBB1F1D38125C0082FE0A /* MapAnnotationCallout.h */,
-				43ACBB201D38125C0082FE0A /* MapAnnotationCallout.m */,
-				43ACBB221D3812A20082FE0A /* MapAnnotationCalloutView.xib */,
-				437CC2931D3A961C00A81469 /* MediaPreviewCell.h */,
-				437CC2941D3A961C00A81469 /* MediaPreviewCell.m */,
-				437CC2951D3A961C00A81469 /* MediaPreviewCell.xib */,
+				43D197C01D4658B200245C58 /* ImageProcessor.h */,
+				43D197C11D4658B200245C58 /* ImageProcessor.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -199,6 +199,19 @@
 				43D197BD1D4640F800245C58 /* AFNetworkingOp.m */,
 			);
 			name = Networking;
+			sourceTree = "<group>";
+		};
+		43D197BF1D4656C700245C58 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				43ACBB1F1D38125C0082FE0A /* MapAnnotationCallout.h */,
+				43ACBB201D38125C0082FE0A /* MapAnnotationCallout.m */,
+				43ACBB221D3812A20082FE0A /* MapAnnotationCalloutView.xib */,
+				437CC2931D3A961C00A81469 /* MediaPreviewCell.h */,
+				437CC2941D3A961C00A81469 /* MediaPreviewCell.m */,
+				437CC2951D3A961C00A81469 /* MediaPreviewCell.xib */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		43D8DEF01D0105290060D1BF /* Login */ = {
@@ -360,6 +373,7 @@
 				43ACBAEA1D35B40A0082FE0A /* AlertView.m in Sources */,
 				43AB32A01CFB8C1E00631D92 /* Spot.m in Sources */,
 				4374D3181D010ECA00C8FE5B /* User.m in Sources */,
+				43D197C21D4658B200245C58 /* ImageProcessor.m in Sources */,
 				43280D981CF87BF900F726FE /* MapSpotMapVC.m in Sources */,
 				43280D951CF87BF900F726FE /* AppDelegate.m in Sources */,
 				4311809D1D2D4DB50002DC22 /* EditProfileTVC.m in Sources */,

@@ -57,20 +57,10 @@
     
 }
 
-
--(void)uploadImageToFirebase:(UIImage *)image withFirebaseOperation:(FirebaseOperation *)firebaseOperation {
-    NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
-    [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
-        NSLog(@"photo: %@", imageDownloadURL);
-    }];
-}
-
-
 -(void)viewDidDisappear:(BOOL)animated {
     [_mapAnnotationCallout removeFromSuperview];
     [_mapView deselectAnnotation:_selectedAnnotation animated:FALSE];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -144,6 +134,10 @@
     [_mapView addAnnotation:annotation];
 }
 
+/*
+ Presents the custom callout when an annotation is selected.
+ This is called in the didSelectAnnotationView method.
+ */
 -(void)showCustomMapCallout {
     _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
    _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
@@ -152,6 +146,7 @@
      [_mapAnnotationCallout.mediaCollectionView reloadData];
 }
 
+//Sets the custom callout's attributes such as the username label, message and collectionView's datasource.
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
     _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImages];
     _mapAnnotationCallout.usernameLabel.text = spot.user;
