@@ -13,5 +13,4 @@
 
 -(void)genericAlert:(NSString *)title message:(NSString *)message presentingViewController:(UIViewController *)viewController;
 
-
 @end

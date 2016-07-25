@@ -10,6 +10,7 @@
 #import "CurrentUser.h"
 #import "FirebaseOperation.h"
 #import "AlertView.h"
+#import "AFNetworkingOp.h"
 @import FirebaseAuth;
 
 @interface LoginVC ()
@@ -47,12 +48,25 @@
     }];
 }
 
+-(void)setProfilePhotosForCurrentUser:(CurrentUser *)currentUser {
+    
+    AFNetworkingOp *afnetworkingOp = [[AFNetworkingOp alloc]init];
+    
+    [afnetworkingOp downloadImageFromFirebaseWithAFNetworking:currentUser.profilePhotoDownloadURL completion:^(UIImage *image) {
+        currentUser.profilePhoto = image;
+    }];
+    [afnetworkingOp downloadImageFromFirebaseWithAFNetworking:currentUser.backgroundProfilePhotoDownloadURL completion:^(UIImage *image) {
+        currentUser.backgroundProfilePhoto = image;
+    }];
+}
+
 //Sets the CurrentUser singleton once the user profile is returned from Firebase.
 -(void)setCurrentUser:(FIRDataSnapshot *)snapshot {
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
     for (FIRDataSnapshot *child in snapshot.children) {
-        [currentUser updateCurrentUser:child]; 
+        [currentUser updateCurrentUser:child];
+        [self setProfilePhotosForCurrentUser:currentUser];
     }
 }
 

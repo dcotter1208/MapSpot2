@@ -9,6 +9,7 @@
 #import "UserSpotCreationVC.h"
 #import "FirebaseOperation.h"
 #import "CurrentUser.h"
+#import "ImageProcessor.h"
 #import "Photo.h"
 @import Photos;
 
@@ -27,6 +28,7 @@
 @property (nonatomic, strong) PHFetchResult *imageAssests;
 @property (nonatomic, strong) PHImageManager *manager;
 @property (nonatomic, strong) NSMutableArray *photoArray;
+@property (nonnull, strong) ImageProcessor *imageProcessor;
 
 @end
 
@@ -43,8 +45,9 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     [self checkForPhotoLibraryPermission];
-
     [self collectionViewSetUp];
+    
+    _imageProcessor = [[ImageProcessor alloc]init];
     
 }
 
@@ -97,6 +100,13 @@
     _photoLibraryCollectionView.allowsMultipleSelection = TRUE;
 }
 
+//Sets up imageView for the UICollectionViewCell
+-(UIImageView *)setUpImageViewForCell:(UICollectionViewCell *)cell withTag:(NSInteger)tag {
+    UIImageView *cellImageView = (UIImageView *)[cell viewWithTag:tag];
+    cellImageView.layer.masksToBounds = TRUE;
+    return cellImageView;
+}
+
 //Checks the capacity of my spot media's array.
 -(BOOL)checkMediaArrayCapacity {
     if ([_spotMediaItems count] == 10) {
@@ -121,11 +131,6 @@
 
 
 #pragma mark Image Processing Methods
-//converts an image to NSData
--(NSData *)convertImageToNSData:(UIImage *)image {
-    NSData *imageData = UIImagePNGRepresentation(image);
-    return imageData;
-}
 
 //Determine if the image to upload is was a screenshot from the phone or not.
 -(BOOL)imageIsiPhoneScreenShot:(UIImage *)image {
@@ -138,28 +143,6 @@
     }
 }
 
-/*
- Sets the image view for the cell by turning a PHAsset
- into a UIImage.
- */
--(void)setImageForCellImageViewWithAsset:(PHAsset *)asset imageView:(UIImageView *)imageView {
-    
-    [_manager requestImageForAsset:asset
-                        targetSize:_assetThumbnailSize
-                       contentMode:PHImageContentModeAspectFill
-                           options:nil
-                     resultHandler:^(UIImage *result, NSDictionary *info) {
-                         imageView.image = result;
-                     }];
-}
-
-//Sets up imageView for the UICollectionViewCell
--(UIImageView *)setUpImageViewForCell:(UICollectionViewCell *)cell withTag:(NSInteger)tag {
-    UIImageView *cellImageView = (UIImageView *)[cell viewWithTag:tag];
-    cellImageView.layer.masksToBounds = TRUE;
-    return cellImageView;
-}
-
 //Establish PHImageRequestOptions
 -(PHImageRequestOptions *)setPHImageRequestOptions {
     PHImageRequestOptions *fetchOptions = [[PHImageRequestOptions alloc]init];
@@ -167,15 +150,6 @@
     fetchOptions.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
     
     return fetchOptions;
-}
-
-
--(BOOL)imageIsPortrait:(UIImage *)image {
-    if (image.size.height > image.size.width) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
 }
 
 //Checks if the user has given permission to access the device's photo library.
@@ -209,30 +183,6 @@
     
 }
 
-/*
- Reduces the image's size. If the size to scale down to is the size of
- the original image then just return the original image.
- */
-- (UIImage *)image:(UIImage*)originalImage scaledToSize:(CGSize)size {
-    //avoid redundant drawing
-    if (CGSizeEqualToSize(originalImage.size, size)) {
-        return originalImage;
-    }
-    
-    //create drawing context
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0f);
-    
-    //draw
-    [originalImage drawInRect:CGRectMake(0.0f, 0.0f, size.width, size.height)];
-    
-    //capture resultant image
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    //return image
-    return image;
-}
-
 #pragma mark Camera Methods
 
 //Sets up the image picker to present the camera. Called in the IBAction for the camera button.
@@ -261,14 +211,15 @@
     
 }
 
-#pragma mark Firebase Helper Methods
+#pragma mark Networking Methods
 
 /*Takes an image and uploads it to Firebase storage with the correct size.
  if we have all of our imageDownloadURLs back from Firebase then we
  create the spot using the 'createSpotWithMessage' function and perform the unwindSegue back to the MapSpotMapVC.
  */
 -(void)uploadImageToFirebase:(UIImage *)image withIndex:(int)index withSize:(CGSize)size withFirebaseOperation:(FirebaseOperation *)firebaseOperation {
-    NSData *imageData = [self convertImageToNSData:[self image:image scaledToSize:size]];
+
+    NSData *imageData = [_imageProcessor convertImageToNSData:[_imageProcessor scaleImage:image ToSize:size]];
     [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
 
         Photo *photo = [[Photo alloc]initWithDownloadURL:imageDownloadURL andIndex:index];
@@ -389,7 +340,10 @@
         
         UIImageView *photoLibraryCellImageView = [self setUpImageViewForCell:photoLibraryCell withTag:200];
         
-        [self setImageForCellImageViewWithAsset:asset imageView:photoLibraryCellImageView];
+        [_imageProcessor getImageFromPHAsset:asset withPHImageManager:_manager andTargetSize:_assetThumbnailSize andContentMode:PHImageContentModeAspectFill andRequestOptions:nil completion:^(UIImage *image) {
+            photoLibraryCellImageView.image = image;
+        }];
+        
 
     return photoLibraryCell;
 
@@ -410,7 +364,10 @@
                 spotMediaCellImageView.image = image;
             } else {
                 PHAsset *asset = _spotMediaItems[indexPath.item];
-                [self setImageForCellImageViewWithAsset:asset imageView:spotMediaCellImageView];
+                
+                [_imageProcessor getImageFromPHAsset:asset withPHImageManager:_manager andTargetSize:_assetThumbnailSize andContentMode:PHImageContentModeAspectFill andRequestOptions:nil completion:^(UIImage *image) {
+                    spotMediaCellImageView.image = image;
+                }];
         }
     return spotMediaCell;
     }
@@ -474,9 +431,7 @@
             [self uploadImageToFirebase:image withIndex:index withSize:CGSizeMake(image.size.width/10, image.size.height/10) withFirebaseOperation:firebaseOperation];
         }
     }
-    
     [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
-
 }
 
 - (IBAction)cameraButtonPressed:(id)sender {

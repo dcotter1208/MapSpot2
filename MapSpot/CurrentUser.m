@@ -7,7 +7,6 @@
 //
 
 #import "CurrentUser.h"
-#import "AFNetworking.h"
 
 @implementation CurrentUser
 
@@ -45,20 +44,7 @@
     self.backgroundProfilePhotoDownloadURL = snapshot.value[@"backgroundProfilePhotoDownloadURL"];
     self.profileKey = snapshot.key;
     
-    //WILL HAVE TO UPDATE PHOTOS AND URLS HERE TOO...
-    
 }
 
-//Downloads the photo using AFNetworking. returns a UIImage in the completion handler.
--(void)downloadImageFromFirebaseWithAFNetworking:(NSString *)imageURL completion:(void(^)(UIImage *image))completion {
-    NSURL *url = [NSURL URLWithString:imageURL];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFImageResponseSerializer serializer];
-    [manager GET:url.absoluteString parameters:nil progress:nil success:^(NSURLSessionDataTask *task, UIImage *responseData) {
-        completion(responseData);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-}
 
 @end

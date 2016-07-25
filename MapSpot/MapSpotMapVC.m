@@ -11,6 +11,7 @@
 #import "MapAnnotationCallout.h"
 #import "Spot.h"
 #import "FirebaseOperation.h"
+#import "AFNetworkingOp.h"
 #import "Annotation.h"
 #import "CurrentUser.h"
 #import "Photo.h"
@@ -53,15 +54,13 @@
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
-
+    
 }
-
 
 -(void)viewDidDisappear:(BOOL)animated {
     [_mapAnnotationCallout removeFromSuperview];
     [_mapView deselectAnnotation:_selectedAnnotation animated:FALSE];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -135,6 +134,10 @@
     [_mapView addAnnotation:annotation];
 }
 
+/*
+ Presents the custom callout when an annotation is selected.
+ This is called in the didSelectAnnotationView method.
+ */
 -(void)showCustomMapCallout {
     _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
    _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
@@ -143,6 +146,7 @@
      [_mapAnnotationCallout.mediaCollectionView reloadData];
 }
 
+//Sets the custom callout's attributes such as the username label, message and collectionView's datasource.
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
     _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImages];
     _mapAnnotationCallout.usernameLabel.text = spot.user;
@@ -162,7 +166,20 @@
     [_mapView setRegion:currentRegion animated:true];
 }
 
-#pragma mark Firebase Helper Methods
+#pragma mark Networking Methods
+
+//Accepts a current user as an argument and then sets the profile photos for the current user.
+-(void)setProfilePhotosForCurrentUser:(CurrentUser *)currentUser {
+    
+    AFNetworkingOp *afnetworkingOp = [[AFNetworkingOp alloc]init];
+    
+    [afnetworkingOp downloadImageFromFirebaseWithAFNetworking:currentUser.profilePhotoDownloadURL completion:^(UIImage *image) {
+        currentUser.profilePhoto = image;
+    }];
+    [afnetworkingOp downloadImageFromFirebaseWithAFNetworking:currentUser.backgroundProfilePhotoDownloadURL completion:^(UIImage *image) {
+        currentUser.backgroundProfilePhoto = image;
+    }];
+}
 
 /*
  Makes a call to the photos in the Firebase database based on which spot is passed in.
@@ -231,12 +248,7 @@
     
     for (FIRDataSnapshot *child in snapshot.children) {
         [currentUser updateCurrentUser:child];
-        [currentUser downloadImageFromFirebaseWithAFNetworking:currentUser.profilePhotoDownloadURL completion:^(UIImage *image) {
-            currentUser.profilePhoto = image;
-        }];
-        [currentUser downloadImageFromFirebaseWithAFNetworking:currentUser.backgroundProfilePhotoDownloadURL completion:^(UIImage *image) {
-            currentUser.backgroundProfilePhoto = image;
-        }];
+        [self setProfilePhotosForCurrentUser:currentUser];
     }
 }
 

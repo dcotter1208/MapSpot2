@@ -29,8 +29,6 @@
 
 -(void)updateCurrentUser:(FIRDataSnapshot *)snapshot;
 
--(void)downloadImageFromFirebaseWithAFNetworking:(NSString *)imageURL completion:(void(^)(UIImage *image))completion;
-
 +(instancetype)sharedInstance;
 
 @end
