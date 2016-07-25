@@ -53,7 +53,15 @@
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
+    
+}
 
+
+-(void)uploadImageToFirebase:(UIImage *)image withFirebaseOperation:(FirebaseOperation *)firebaseOperation {
+    NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+    [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
+        NSLog(@"photo: %@", imageDownloadURL);
+    }];
 }
 
 

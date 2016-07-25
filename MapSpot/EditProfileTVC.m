@@ -139,7 +139,7 @@
     [self presentViewController:_imagePicker animated:TRUE completion:nil];
 }
 
--(void)displayChnagePhotoActionSheetWithTitle:(NSString *)title {
+-(void)displayChangePhotoActionSheetWithTitle:(NSString *)title {
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:title message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
     
     [self presentViewController:actionSheet animated:TRUE completion:nil];
@@ -209,13 +209,13 @@
 
 - (IBAction)profilePhotoSelected:(id)sender {
     _profilePhotoSelected = TRUE;
-    [self displayChnagePhotoActionSheetWithTitle:@"Edit Profile Photo"];
+    [self displayChangePhotoActionSheetWithTitle:@"Edit Profile Photo"];
 }
 
 
 - (IBAction)backgroundProfilePhotoSelected:(id)sender {
     _profilePhotoSelected = FALSE;
-    [self displayChnagePhotoActionSheetWithTitle:@"Edit Background Profile Photo"];
+    [self displayChangePhotoActionSheetWithTitle:@"Edit Background Profile Photo"];
 }
 
 - (IBAction)signOutPressed:(id)sender {
@@ -252,15 +252,7 @@
 
     _currentUser.profilePhoto = _profilePhotoImageView.image;
     _currentUser.backgroundProfilePhoto = _backgroundProfilePhotoImageView.image;
-    
-    //******************************************************* DELETE THIS ONCE I GIVE DEFAULT USER A DEFAULT URL ON SIGN UP.
-    
-    
-    NSString *backgroundURL = @"";
-    
-    
-    //*************************************************************************************************
-    
+
     [self validateUsernameUniqueness:username completion:^(FIRDataSnapshot *snapshot) {
         
         NSString *snapshotUserId;
@@ -292,7 +284,7 @@
             } else if (_profilePhotoChanged) {
                 [_firebaseOperation uploadToFirebase:_profilePhotoData completion:^(NSString *imageDownloadURL) {
                     
-                    NSDictionary *userProfile = [self createUserProfileToUpdate:imageDownloadURL backgroundProfilePhotoDownloadURL:backgroundURL];
+                    NSDictionary *userProfile = [self createUserProfileToUpdate:imageDownloadURL backgroundProfilePhotoDownloadURL:_currentUser.backgroundProfilePhotoDownloadURL];
 
                     [_firebaseOperation updateChildNode:@"users" nodeToUpdate:userProfile];
                 }];

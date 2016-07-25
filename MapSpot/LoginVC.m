@@ -52,7 +52,13 @@
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     
     for (FIRDataSnapshot *child in snapshot.children) {
-        [currentUser updateCurrentUser:child]; 
+        [currentUser updateCurrentUser:child];
+        [currentUser downloadImageFromFirebaseWithAFNetworking:currentUser.profilePhotoDownloadURL completion:^(UIImage *image) {
+            currentUser.profilePhoto = image;
+        }];
+        [currentUser downloadImageFromFirebaseWithAFNetworking:currentUser.backgroundProfilePhotoDownloadURL completion:^(UIImage *image) {
+            currentUser.backgroundProfilePhoto = image;
+        }];
     }
 }
 
