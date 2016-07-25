@@ -48,6 +48,7 @@
 
 - (void)viewDidLoad {
     _mapAnnotationCallout = [[MapAnnotationCallout alloc]init];
+    [_mapAnnotationCallout setDelegate:self];
     _photoArray = [[NSMutableArray alloc]init];
     [self checkForCurrentUserValue];
     [super viewDidLoad];
@@ -316,6 +317,12 @@
 }
 
 #pragma mark IBActions
+
+//more button on callout pressed.
+-(void)moreButtonPressed:(id)sender {
+    [self performSegueWithIdentifier:@"segueToSpotDetailVC" sender:self];
+}
+
 
 /*
  Used to take the user's press on the screen and turn them into map coordinates.

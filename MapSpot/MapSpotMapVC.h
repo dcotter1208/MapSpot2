@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MapAnnotationCallout.h"
 
-@interface MapSpotMapVC : UIViewController
+@interface MapSpotMapVC : UIViewController <CustomCalloutDelegate>
 
 @end
 

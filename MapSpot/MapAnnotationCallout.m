@@ -64,6 +64,12 @@
     return cell;
 }
 
+- (IBAction)moreButtonPressed:(id)sender {
+    
+    [self.delegate moreButtonPressed:self];
+}
+
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
