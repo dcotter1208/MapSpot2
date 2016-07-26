@@ -57,8 +57,8 @@
         
         for (FIRDataSnapshot *child in snapshot.children) {
             _usernameLabel.text = child.value[@"username"];
-            [_profileImageView setImageWithURL:[NSURL URLWithString:child.value[@"profilePhotoDownloadURL"]] placeholderImage:[UIImage imageNamed:@"placeholder"]];
-            [_backgroundProfileImageView setImageWithURL:[NSURL URLWithString:child.value[@"backgroundProfilePhotoDownloadURL"]] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+            [_profileImageView setImageWithURL:[NSURL URLWithString:child.value[@"profilePhotoDownloadURL"]]];
+            [_backgroundProfileImageView setImageWithURL:[NSURL URLWithString:child.value[@"backgroundProfilePhotoDownloadURL"]]];
         }
     }];
 
