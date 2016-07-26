@@ -7,6 +7,7 @@
 //
 
 #import "SpotDetailTVC.h"
+#import "SpotMediaFullViewCVC.h"
 #import "Photo.h"
 #import "FirebaseOperation.h"
 #import "UIImageView+AFNetworking.h"
@@ -20,6 +21,7 @@
 
 @property (nonatomic, strong) NSArray *spotPhotoArray;
 @property (nonatomic, strong) FirebaseOperation *firebaseOperation;
+@property (nonatomic) NSInteger indexOfSelectedCell;
 
 @end
 
@@ -102,6 +104,8 @@
 
     UIImageView *cellImageView = (UIImageView *)[cell viewWithTag:100];
     
+    NSLog(@"Spot Detail image View tag: %lu", cellImageView.tag);
+    
     cellImageView.layer.masksToBounds = TRUE;
     
     [cellImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL]];
@@ -120,11 +124,16 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
    
-    NSInteger *indexOfSelectedCell = indexPath.item;
+    _indexOfSelectedCell = indexPath.item;
+    [self performSegueWithIdentifier:@"FullViewSegue" sender:self];
     
-    NSLog(@"INDEXPATH: %lu", indexPath.item);
-    
-    
+}
+
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    SpotMediaFullViewCVC *destionationVC = [segue destinationViewController];
+    destionationVC.spotMediaItems = _spot.spotImages;
+    destionationVC.passedIndex = _indexOfSelectedCell;
 }
 
 //- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
