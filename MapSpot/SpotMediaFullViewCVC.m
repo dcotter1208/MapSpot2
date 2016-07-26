@@ -20,14 +20,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSLog(@"Spot Images: %@", _spotMediaItems.description);
-    NSLog(@"Passed Index: %lu", _passedIndex);
-
+    [self scrollToSelectedPhoto];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)scrollToSelectedPhoto {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:_passedIndex inSection:0];
+    
+    [UIView animateWithDuration:0
+                     animations: ^{ [self.collectionView reloadData]; }
+                     completion:^(BOOL finished) {
+                         [_fullViewCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+                     }];
+
 }
 
 #pragma mark <UICollectionViewDataSource>
