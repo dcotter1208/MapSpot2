@@ -177,7 +177,10 @@
 }
 
 #pragma mark Networking Methods
-
+/*
+ Downloads the userprofile information to display in the callout.
+ The userprofile contains the username and downloadURLs for the profile photos.
+ */
 -(void)downloadSpotUserProfileForSpot:(Spot *)spot withCompletion:(void(^)(FIRDataSnapshot *snapshot))completion {
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
 
@@ -186,7 +189,6 @@
         completion(snapshot);
     }];
 }
-
 
 //Accepts a current user as an argument and then sets the profile photos for the current user.
 -(void)setProfilePhotosForCurrentUser:(CurrentUser *)currentUser {
