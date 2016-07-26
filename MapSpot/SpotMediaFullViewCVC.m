@@ -30,6 +30,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (UIImage*)rotateUIImage:(UIImage*)sourceImage {
+    CGSize size = sourceImage.size;
+    UIGraphicsBeginImageContext(CGSizeMake(size.height, size.width));
+    [[UIImage imageWithCGImage:[sourceImage CGImage] scale:1.0 orientation:UIImageOrientationRight]
+     drawInRect:CGRectMake(0,0,size.height ,size.width)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
 
 #pragma mark <UICollectionViewDataSource>
 
@@ -45,42 +55,29 @@
     
     UIImageView *cellImageView = (UIImageView *)[cell viewWithTag:300];
     
-    NSLog(@"IMAGEVIEW TAG: %lu", cellImageView.tag);
-    
     [cellImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL]];
+    
+    if (cellImageView.image.size.width > cellImageView.image.size.height) {
+//        cellImageView.transform = CGAffineTransformMakeRotation(M_PI_2);
+//        cellImageView.frame = CGRectMake(0, 0, cell.frame.size.height, cell.frame.size.width);
+//        cellImageView.image = [self rotateUIImage:cellImageView.image];
+        
+        UIImage *newImage = [[UIImage alloc] initWithCGImage: cellImageView.image.CGImage
+                                                       scale: 1.0
+                                                 orientation: UIImageOrientationRight];
+        cellImageView.image = newImage;
+        
+    }
+    
+//    NSLog(@"image size: %f, %f", cellImageView.image.size.width, cellImageView.image.size.height);
 
     return cell;
 }
 
-#pragma mark <UICollectionViewDelegate>
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(_fullViewCollectionView.frame.size.width, _fullViewCollectionView.frame.size.height);
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
 
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 @end
