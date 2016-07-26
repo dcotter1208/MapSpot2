@@ -10,22 +10,22 @@
 
 @implementation Spot
 
--(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt
+-(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates userID:(NSString *)userID createdAt:(NSString *)createdAt
 {
     self = [super init];
     
     if (self) {
         _spotCoordinates = spotCoordinates;
-        _user = user;
+        _userID = userID;
         _createdAt = createdAt;
         _spotImages = [[NSMutableArray alloc]init];
     }
     return self;
 }
 
-+(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates user:(NSString *)user createdAt:(NSString *)createdAt
++(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates userID:(NSString *)userID createdAt:(NSString *)createdAt
 {
-    return [[self alloc]initWithSpotCoordinates:spotCoordinates user:user createdAt:createdAt];
+    return [[self alloc]initWithSpotCoordinates:spotCoordinates userID:userID createdAt:createdAt];
 }
 
 @end

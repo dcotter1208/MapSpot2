@@ -8,6 +8,7 @@
 
 #import "MapSpotMapVC.h"
 #import "UserSpotCreationVC.h"
+#import "SpotDetailTVC.h"
 #import "MapAnnotationCallout.h"
 #import "Spot.h"
 #import "FirebaseOperation.h"
@@ -15,6 +16,7 @@
 #import "Annotation.h"
 #import "CurrentUser.h"
 #import "Photo.h"
+#import "UIImageView+AFNetworking.h"
 @import FirebaseAuth;
 @import FirebaseDatabase;
 @import MapKit;
@@ -48,6 +50,7 @@
 
 - (void)viewDidLoad {
     _mapAnnotationCallout = [[MapAnnotationCallout alloc]init];
+    [_mapAnnotationCallout setDelegate:self];
     _photoArray = [[NSMutableArray alloc]init];
     [self checkForCurrentUserValue];
     [super viewDidLoad];
@@ -129,7 +132,7 @@
 */
  -(void)addSpotToMap:(Spot *)spot {
     Annotation *annotation = [Annotation initWithAnnotationSpot:spot coordinate:CLLocationCoordinate2DMake(spot.spotCoordinates.latitude, spot.spotCoordinates.longitude)];
-    annotation.title = spot.user;
+    annotation.title = spot.userID;
     annotation.subtitle = [NSString stringWithFormat:@"%@", spot.message];
     [_mapView addAnnotation:annotation];
 }
@@ -149,8 +152,15 @@
 //Sets the custom callout's attributes such as the username label, message and collectionView's datasource.
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
     _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImages];
-    _mapAnnotationCallout.usernameLabel.text = spot.user;
     _mapAnnotationCallout.messageTextView.text = spot.message;
+    
+    [self downloadSpotUserProfileForSpot:spot withCompletion:^(FIRDataSnapshot *snapshot) {
+        
+        for (FIRDataSnapshot *child in snapshot.children) {
+            _mapAnnotationCallout.usernameLabel.text = child.value[@"username"];
+            [_mapAnnotationCallout.userProfileImageView setImageWithURL:[NSURL URLWithString:child.value[@"profilePhotoDownloadURL"]]];
+        }
+    }];
 
 }
 
@@ -167,6 +177,18 @@
 }
 
 #pragma mark Networking Methods
+/*
+ Downloads the userprofile information to display in the callout.
+ The userprofile contains the username and downloadURLs for the profile photos.
+ */
+-(void)downloadSpotUserProfileForSpot:(Spot *)spot withCompletion:(void(^)(FIRDataSnapshot *snapshot))completion {
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:spot.userID andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
+        
+        completion(snapshot);
+    }];
+}
 
 //Accepts a current user as an argument and then sets the profile photos for the current user.
 -(void)setProfilePhotosForCurrentUser:(CurrentUser *)currentUser {
@@ -207,7 +229,7 @@
     [firebaseOperation queryFirebaseWithNoConstraintsForChild:@"spots" andFIRDataEventType:FIRDataEventTypeChildAdded completion:^(FIRDataSnapshot *snapshot) {
         Spot *spot = [[Spot alloc]
                       initWithSpotCoordinates:CLLocationCoordinate2DMake([snapshot.value[@"latitude"] doubleValue], [snapshot.value[@"longitude"] doubleValue])
-                      user:snapshot.value[@"username"]
+                      userID:snapshot.value[@"userId"]
                       createdAt:snapshot.value[@"createdAt"]];
         spot.message = snapshot.value[@"message"];
         spot.spotReference = snapshot.value[@"spotReference"];
@@ -266,6 +288,9 @@
         } else {
             [destionationVC setCoordinatesForCreatedSpot:_longPressCoordinates];
         }
+    } else if ([segue.identifier isEqualToString:@"segueToSpotDetailVC"]){
+        SpotDetailTVC *destionationVC = [segue destinationViewController];
+        destionationVC.spot = _selectedAnnotation.spotAtAnnotation;
     }
 }
 
@@ -316,6 +341,12 @@
 }
 
 #pragma mark IBActions
+
+//more button on callout pressed.
+-(void)moreButtonPressed:(id)sender {
+    [self performSegueWithIdentifier:@"segueToSpotDetailVC" sender:self];
+}
+
 
 /*
  Used to take the user's press on the screen and turn them into map coordinates.

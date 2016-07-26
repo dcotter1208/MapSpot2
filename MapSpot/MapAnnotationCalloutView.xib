@@ -31,14 +31,14 @@
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_photo" translatesAutoresizingMaskIntoConstraints="NO" id="Ma7-Zg-Cq5">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ma7-Zg-Cq5">
                     <rect key="frame" x="8" y="20" width="56" height="56"/>
-                    <color key="backgroundColor" red="0.0" green="0.51121367520000005" blue="1" alpha="0.77400323280000005" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="56" id="zlm-u0-fjo"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cotter_Donovan" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tv1-ec-vMc">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tv1-ec-vMc">
                     <rect key="frame" x="72" y="20" width="340" height="25"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -61,20 +61,31 @@
                         <outlet property="delegate" destination="-1" id="I50-7k-DQi"/>
                     </connections>
                 </collectionView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="avz-uG-5NZ">
+                    <rect key="frame" x="428" y="38" width="43" height="38"/>
+                    <state key="normal" title="Button" image="more"/>
+                    <connections>
+                        <action selector="moreButtonPressed:" destination="-1" eventType="touchUpInside" id="x6W-pD-0eD"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstItem="avz-uG-5NZ" firstAttribute="leading" secondItem="Tv1-ec-vMc" secondAttribute="trailing" constant="16" id="5KC-X2-T7N"/>
                 <constraint firstAttribute="trailing" secondItem="l0E-zb-O4T" secondAttribute="trailing" id="6j1-r9-FhF"/>
                 <constraint firstItem="Tv1-ec-vMc" firstAttribute="leading" secondItem="Ma7-Zg-Cq5" secondAttribute="trailing" constant="8" symbolic="YES" id="9VQ-wx-1wg"/>
                 <constraint firstItem="l0E-zb-O4T" firstAttribute="top" secondItem="Tv1-ec-vMc" secondAttribute="bottom" constant="39" id="AZc-WM-5Mu"/>
                 <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="Dwa-qw-hbS"/>
                 <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="GrB-AL-9YI"/>
                 <constraint firstAttribute="trailing" secondItem="Tv1-ec-vMc" secondAttribute="trailing" constant="67" id="M1o-MM-2Um"/>
+                <constraint firstItem="l0E-zb-O4T" firstAttribute="top" secondItem="avz-uG-5NZ" secondAttribute="bottom" constant="8" symbolic="YES" id="OEo-4p-fCv"/>
                 <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="top" secondItem="Tv1-ec-vMc" secondAttribute="top" id="PAD-Nt-dR9"/>
+                <constraint firstItem="avz-uG-5NZ" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailingMargin" id="SEV-rQ-syu"/>
                 <constraint firstItem="3iE-5C-Kmn" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Vax-Rw-JVe"/>
                 <constraint firstAttribute="bottom" secondItem="3iE-5C-Kmn" secondAttribute="bottom" id="im0-S3-Z4P"/>
                 <constraint firstItem="3iE-5C-Kmn" firstAttribute="top" secondItem="l0E-zb-O4T" secondAttribute="bottom" constant="8" symbolic="YES" id="kNZ-xI-xBd"/>
                 <constraint firstItem="l0E-zb-O4T" firstAttribute="centerX" secondItem="3iE-5C-Kmn" secondAttribute="centerX" id="ler-vJ-Z3f"/>
+                <constraint firstItem="avz-uG-5NZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="38" id="lfU-11-PnU"/>
                 <constraint firstItem="l0E-zb-O4T" firstAttribute="top" secondItem="Ma7-Zg-Cq5" secondAttribute="bottom" constant="8" symbolic="YES" id="pDJ-pM-YsZ"/>
                 <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="leading" secondItem="l0E-zb-O4T" secondAttribute="leading" constant="8" id="wRO-fO-DBB"/>
             </constraints>
@@ -84,6 +95,6 @@
         </view>
     </objects>
     <resources>
-        <image name="default_profile_photo" width="256" height="256"/>
+        <image name="more" width="64" height="64"/>
     </resources>
 </document>

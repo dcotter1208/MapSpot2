@@ -59,10 +59,18 @@
     
     UIImageView *mediaImageView = (UIImageView *)[cell viewWithTag:100];
     
-    [mediaImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+//    [mediaImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    [mediaImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL]];
     
     return cell;
 }
+
+- (IBAction)moreButtonPressed:(id)sender {
+    
+    [self.delegate moreButtonPressed:self];
+}
+
+
 
 /*
 // Only override drawRect: if you perform custom drawing.
