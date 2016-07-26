@@ -118,6 +118,15 @@
     return 10;
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+   
+    NSInteger *indexOfSelectedCell = indexPath.item;
+    
+    NSLog(@"INDEXPATH: %lu", indexPath.item);
+    
+    
+}
+
 //- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
 //    return UIEdgeInsetsMake(0, 5, 0, 5);
 //}
