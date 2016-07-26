@@ -663,9 +663,6 @@
                                         <imageView tag="300" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QhV-ci-ngJ">
                                             <rect key="frame" x="0.0" y="0.0" width="599" height="528"/>
                                             <gestureRecognizers/>
-                                            <connections>
-                                                <outletCollection property="gestureRecognizers" destination="ifr-Gs-oH3" appends="YES" id="Z5E-4z-JDf"/>
-                                            </connections>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -689,11 +686,6 @@
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vtd-Wn-fXH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="ifr-Gs-oH3">
-                    <connections>
-                        <action selector="imageTapped:" destination="sY7-vh-cAf" id="yBY-KV-QYa"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-5340" y="1640"/>
         </scene>

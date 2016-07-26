@@ -103,9 +103,7 @@
     cell.layer.cornerRadius = cell.layer.frame.size.height/2;
 
     UIImageView *cellImageView = (UIImageView *)[cell viewWithTag:100];
-    
-    NSLog(@"Spot Detail image View tag: %lu", cellImageView.tag);
-    
+
     cellImageView.layer.masksToBounds = TRUE;
     
     [cellImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL]];

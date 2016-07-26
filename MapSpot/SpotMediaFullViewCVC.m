@@ -30,17 +30,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (UIImage*)rotateUIImage:(UIImage*)sourceImage {
-    CGSize size = sourceImage.size;
-    UIGraphicsBeginImageContext(CGSizeMake(size.height, size.width));
-    [[UIImage imageWithCGImage:[sourceImage CGImage] scale:1.0 orientation:UIImageOrientationRight]
-     drawInRect:CGRectMake(0,0,size.height ,size.width)];
-    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return newImage;
-}
-
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -65,7 +54,8 @@
                                                  orientation: UIImageOrientationRight];
         cellImageView.contentMode = UIViewContentModeScaleAspectFit;
         cellImageView.image = newImage;
-        
+    } else {
+        cellImageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     
     return cell;
@@ -75,13 +65,17 @@
     return CGSizeMake(_fullViewCollectionView.frame.size.width, _fullViewCollectionView.frame.size.height);
 }
 
-- (IBAction)imageTapped:(id)sender {
-
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (self.navigationController.navigationBarHidden == TRUE) {
         self.navigationController.navigationBarHidden = FALSE;
     } else {
         self.navigationController.navigationBarHidden = TRUE;
     }
+}
+
+- (IBAction)imageTapped:(id)sender {
+
+
 
 }
 
