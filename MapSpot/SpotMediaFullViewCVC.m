@@ -39,6 +39,22 @@
 
 }
 
+-(BOOL)isImageLandscape:(UIImage *)image {
+    if (image.size.width > image.size.height) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+-(UIImage *)rotateImage:(UIImage *)image {
+    UIImage *newImage = [[UIImage alloc] initWithCGImage: image.CGImage
+                                                   scale: 1.0
+                                             orientation: UIImageOrientationRight];
+    
+    return newImage;
+}
+
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -56,17 +72,15 @@
     [cellImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL]];
     
     //Checks if the image is in landscape. if it is then rotate the image.
-    if (cellImageView.image.size.width > cellImageView.image.size.height) {
-
-        UIImage *newImage = [[UIImage alloc] initWithCGImage: cellImageView.image.CGImage
-                                                       scale: 1.0
-                                                 orientation: UIImageOrientationRight];
+    
+    if ([self isImageLandscape:cellImageView.image]) {
+        UIImage *rotatedImage = [self rotateImage:cellImageView.image];
         cellImageView.contentMode = UIViewContentModeScaleAspectFit;
-        cellImageView.image = newImage;
+        cellImageView.image = rotatedImage;
     } else {
         cellImageView.contentMode = UIViewContentModeScaleAspectFill;
     }
-    
+
     return cell;
 }
 
@@ -81,12 +95,5 @@
         self.navigationController.navigationBarHidden = TRUE;
     }
 }
-
-- (IBAction)imageTapped:(id)sender {
-
-
-
-}
-
 
 @end
