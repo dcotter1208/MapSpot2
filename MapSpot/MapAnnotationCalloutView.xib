@@ -31,14 +31,14 @@
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_photo" translatesAutoresizingMaskIntoConstraints="NO" id="Ma7-Zg-Cq5">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ma7-Zg-Cq5">
                     <rect key="frame" x="8" y="20" width="56" height="56"/>
-                    <color key="backgroundColor" red="0.0" green="0.51121367520000005" blue="1" alpha="0.77400323280000005" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" white="0.83973888419999998" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="56" id="zlm-u0-fjo"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cotter_Donovan" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tv1-ec-vMc">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tv1-ec-vMc">
                     <rect key="frame" x="72" y="20" width="340" height="25"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -95,7 +95,6 @@
         </view>
     </objects>
     <resources>
-        <image name="default_profile_photo" width="256" height="256"/>
         <image name="more" width="64" height="64"/>
     </resources>
 </document>

@@ -19,6 +19,7 @@
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
+            <color key="backgroundColor" white="0.83973888419999998" alpha="1" colorSpace="calibratedWhite"/>
             <size key="customSize" width="104" height="99"/>
             <point key="canvasLocation" x="168.5" y="251.5"/>
         </collectionViewCell>

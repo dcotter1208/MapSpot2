@@ -16,6 +16,7 @@
 #import "Annotation.h"
 #import "CurrentUser.h"
 #import "Photo.h"
+#import "UIImageView+AFNetworking.h"
 @import FirebaseAuth;
 @import FirebaseDatabase;
 @import MapKit;
@@ -151,8 +152,15 @@
 //Sets the custom callout's attributes such as the username label, message and collectionView's datasource.
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
     _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImages];
-    _mapAnnotationCallout.usernameLabel.text = spot.userID;
     _mapAnnotationCallout.messageTextView.text = spot.message;
+    
+    [self downloadSpotUserProfileForSpot:spot withCompletion:^(FIRDataSnapshot *snapshot) {
+        
+        for (FIRDataSnapshot *child in snapshot.children) {
+            _mapAnnotationCallout.usernameLabel.text = child.value[@"username"];
+            [_mapAnnotationCallout.userProfileImageView setImageWithURL:[NSURL URLWithString:child.value[@"profilePhotoDownloadURL"]]];
+        }
+    }];
 
 }
 
@@ -169,6 +177,16 @@
 }
 
 #pragma mark Networking Methods
+
+-(void)downloadSpotUserProfileForSpot:(Spot *)spot withCompletion:(void(^)(FIRDataSnapshot *snapshot))completion {
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"users" queryOrderedByChild:@"userId" queryEqualToValue:spot.userID andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
+        
+        completion(snapshot);
+    }];
+}
+
 
 //Accepts a current user as an argument and then sets the profile photos for the current user.
 -(void)setProfilePhotosForCurrentUser:(CurrentUser *)currentUser {
