@@ -57,20 +57,17 @@
     
     [cellImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL]];
     
+    //Checks if the image is in landscape. if it is then rotate the image.
     if (cellImageView.image.size.width > cellImageView.image.size.height) {
-//        cellImageView.transform = CGAffineTransformMakeRotation(M_PI_2);
-//        cellImageView.frame = CGRectMake(0, 0, cell.frame.size.height, cell.frame.size.width);
-//        cellImageView.image = [self rotateUIImage:cellImageView.image];
-        
+
         UIImage *newImage = [[UIImage alloc] initWithCGImage: cellImageView.image.CGImage
                                                        scale: 1.0
                                                  orientation: UIImageOrientationRight];
+        cellImageView.contentMode = UIViewContentModeScaleAspectFit;
         cellImageView.image = newImage;
         
     }
     
-//    NSLog(@"image size: %f, %f", cellImageView.image.size.width, cellImageView.image.size.height);
-
     return cell;
 }
 
@@ -78,6 +75,15 @@
     return CGSizeMake(_fullViewCollectionView.frame.size.width, _fullViewCollectionView.frame.size.height);
 }
 
+- (IBAction)imageTapped:(id)sender {
+
+    if (self.navigationController.navigationBarHidden == TRUE) {
+        self.navigationController.navigationBarHidden = FALSE;
+    } else {
+        self.navigationController.navigationBarHidden = TRUE;
+    }
+
+}
 
 
 @end

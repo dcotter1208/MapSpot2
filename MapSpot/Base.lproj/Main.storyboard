@@ -644,7 +644,7 @@
             <objects>
                 <collectionViewController id="sY7-vh-cAf" customClass="SpotMediaFullViewCVC" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" id="uKz-t4-HBF">
-                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="44" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="jOh-Yd-jjy">
                             <size key="itemSize" width="599" height="527.5"/>
@@ -654,14 +654,18 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImageCell" id="ADB-aP-yaH">
-                                <rect key="frame" x="0.0" y="4.5" width="599" height="527.5"/>
+                                <rect key="frame" x="0.0" y="14.5" width="599" height="527.5"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="599" height="527.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" tag="300" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QhV-ci-ngJ">
+                                        <imageView tag="300" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QhV-ci-ngJ">
                                             <rect key="frame" x="0.0" y="0.0" width="599" height="528"/>
+                                            <gestureRecognizers/>
+                                            <connections>
+                                                <outletCollection property="gestureRecognizers" destination="ifr-Gs-oH3" appends="YES" id="Z5E-4z-JDf"/>
+                                            </connections>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -679,11 +683,17 @@
                             <outlet property="delegate" destination="sY7-vh-cAf" id="3le-bn-dNI"/>
                         </connections>
                     </collectionView>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="fullViewCollectionView" destination="uKz-t4-HBF" id="rDb-VA-TBf"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vtd-Wn-fXH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="ifr-Gs-oH3">
+                    <connections>
+                        <action selector="imageTapped:" destination="sY7-vh-cAf" id="yBY-KV-QYa"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-5340" y="1640"/>
         </scene>
