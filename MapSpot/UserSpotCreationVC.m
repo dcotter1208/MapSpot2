@@ -8,6 +8,7 @@
 
 #import "UserSpotCreationVC.h"
 #import "FirebaseOperation.h"
+#import "FullImageVC.h"
 #import "CurrentUser.h"
 #import "ImageProcessor.h"
 #import "Photo.h"
@@ -29,6 +30,9 @@
 @property (nonatomic, strong) PHImageManager *manager;
 @property (nonatomic, strong) NSMutableArray *photoArray;
 @property (nonnull, strong) ImageProcessor *imageProcessor;
+@property (nonatomic, strong) UIImage *imageToPass;
+@property (nonatomic, strong) PHAsset *assetToPass;
+@property (nonatomic) BOOL passedImageIsPHAsset;
 
 @end
 
@@ -277,6 +281,20 @@
     
 }
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"FullImageVCSegue"]) {
+        FullImageVC *destionationVC = [segue destinationViewController];
+        
+        if (_passedImageIsPHAsset) {
+            destionationVC.passedAsset = _assetToPass;
+            destionationVC.imageIsPHAsset = TRUE;
+        } else {
+            destionationVC.passedImage = _imageToPass;
+            destionationVC.imageIsPHAsset = FALSE;
+        }
+    }
+}
+
 #pragma mark UICollectionView DataSource
 
 //sets the size of the cells in both collection views.
@@ -319,7 +337,20 @@
         }
         
     } else { //Will use this else statement to see the photo in full view.
-        PHAsset *selectedImage = [_spotMediaItems objectAtIndex:indexPath.item];
+        id selectedImage = [_spotMediaItems objectAtIndex:indexPath.item];
+
+        if ([selectedImage isMemberOfClass:[PHAsset class]]) {
+            
+            _passedImageIsPHAsset = TRUE;
+            _assetToPass = selectedImage;
+
+        } else {
+            _passedImageIsPHAsset = FALSE;
+            _imageToPass = selectedImage;
+        }
+        
+        [self performSegueWithIdentifier:@"FullImageVCSegue" sender:self];
+        
     }
 
 }

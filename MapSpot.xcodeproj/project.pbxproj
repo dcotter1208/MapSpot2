@@ -34,6 +34,7 @@
 		43D197C21D4658B200245C58 /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197C11D4658B200245C58 /* ImageProcessor.m */; };
 		43D197C81D4679F200245C58 /* SpotDetailTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197C71D4679F200245C58 /* SpotDetailTVC.m */; };
 		43D197CB1D47D67100245C58 /* SpotMediaFullViewCVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197CA1D47D67100245C58 /* SpotMediaFullViewCVC.m */; };
+		43D197CE1D4813FD00245C58 /* FullImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197CD1D4813FD00245C58 /* FullImageVC.m */; };
 		43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEB1D0104F00060D1BF /* LoginVC.m */; };
 		43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEE1D0105210060D1BF /* SignUpVC.m */; };
 		43F8226A1D43CFDA00C8AA06 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F822691D43CFDA00C8AA06 /* Photo.m */; };
@@ -89,6 +90,8 @@
 		43D197C71D4679F200245C58 /* SpotDetailTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotDetailTVC.m; sourceTree = "<group>"; };
 		43D197C91D47D67100245C58 /* SpotMediaFullViewCVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpotMediaFullViewCVC.h; sourceTree = "<group>"; };
 		43D197CA1D47D67100245C58 /* SpotMediaFullViewCVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotMediaFullViewCVC.m; sourceTree = "<group>"; };
+		43D197CC1D4813FD00245C58 /* FullImageVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullImageVC.h; sourceTree = "<group>"; };
+		43D197CD1D4813FD00245C58 /* FullImageVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullImageVC.m; sourceTree = "<group>"; };
 		43D8DEEA1D0104F00060D1BF /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		43D8DEEB1D0104F00060D1BF /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		43D8DEED1D0105210060D1BF /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
@@ -194,6 +197,8 @@
 				43D197C71D4679F200245C58 /* SpotDetailTVC.m */,
 				43D197C91D47D67100245C58 /* SpotMediaFullViewCVC.h */,
 				43D197CA1D47D67100245C58 /* SpotMediaFullViewCVC.m */,
+				43D197CC1D4813FD00245C58 /* FullImageVC.h */,
+				43D197CD1D4813FD00245C58 /* FullImageVC.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -389,6 +394,7 @@
 				4311809D1D2D4DB50002DC22 /* EditProfileTVC.m in Sources */,
 				43ACBAE61D352A0A0082FE0A /* FirebaseOperation.m in Sources */,
 				43ACBAAE1D34095F0082FE0A /* CurrentUser.m in Sources */,
+				43D197CE1D4813FD00245C58 /* FullImageVC.m in Sources */,
 				43013AEB1D243A9C004D569F /* FirebaseDatabaseService.m in Sources */,
 				43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */,
 				43F8226A1D43CFDA00C8AA06 /* Photo.m in Sources */,

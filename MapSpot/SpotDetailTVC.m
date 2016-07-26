@@ -79,18 +79,6 @@
     }];
 }
 
-//-(void)setupDataForEndlessScrollingCollectionView {
-//    Photo *firstPhoto = _spot.spotImages[0];
-//    Photo *lastPhoto = [_spot.spotImages lastObject];
-//    
-//    NSMutableArray *endlessScrollingArray = [_spot.spotImages mutableCopy];
-//    [endlessScrollingArray insertObject:lastPhoto atIndex:0];
-//    [endlessScrollingArray addObject:firstPhoto];
-//    
-//    _spotPhotoArray = [NSArray arrayWithArray:endlessScrollingArray];
-//    
-//}
-
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return [_spot.spotImages count];
 }
@@ -133,6 +121,19 @@
     destionationVC.spotMediaItems = _spot.spotImages;
     destionationVC.passedIndex = _indexOfSelectedCell;
 }
+
+//-(void)setupDataForEndlessScrollingCollectionView {
+//    Photo *firstPhoto = _spot.spotImages[0];
+//    Photo *lastPhoto = [_spot.spotImages lastObject];
+//
+//    NSMutableArray *endlessScrollingArray = [_spot.spotImages mutableCopy];
+//    [endlessScrollingArray insertObject:lastPhoto atIndex:0];
+//    [endlessScrollingArray addObject:firstPhoto];
+//
+//    _spotPhotoArray = [NSArray arrayWithArray:endlessScrollingArray];
+//
+//}
+
 
 //- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
 //    return UIEdgeInsetsMake(0, 5, 0, 5);
