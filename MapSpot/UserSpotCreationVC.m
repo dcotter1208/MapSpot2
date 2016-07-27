@@ -52,7 +52,6 @@
     [self collectionViewSetUp];
     
     _imageProcessor = [[ImageProcessor alloc]init];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,6 +67,10 @@
     _mediaCollectionView.layer.borderColor = [[UIColor blackColor]CGColor];
     _mediaCollectionView.layer.backgroundColor = [[UIColor whiteColor]CGColor];
 
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [_messageTF resignFirstResponder];
 }
 
 //Creates a dictionary from an array of imageURLs.
