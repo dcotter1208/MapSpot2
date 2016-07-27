@@ -42,6 +42,7 @@
 @property (nonatomic, strong) Annotation *selectedAnnotation;
 @property (nonnull, strong) NSMutableArray *photoArray;
 @property (nonatomic) BOOL spotLikedByCurrentUser;
+@property(nonatomic, strong) NSString *likeToBeRemovedKey;
 
 @end
 
@@ -253,6 +254,8 @@
         } else {
             [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
                 if ([snapshot.value[@"userID"]isEqualToString:[CurrentUser sharedInstance].userId]) {
+                    _likeToBeRemovedKey = snapshot.key;
+                    NSLog(@"LIKE KEY %@", _likeToBeRemovedKey);
                     [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
                     _spotLikedByCurrentUser = TRUE;
                 } else if ([snapshot exists] && ![snapshot.value[@"userID"]isEqualToString:[CurrentUser sharedInstance].userId]) {
@@ -409,9 +412,11 @@
 }
 
 -(void)likeButtonPressed:(id)sender {
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
     if (_spotLikedByCurrentUser) {
         NSLog(@"Called - 1");
+        [firebaseOperation removeChildNode:@"likes" nodeChildKey:_likeToBeRemovedKey];
         [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
         _spotLikedByCurrentUser = FALSE;
     } else {

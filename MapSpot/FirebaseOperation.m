@@ -87,6 +87,14 @@
     }
 }
 
+-(void)removeChildNode:(NSString *)child nodeChildKey:(NSString *)nodeChildKey {
+    FIRDatabaseReference *childNodeToRemoveRef = [[_firebaseDatabaseService.ref child:child] child:nodeChildKey];
+
+//    FIRDatabaseReference *childToRemoveRef = [childRef child:nodeChildKey];
+
+    [childNodeToRemoveRef removeValue];
+}
+
 -(CurrentUser *)updateCurrentUserInfo:(FIRDataSnapshot *)snapshot {
     CurrentUser *currentUser = [CurrentUser sharedInstance];
     [currentUser initWithUsername:snapshot.value[@"username"]
