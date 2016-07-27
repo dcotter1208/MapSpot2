@@ -72,7 +72,7 @@
 }
 
 - (IBAction)likeButtonPressed:(id)sender {
-    [self likeButtonPressed:self];
+    [self.delegate likeButtonPressed:self];
 }
 
 

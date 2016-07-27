@@ -11,6 +11,7 @@
 #import "SpotDetailTVC.h"
 #import "MapAnnotationCallout.h"
 #import "Spot.h"
+#import "Like.h"
 #import "FirebaseOperation.h"
 #import "AFNetworkingOp.h"
 #import "Annotation.h"
@@ -58,6 +59,7 @@
     [self mapSetup];
     [self setUpLongPressGesture];
     
+    
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -68,6 +70,36 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+
+
+
+
+
+-(void)queryLikesForSpot:(Spot *)spot withValueFor:(CurrentUser *)currentUser withCompletion:(void(^)(id response))completion {
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    FIRDatabaseQuery *query = [[[firebaseOperation.firebaseDatabaseService.ref child:@"likes"]queryOrderedByChild:@"spotReference"] queryEqualToValue:spot.spotReference];
+    
+    [query observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+
+        if ([snapshot.value[@"userID"] isEqualToString:currentUser.userId]) {
+            completion(snapshot.value);
+        } else {
+            completion(@"No such snapshot");
+        }
+    }];
+
+}
+
+
+
+
+
+
+
+
+
 
 #pragma mark Helper Methods
 //Sets up the MKMapView and calls the getUserLocation function.
@@ -161,6 +193,12 @@
             [_mapAnnotationCallout.userProfileImageView setImageWithURL:[NSURL URLWithString:child.value[@"profilePhotoDownloadURL"]]];
         }
     }];
+    
+    
+    [self queryLikesForSpot:spot withValueFor:[CurrentUser sharedInstance] withCompletion:^(id response) {
+        NSLog(@"RESPONSE: %@", response);
+    }];
+    
 
 }
 
@@ -233,7 +271,7 @@
                       createdAt:snapshot.value[@"createdAt"]];
         spot.message = snapshot.value[@"message"];
         spot.spotReference = snapshot.value[@"spotReference"];
-        
+
         [self queryPhotosFromFirebaseForSpot:spot];
 
         [self addSpotToMap:spot];
@@ -347,6 +385,18 @@
     [self performSegueWithIdentifier:@"segueToSpotDetailVC" sender:self];
 }
 
+-(void)likeButtonPressed:(id)sender {
+    Like *like = [[Like alloc]initWithUserID:[CurrentUser sharedInstance].userId andSpotReference:_selectedAnnotation.spotAtAnnotation.spotReference];
+    
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    NSDictionary *spotDict = @{@"likeID": like.likeID,
+                               @"spotReference": like.spotReference,
+                               @"userID": like.userID};
+    
+    [firebaseOperation setValueForFirebaseChild:@"likes" value:spotDict];
+
+}
 
 /*
  Used to take the user's press on the screen and turn them into map coordinates.
