@@ -41,6 +41,7 @@
 @property(nonatomic, strong) MapAnnotationCallout *mapAnnotationCallout;
 @property (nonatomic, strong) Annotation *selectedAnnotation;
 @property (nonnull, strong) NSMutableArray *photoArray;
+@property (nonatomic) BOOL spotLikedByCurrentUser;
 
 @end
 
@@ -76,21 +77,19 @@
 
 
 
--(void)queryLikesForSpot:(Spot *)spot withValueFor:(CurrentUser *)currentUser withCompletion:(void(^)(id response))completion {
-    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    
-    FIRDatabaseQuery *query = [[[firebaseOperation.firebaseDatabaseService.ref child:@"likes"]queryOrderedByChild:@"spotReference"] queryEqualToValue:spot.spotReference];
-    
-    [query observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-
-        if ([snapshot.value[@"userID"] isEqualToString:currentUser.userId]) {
-            completion(snapshot.value);
-        } else {
-            completion(@"No such snapshot");
-        }
-    }];
-
-}
+//-(void)queryLikesForSpot:(Spot *)spot withValueFor:(CurrentUser *)currentUser withCompletion:(void(^)(Like *like))completion {
+//    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+//    
+//    FIRDatabaseQuery *query = [[[firebaseOperation.firebaseDatabaseService.ref child:@"likes"]queryOrderedByChild:@"spotReference"] queryEqualToValue:spot.spotReference];
+//    
+//    [query observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+//
+//        if ([snapshot.value[@"userID"] isEqualToString:currentUser.userId]) {
+//            completion(snapshot.value);
+//        }
+//    }];
+//
+//}
 
 
 
@@ -194,11 +193,22 @@
         }
     }];
     
-    
-    [self queryLikesForSpot:spot withValueFor:[CurrentUser sharedInstance] withCompletion:^(id response) {
-        NSLog(@"RESPONSE: %@", response);
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
+
+        if ([snapshot.value[@"userID"]isEqualToString:[CurrentUser sharedInstance].userId]) {
+            _spotLikedByCurrentUser = TRUE;
+        } else if ([snapshot exists] && ![snapshot.value[@"userID"]isEqualToString:[CurrentUser sharedInstance].userId]) {
+            _spotLikedByCurrentUser = FALSE;
+        }
+        
     }];
     
+
+//    [self queryLikesForSpot:spot withValueFor:[CurrentUser sharedInstance] withCompletion:^(id response) {
+//        NSLog(@"RESPONSE: %@", response);
+//    }];
+//    
 
 }
 
