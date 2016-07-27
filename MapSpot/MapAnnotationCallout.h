@@ -12,6 +12,7 @@
 @protocol CustomCalloutDelegate <NSObject>
 
 -(void)moreButtonPressed:(id)sender;
+-(void)likeButtonPressed:(id)sender;
 
 @end
 

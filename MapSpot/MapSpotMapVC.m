@@ -143,7 +143,7 @@
  */
 -(void)showCustomMapCallout {
     _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
-   _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
+   _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2.5);
     [self.view addSubview:_mapAnnotationCallout];
     //This is important otherwise the callout's collectionview won't reload.
      [_mapAnnotationCallout.mediaCollectionView reloadData];
