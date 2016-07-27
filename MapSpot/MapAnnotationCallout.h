@@ -24,6 +24,7 @@
 @property (strong, nonatomic) IBOutlet UIView *view;
 @property (weak, nonatomic) IBOutlet UICollectionView *mediaCollectionView;
 @property (nonatomic, strong) NSMutableArray *previewImages;
+@property (weak, nonatomic) IBOutlet UIButton *likeButton;
 
 @property(nonatomic, weak) id<CustomCalloutDelegate>delegate;
 
