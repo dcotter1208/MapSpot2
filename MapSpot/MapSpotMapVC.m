@@ -252,8 +252,6 @@
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
-
-    
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
 
         if (!snapshot.exists) {
@@ -268,22 +266,25 @@
 }
 
 -(void)detectLikeAdded:(FirebaseOperation *)firebaseOperation {
+    
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
         
         NSArray *snapshotArray = [NSArray arrayWithObject:snapshot];
         
         for (FIRDataSnapshot *snap in snapshotArray) {
             NSString *userID = snap.value[@"userID"];
-            if ([snap.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
-                _likeToBeRemovedKey = snap.key;
+            
+            if (![_likeUserIDArray containsObject:userID]) {
+                [_likeUserIDArray addObject:userID];
+                if ([snap.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
+                    _likeToBeRemovedKey = snap.key;
+                }
             }
-            [_likeUserIDArray addObject:userID];
         }
-
+        
         _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _likeUserIDArray.count];
         
         if ([_likeUserIDArray containsObject:[CurrentUser sharedInstance].userId]) {
-//            _likeToBeRemovedKey = snapshot.key;
             [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
             _spotLikedByCurrentUser = TRUE;
         }
@@ -301,8 +302,6 @@
             [_likeUserIDArray removeObject:snapshot.value[@"userID"]];
             _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _likeUserIDArray.count];
             if ([snapshot.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
-                NSLog(@"CURRENT USER ID %@", [CurrentUser sharedInstance].userId);
-                NSLog(@"snapshot userID: %@", snapshot.value[@"userID"]);
                 [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
                 _spotLikedByCurrentUser = FALSE;
             }
@@ -455,6 +454,7 @@
 }
 
 -(void)likeButtonPressed:(id)sender {
+    
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
     if (_spotLikedByCurrentUser) {
