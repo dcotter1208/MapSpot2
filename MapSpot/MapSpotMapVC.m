@@ -244,14 +244,13 @@
 /*
  Checks if there are any likes for the spot.
  1) If there aren't any likes yet (no snapshot) then the heart is black ('unLike').
- 2) If a snapshot exists then query the likes. If the user has already liked it then the heart is red ('like')
- 3) If user hasn't liked it then the heart is black ('unLike').
- It also sets the _spotLikedByCurrentUser BOOL.
+ 2) If a snapshot exists then query the likes (detectLikeAdded).
+ 3) Call detectLikeRemove to start detecting when likes are removed.
  */
 -(void)setLikeButton {
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    
+    // (1)
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
 
         if (!snapshot.exists) {
@@ -259,7 +258,7 @@
             [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
         }
     }];
-    
+    // (2)
     [self detectLikeAdded:firebaseOperation];
     [self detectLikeRemove:firebaseOperation];
     
