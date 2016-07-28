@@ -142,8 +142,12 @@
 //Determine if the image to upload is was a screenshot from the phone or not.
 -(BOOL)imageIsiPhoneScreenShot:(UIImage *)image {
     CGRect screenSize = [[UIScreen mainScreen] bounds];
-    
+
+    //Portrait Screenshot
     if (image.size.width <= (screenSize.size.width * 2) && image.size.height <= (screenSize.size.height * 2)) {
+        return TRUE;
+        //Landscape Screenshot
+    } else if (image.size.height <= (screenSize.size.width * 2) && image.size.width <= (screenSize.size.height * 2)) {
         return TRUE;
     } else {
         return FALSE;
@@ -224,9 +228,18 @@
  if we have all of our imageDownloadURLs back from Firebase then we
  create the spot using the 'createSpotWithMessage' function and perform the unwindSegue back to the MapSpotMapVC.
  */
--(void)uploadImageToFirebase:(UIImage *)image withIndex:(int)index withSize:(CGSize)size withFirebaseOperation:(FirebaseOperation *)firebaseOperation {
+-(void)uploadImageToFirebase:(UIImage *)image withIndex:(int)index scaleImage:(BOOL)scaleImage scaleToSize:(CGSize)scaledSize withFirebaseOperation:(FirebaseOperation *)firebaseOperation {
 
-    NSData *imageData = [_imageProcessor convertImageToNSData:[_imageProcessor scaleImage:image ToSize:size]];
+    NSData *imageData;
+    
+    if (scaleImage) {
+        NSLog(@"image was scaled");
+        imageData = [_imageProcessor convertImageToNSData:[_imageProcessor scaleImage:image ToSize:scaledSize]];
+    } else {
+        imageData = UIImagePNGRepresentation(image);
+        NSLog(@"SKIP IMAGE SCALE: %@", image.description);
+    }
+    
     [firebaseOperation uploadToFirebase:imageData completion:^(NSString *imageDownloadURL) {
 
         Photo *photo = [[Photo alloc]initWithDownloadURL:imageDownloadURL andIndex:index];
@@ -442,25 +455,18 @@
         
         if ([photo isMemberOfClass:[PHAsset class]]) {
             
-            [_manager requestImageForAsset:photo
-                    targetSize:PHImageManagerMaximumSize
-                   contentMode:PHImageContentModeAspectFill
-                       options:fetchOptions
-                 resultHandler:^(UIImage *result, NSDictionary *info) {
-                     
-                     if ([self imageIsiPhoneScreenShot:result]) {
+            [_imageProcessor getImageFromPHAsset:photo withPHImageManager:_manager andTargetSize:PHImageManagerMaximumSize andContentMode:PHImageContentModeAspectFill andRequestOptions:fetchOptions completion:^(UIImage *image) {
+                if ([self imageIsiPhoneScreenShot:image]) {
+                    [self uploadImageToFirebase:image withIndex:index scaleImage:FALSE scaleToSize:CGSizeMake(image.size.width, image.size.height) withFirebaseOperation:firebaseOperation];
+    
+                } else {
+                    [self uploadImageToFirebase:image withIndex:index scaleImage:TRUE scaleToSize:CGSizeMake(image.size.width/10, image.size.height/10) withFirebaseOperation:firebaseOperation];
+                }
+            }];
 
-                         [self uploadImageToFirebase:result withIndex:index withSize:CGSizeMake(result.size.width/4, result.size.height/4) withFirebaseOperation:firebaseOperation];
-                     } else {
-
-                         [self uploadImageToFirebase:result withIndex:index withSize:CGSizeMake(result.size.width/10, result.size.height/10) withFirebaseOperation:firebaseOperation];
-                     }
-                 }];
-            
         } else {
             UIImage *image = photo;
-
-            [self uploadImageToFirebase:image withIndex:index withSize:CGSizeMake(image.size.width/10, image.size.height/10) withFirebaseOperation:firebaseOperation];
+            [self uploadImageToFirebase:image withIndex:index scaleImage:TRUE scaleToSize:CGSizeMake(image.size.width/10, image.size.height/10) withFirebaseOperation:firebaseOperation];
         }
     }
     [self performSegueWithIdentifier:@"unwindToMapSpotMapVCSegue" sender:self];
