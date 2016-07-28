@@ -265,7 +265,7 @@
     }];
     // (2)
     [self detectLikeAdded:firebaseOperation];
-    [self detectLikeRemove:firebaseOperation];
+    [self detectLikeRemoved:firebaseOperation];
     
 }
 
@@ -325,12 +325,9 @@
     '_spotLikeByCurrentUser' is used to determine if a like is removed from Firebase in the 'likeButtonPressed' function.
  
  */
--(void)detectLikeRemove:(FirebaseOperation *)firebaseOperation {
-    
-    FIRDatabaseReference *likesRef = [firebaseOperation.firebaseDatabaseService.ref child:@"likes"];
-    FIRDatabaseQuery *query = [[likesRef queryOrderedByChild:@"spotReference"]queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference];
+-(void)detectLikeRemoved:(FirebaseOperation *)firebaseOperation {
     // (1)
-    [query observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeChildRemoved observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
         // (2)
         if ([_likeUserIDArray containsObject:snapshot.value[@"userID"]]) {
             [_likeUserIDArray removeObject:snapshot.value[@"userID"]];
@@ -342,6 +339,13 @@
             }
         }
     }];
+    
+//    FIRDatabaseReference *likesRef = [firebaseOperation.firebaseDatabaseService.ref child:@"likes"];
+//    FIRDatabaseQuery *query = [[likesRef queryOrderedByChild:@"spotReference"]queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference];
+//    // (1)
+//    [query observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
+//
+//    }];
 }
 
 /*
