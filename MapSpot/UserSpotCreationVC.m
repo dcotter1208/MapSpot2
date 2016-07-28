@@ -456,6 +456,7 @@
         if ([photo isMemberOfClass:[PHAsset class]]) {
             
             [_imageProcessor getImageFromPHAsset:photo withPHImageManager:_manager andTargetSize:PHImageManagerMaximumSize andContentMode:PHImageContentModeAspectFill andRequestOptions:fetchOptions completion:^(UIImage *image) {
+                //If the returned image is an iPhone screen then don't scale it.
                 if ([self imageIsiPhoneScreenShot:image]) {
                     [self uploadImageToFirebase:image withIndex:index scaleImage:FALSE scaleToSize:CGSizeMake(image.size.width, image.size.height) withFirebaseOperation:firebaseOperation];
     
