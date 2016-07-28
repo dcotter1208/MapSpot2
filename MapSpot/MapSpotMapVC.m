@@ -274,6 +274,8 @@
         for (FIRDataSnapshot *snap in snapshotArray) {
             NSString *userID = snap.value[@"userID"];
             
+            NSLog(@"Like Array 1 %@", _likeUserIDArray.description);
+            
             if (![_likeUserIDArray containsObject:userID]) {
                 [_likeUserIDArray addObject:userID];
                 if ([snap.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
@@ -281,6 +283,9 @@
                 }
             }
         }
+        
+        NSLog(@"Like Array 2 %@", _likeUserIDArray.description);
+
         
         _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _likeUserIDArray.count];
         
