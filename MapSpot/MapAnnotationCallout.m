@@ -61,7 +61,6 @@
     
     UIImageView *mediaImageView = (UIImageView *)[cell viewWithTag:100];
     
-//    [mediaImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
     [mediaImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL]];
     
     return cell;
