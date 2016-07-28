@@ -242,8 +242,13 @@
 }
 
 /*
- Checks if there are any likes for the spot.
- 1) If there aren't any likes yet (no snapshot) then the heart is black ('unLike').
+ ************************************************************
+ Called in setCustomMapCalloutAttributes to set the likeButton
+ and to start detecting likes being added and removed.
+ ************************************************************
+ 1) Checks if there are any likes for the spot.
+    If there aren't any likes yet (no snapshot) then likes count label
+    is set to "0 likes" the heart is black ('unLike').
  2) If a snapshot exists then query the likes (detectLikeAdded).
  3) Call detectLikeRemove to start detecting when likes are removed.
  */
