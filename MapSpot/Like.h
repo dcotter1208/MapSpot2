@@ -18,8 +18,4 @@
 
 -(instancetype)initWithUserID:(NSString *)userID andSpotReference:(NSString *)spotReference;
 
--(void)addLikeToSpot:(Spot *)spot;
--(void)removeLikeFromSpot:(Spot *)spot;
--(BOOL)currentUserAlreadyLikeSpot:(CurrentUser *)currentUser;
-
 @end

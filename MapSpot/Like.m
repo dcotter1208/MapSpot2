@@ -22,40 +22,4 @@
     return self;
 }
 
--(void)addLikeToSpot:(Spot *)spot {
-
-}
-
--(void)removeLikeFromSpot:(Spot *)spot {
-
-}
-
--(BOOL)currentUserAlreadyLikeSpot:(Spot *)spot currentUser:(CurrentUser *)currentUser {
-    
-    [self queryLikesForSpot:spot withValueFor:currentUser withCompletion:^(id response) {
-        NSLog(@"RESPONSE: %@", response);
-    }];
-    
-    return TRUE;
-}
-
--(void)queryLikesForSpot:(Spot *)spot withValueFor:(CurrentUser *)currentUser withCompletion:(void(^)(id response))completion {
-    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    
-    FIRDatabaseQuery *query = [[[[firebaseOperation.firebaseDatabaseService.ref child:@"likes"]queryOrderedByChild:@"spotReference"] queryEqualToValue:spot.spotReference]queryEqualToValue:currentUser.userId];
-    
-    
-    [query observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot *snapshot) {
-        if ([snapshot exists]) {
-            completion(snapshot.value);
-//            NSLog(@"%@", snapshot.value);
-        } else {
-            completion(@"No such snapshot");
-//            NSLog(@"No such snapshot");
-        }
-    }];
-    
-
-}
-
 @end
