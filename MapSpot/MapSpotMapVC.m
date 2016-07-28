@@ -242,16 +242,20 @@
 }
 
 /*
- Checks if there are any likes for the spot.
- 1) If there aren't any likes yet (no snapshot) then the heart is black ('unLike').
- 2) If a snapshot exists then query the likes. If the user has already liked it then the heart is red ('like')
- 3) If user hasn't liked it then the heart is black ('unLike').
- It also sets the _spotLikedByCurrentUser BOOL.
+ ************************************************************
+ Called in setCustomMapCalloutAttributes to set the likeButton
+ and to start detecting likes being added and removed.
+ ************************************************************
+ 1) Checks if there are any likes for the spot.
+    If there aren't any likes yet (no snapshot) then likes count label
+    is set to "0 likes" the heart is black ('unLike').
+ 2) If a snapshot exists then query the likes (detectLikeAdded).
+ 3) Call detectLikeRemove to start detecting when likes are removed.
  */
 -(void)setLikeButton {
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-    
+    // (1)
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
 
         if (!snapshot.exists) {
@@ -259,47 +263,75 @@
             [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
         }
     }];
-    
+    // (2)
     [self detectLikeAdded:firebaseOperation];
-    [self detectLikeRemove:firebaseOperation];
+    [self detectLikeRemoved:firebaseOperation];
     
 }
 
+/*
+ ****************************************
+ Detects when a like is added to Firebase.
+ ****************************************
+ 1) If a like is added then the whole snapshot is added to an NSArray (snapshotArray).
+ 2) This array is looped through and a string for the value of userID is created (NSString *userID)
+ 3) If a userID is not in the _likeUserIDArray then it is added to the _likeUserIDArray.
+ 4) If the snapshot's value for "userID" is equaled to the current user's userId then the
+    _likeToBeRemovedKey(NSString) is assigned that snapshot's key. The key is referring to the child node key (childByAutoID)
+    and is used to remove the like from Firebase if the current user unlikes that spot.
+ 5) The callout's like label is then set to the count of _likeUserIDArray.
+ 6) If the _likeUserIDArray contains the current user's userID then the callout's
+    like button (heart) is set to 'like', which is the red heart. Then the BOOL '_spotLikedByCurrentUser' is set to TRUE.
+    This BOOL is determine if a like is removed from Firebase in the 'likeButtonPressed' function.
+ 
+ */
 -(void)detectLikeAdded:(FirebaseOperation *)firebaseOperation {
     
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
-        
+        // (1)
         NSArray *snapshotArray = [NSArray arrayWithObject:snapshot];
         
+        // (2)
         for (FIRDataSnapshot *snap in snapshotArray) {
             NSString *userID = snap.value[@"userID"];
-
+            // (3)
             if (![_likeUserIDArray containsObject:userID]) {
                 [_likeUserIDArray addObject:userID];
+                // (4)
                 if ([snap.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
                     _likeToBeRemovedKey = snap.key;
                 }
             }
         }
-
+        // (5)
         _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _likeUserIDArray.count];
-        
+        // (6)
         if ([_likeUserIDArray containsObject:[CurrentUser sharedInstance].userId]) {
             [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
             _spotLikedByCurrentUser = TRUE;
         }
     }];
 }
-
--(void)detectLikeRemove:(FirebaseOperation *)firebaseOperation {
-    
-    FIRDatabaseReference *likesRef = [firebaseOperation.firebaseDatabaseService.ref child:@"likes"];
-    FIRDatabaseQuery *query = [[likesRef queryOrderedByChild:@"spotReference"]queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference];
-    
-    [query observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
-        
+/*
+ ******************************************
+ Detects if a like is removed from Firebase.
+ ******************************************
+ 1) If a like is removed from Firebase it returns the snapshot of the removed like.
+ 2) If the _likeUserIDArray contains the snapshot.value[@"userID"],
+    meaning the like that was removed has a userID in that _likeUserIDArray, then remove it from the _likeUserIDArray.
+ 3) The callout's like label is then set to the count of _likeUserIDArray.
+ 4) If the the removed like's snapshot's value for userID is equaled to the current user's userID then
+    change the like image to 'unLike' (black heart) and then the BOOL '_spotLikeByCurrentUser' is set to FALSE.
+    '_spotLikeByCurrentUser' is used to determine if a like is removed from Firebase in the 'likeButtonPressed' function.
+ 
+ */
+-(void)detectLikeRemoved:(FirebaseOperation *)firebaseOperation {
+    // (1)
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeChildRemoved observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
+        // (2)
         if ([_likeUserIDArray containsObject:snapshot.value[@"userID"]]) {
             [_likeUserIDArray removeObject:snapshot.value[@"userID"]];
+            // (3)
             _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _likeUserIDArray.count];
             if ([snapshot.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
                 [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
@@ -307,6 +339,13 @@
             }
         }
     }];
+    
+//    FIRDatabaseReference *likesRef = [firebaseOperation.firebaseDatabaseService.ref child:@"likes"];
+//    FIRDatabaseQuery *query = [[likesRef queryOrderedByChild:@"spotReference"]queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference];
+//    // (1)
+//    [query observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
+//
+//    }];
 }
 
 /*
@@ -453,24 +492,50 @@
     [self performSegueWithIdentifier:@"segueToSpotDetailVC" sender:self];
 }
 
+/*
+ ****************************************************
+ This is the protocol defined in MapAnnotationCallout.
+ ****************************************************
+ 
+ IF:
+ 1) If the BOOL '_spotLikedByCurrentUser' is TRUE then
+    remove the like from Firebase with the key assigned to _likeToBeRemovedKey (this is the key for the current user's like).
+    This is done by calling the FirebaseOperation method 'removeChildNode'.
+ 2) Set the callout's like button's image to 'unLike'(black heart).
+ 3) Set the _spotLikeByCurrentUser from TRUE to FALSE - because the spot is no longer liked by the current user.
+ 
+ ELSE:
+ 1) Else set the _spotLikedByCurrentUser to TRUE - because now the spot is liked by the CurrentUser.
+ 2) Create an instance of Like with a random likeID (generated in custom init method using NSUUID),
+    spotReference (current spot's reference) and the userID (current user's userID).
+ 3) Send this like to Firebase by calling the FIrebaseOperation method 'setValueForFirebaseChild'.
+ 4) Set the callout's like button's image to 'like'(red heart).
+ */
 -(void)likeButtonPressed:(id)sender {
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
+    // (1)
     if (_spotLikedByCurrentUser) {
         [firebaseOperation removeChildNode:@"likes" nodeChildKey:_likeToBeRemovedKey];
+        // (2)
         [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
+        // (3)
         _spotLikedByCurrentUser = FALSE;
     } else {
+        // (1)
         _spotLikedByCurrentUser = TRUE;
 
+        // (2)
         Like *like = [[Like alloc]initWithUserID:[CurrentUser sharedInstance].userId andSpotReference:_selectedAnnotation.spotAtAnnotation.spotReference];
-        FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+
         NSDictionary *spotDict = @{@"likeID": like.likeID,
                                    @"spotReference": like.spotReference,
                                    @"userID": like.userID};
-        
+        // (3)
         [firebaseOperation setValueForFirebaseChild:@"likes" value:spotDict];
+        
+        // (4)
         [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
     }
 
