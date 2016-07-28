@@ -569,7 +569,7 @@
                                         <rect key="frame" x="0.0" y="307" width="600" height="230"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="naI-A5-MXa" id="gUT-LG-s1d">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="230"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="229.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hya-qg-eVq">
@@ -701,21 +701,21 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="message" translatesAutoresizingMaskIntoConstraints="NO" id="SjI-XZ-Bme">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="86"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SjI-XZ-Bme">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="116"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="86" id="FoT-9O-QWD"/>
+                                    <constraint firstAttribute="height" constant="116" id="FoT-9O-QWD"/>
                                 </constraints>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="myO-oR-4zo">
-                                <rect key="frame" x="0.0" y="130" width="600" height="140"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="myO-oR-4zo">
+                                <rect key="frame" x="0.0" y="124" width="600" height="146"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="140" id="MqR-XS-Xzi"/>
+                                    <constraint firstAttribute="height" constant="146" id="MqR-XS-Xzi"/>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SJ9-7V-nFz">
                                     <size key="itemSize" width="107" height="107"/>
@@ -725,7 +725,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="spotMediaCell" id="NrV-ik-3SE">
-                                        <rect key="frame" x="0.0" y="16.5" width="107" height="107"/>
+                                        <rect key="frame" x="0.0" y="19.5" width="107" height="107"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="107" height="107"/>
@@ -758,7 +758,7 @@
                                     <outlet property="delegate" destination="tKn-pk-HUU" id="CHE-g3-Dv5"/>
                                 </connections>
                             </collectionView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="EL8-1A-sOF">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="EL8-1A-sOF">
                                 <rect key="frame" x="0.0" y="314" width="600" height="178"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="2" id="HoM-M3-x10">
@@ -808,19 +808,11 @@
                                 </items>
                                 <color key="barTintColor" white="0.95482906879194629" alpha="1" colorSpace="calibratedWhite"/>
                             </toolbar>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qG2-Yc-VtC">
-                                <rect key="frame" x="0.0" y="86" width="600" height="44"/>
-                                <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="6K1-dP-S9w"/>
-                                    <barButtonItem title="Create" id="6S2-fx-PB9"/>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="r1M-en-0hf"/>
-                                </items>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="myO-oR-4zo" firstAttribute="leading" secondItem="fPb-kO-WGX" secondAttribute="leading" id="I8e-dk-Ocs"/>
-                            <constraint firstItem="myO-oR-4zo" firstAttribute="top" secondItem="SjI-XZ-Bme" secondAttribute="bottom" constant="44" id="MBU-18-Sjp"/>
+                            <constraint firstItem="myO-oR-4zo" firstAttribute="top" secondItem="SjI-XZ-Bme" secondAttribute="bottom" constant="8" id="MBU-18-Sjp"/>
                             <constraint firstItem="fPb-kO-WGX" firstAttribute="leading" secondItem="EL8-1A-sOF" secondAttribute="leading" id="MG8-ha-8Uo"/>
                             <constraint firstItem="fPb-kO-WGX" firstAttribute="top" secondItem="myO-oR-4zo" secondAttribute="bottom" id="MgB-0c-kE3"/>
                             <constraint firstItem="SjI-XZ-Bme" firstAttribute="leading" secondItem="xwt-in-GBt" secondAttribute="leading" id="Qzb-7k-fXT"/>

@@ -39,6 +39,8 @@
     _userProfileImageView.layer.borderWidth = 1.0;
     _userProfileImageView.layer.borderColor = [[UIColor blackColor]CGColor];
     _userProfileImageView.layer.masksToBounds = TRUE;
+    _messageTextView.layer.borderWidth = 1.0;
+    _messageTextView.layer.borderColor = [[UIColor lightGrayColor]CGColor];
 }
 
 #pragma mark : Collection View Datasource
@@ -59,17 +61,18 @@
     
     UIImageView *mediaImageView = (UIImageView *)[cell viewWithTag:100];
     
-//    [mediaImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL] placeholderImage:[UIImage imageNamed:@"placeholder"]];
     [mediaImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL]];
     
     return cell;
 }
 
 - (IBAction)moreButtonPressed:(id)sender {
-    
     [self.delegate moreButtonPressed:self];
 }
 
+- (IBAction)likeButtonPressed:(id)sender {
+    [self.delegate likeButtonPressed:self];
+}
 
 
 /*

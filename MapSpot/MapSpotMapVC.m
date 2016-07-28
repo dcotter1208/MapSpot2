@@ -11,6 +11,7 @@
 #import "SpotDetailTVC.h"
 #import "MapAnnotationCallout.h"
 #import "Spot.h"
+#import "Like.h"
 #import "FirebaseOperation.h"
 #import "AFNetworkingOp.h"
 #import "Annotation.h"
@@ -40,6 +41,9 @@
 @property(nonatomic, strong) MapAnnotationCallout *mapAnnotationCallout;
 @property (nonatomic, strong) Annotation *selectedAnnotation;
 @property (nonnull, strong) NSMutableArray *photoArray;
+@property (nonatomic) BOOL spotLikedByCurrentUser;
+@property(nonatomic, strong) NSString *likeToBeRemovedKey;
+@property(nonatomic, strong) NSMutableArray *likeUserIDArray;
 
 @end
 
@@ -58,6 +62,9 @@
     [self mapSetup];
     [self setUpLongPressGesture];
     
+    
+    _likeUserIDArray = [[NSMutableArray alloc]init];
+    
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -68,6 +75,34 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+
+
+
+
+
+//-(void)queryLikesForSpot:(Spot *)spot withValueFor:(CurrentUser *)currentUser withCompletion:(void(^)(Like *like))completion {
+//    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+//    
+//    FIRDatabaseQuery *query = [[[firebaseOperation.firebaseDatabaseService.ref child:@"likes"]queryOrderedByChild:@"spotReference"] queryEqualToValue:spot.spotReference];
+//    
+//    [query observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+//
+//        if ([snapshot.value[@"userID"] isEqualToString:currentUser.userId]) {
+//            completion(snapshot.value);
+//        }
+//    }];
+//
+//}
+
+
+
+
+
+
+
+
+
 
 #pragma mark Helper Methods
 //Sets up the MKMapView and calls the getUserLocation function.
@@ -143,7 +178,7 @@
  */
 -(void)showCustomMapCallout {
     _mapAnnotationCallout.backgroundColor = [UIColor whiteColor];
-   _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/3);
+   _mapAnnotationCallout.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2.5);
     [self.view addSubview:_mapAnnotationCallout];
     //This is important otherwise the callout's collectionview won't reload.
      [_mapAnnotationCallout.mediaCollectionView reloadData];
@@ -151,6 +186,7 @@
 
 //Sets the custom callout's attributes such as the username label, message and collectionView's datasource.
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
+
     _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImages];
     _mapAnnotationCallout.messageTextView.text = spot.message;
     
@@ -161,6 +197,8 @@
             [_mapAnnotationCallout.userProfileImageView setImageWithURL:[NSURL URLWithString:child.value[@"profilePhotoDownloadURL"]]];
         }
     }];
+    
+    [self setLikeButton];
 
 }
 
@@ -204,6 +242,74 @@
 }
 
 /*
+ Checks if there are any likes for the spot.
+ 1) If there aren't any likes yet (no snapshot) then the heart is black ('unLike').
+ 2) If a snapshot exists then query the likes. If the user has already liked it then the heart is red ('like')
+ 3) If user hasn't liked it then the heart is black ('unLike').
+ It also sets the _spotLikedByCurrentUser BOOL.
+ */
+-(void)setLikeButton {
+    
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
+
+        if (!snapshot.exists) {
+            _mapAnnotationCallout.likeCountLabel.text = @"0 likes";
+            [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
+        }
+    }];
+    
+    [self detectLikeAdded:firebaseOperation];
+    [self detectLikeRemove:firebaseOperation];
+    
+}
+
+-(void)detectLikeAdded:(FirebaseOperation *)firebaseOperation {
+    
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
+        
+        NSArray *snapshotArray = [NSArray arrayWithObject:snapshot];
+        
+        for (FIRDataSnapshot *snap in snapshotArray) {
+            NSString *userID = snap.value[@"userID"];
+
+            if (![_likeUserIDArray containsObject:userID]) {
+                [_likeUserIDArray addObject:userID];
+                if ([snap.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
+                    _likeToBeRemovedKey = snap.key;
+                }
+            }
+        }
+
+        _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _likeUserIDArray.count];
+        
+        if ([_likeUserIDArray containsObject:[CurrentUser sharedInstance].userId]) {
+            [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
+            _spotLikedByCurrentUser = TRUE;
+        }
+    }];
+}
+
+-(void)detectLikeRemove:(FirebaseOperation *)firebaseOperation {
+    
+    FIRDatabaseReference *likesRef = [firebaseOperation.firebaseDatabaseService.ref child:@"likes"];
+    FIRDatabaseQuery *query = [[likesRef queryOrderedByChild:@"spotReference"]queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference];
+    
+    [query observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
+        
+        if ([_likeUserIDArray containsObject:snapshot.value[@"userID"]]) {
+            [_likeUserIDArray removeObject:snapshot.value[@"userID"]];
+            _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _likeUserIDArray.count];
+            if ([snapshot.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
+                [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
+                _spotLikedByCurrentUser = FALSE;
+            }
+        }
+    }];
+}
+
+/*
  Makes a call to the photos in the Firebase database based on which spot is passed in.
  It then obtains the downloadURLs from those photo objects and adds them to the spotImagesURLs array.
  */
@@ -233,7 +339,7 @@
                       createdAt:snapshot.value[@"createdAt"]];
         spot.message = snapshot.value[@"message"];
         spot.spotReference = snapshot.value[@"spotReference"];
-        
+
         [self queryPhotosFromFirebaseForSpot:spot];
 
         [self addSpotToMap:spot];
@@ -347,6 +453,28 @@
     [self performSegueWithIdentifier:@"segueToSpotDetailVC" sender:self];
 }
 
+-(void)likeButtonPressed:(id)sender {
+    
+    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+    
+    if (_spotLikedByCurrentUser) {
+        [firebaseOperation removeChildNode:@"likes" nodeChildKey:_likeToBeRemovedKey];
+        [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
+        _spotLikedByCurrentUser = FALSE;
+    } else {
+        _spotLikedByCurrentUser = TRUE;
+
+        Like *like = [[Like alloc]initWithUserID:[CurrentUser sharedInstance].userId andSpotReference:_selectedAnnotation.spotAtAnnotation.spotReference];
+        FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
+        NSDictionary *spotDict = @{@"likeID": like.likeID,
+                                   @"spotReference": like.spotReference,
+                                   @"userID": like.userID};
+        
+        [firebaseOperation setValueForFirebaseChild:@"likes" value:spotDict];
+        [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
+    }
+
+}
 
 /*
  Used to take the user's press on the screen and turn them into map coordinates.
