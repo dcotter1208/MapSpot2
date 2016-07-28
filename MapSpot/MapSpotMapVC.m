@@ -252,20 +252,19 @@
     
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
+
+    
+    [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
+
+        if (!snapshot.exists) {
+            _mapAnnotationCallout.likeCountLabel.text = @"0 likes";
+            [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
+        }
+    }];
+    
     [self detectLikeAdded:firebaseOperation];
     [self detectLikeRemove:firebaseOperation];
     
-//    [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeValue observeSingleEventType:TRUE completion:^(FIRDataSnapshot *snapshot) {
-
-//        if (!snapshot.exists) {
-//            _mapAnnotationCallout.likeCountLabel.text = @"0 likes";
-//            [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
-//            _spotLikedByCurrentUser = FALSE;
-//            
-//        } else {
-
-//        }
-//    }];
 }
 
 -(void)detectLikeAdded:(FirebaseOperation *)firebaseOperation {
@@ -277,7 +276,6 @@
             NSString *userID = snap.value[@"userID"];
             if ([snap.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
                 _likeToBeRemovedKey = snap.key;
-                NSLog(@"KEY: %@", _likeToBeRemovedKey);
             }
             [_likeUserIDArray addObject:userID];
         }
