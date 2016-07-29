@@ -178,8 +178,6 @@ SearchTVC *searchTVC;
 */
  -(void)addSpotToMap:(Spot *)spot {
     Annotation *annotation = [Annotation initWithAnnotationSpot:spot coordinate:CLLocationCoordinate2DMake(spot.spotCoordinates.latitude, spot.spotCoordinates.longitude)];
-    annotation.title = spot.userID;
-    annotation.subtitle = [NSString stringWithFormat:@"%@", spot.message];
     [_mapView addAnnotation:annotation];
 }
 
@@ -467,6 +465,7 @@ SearchTVC *searchTVC;
             annotationView.annotation = annotation;
         } else {
             annotationView = [[MKAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:(identifier)];
+            annotationView.canShowCallout = FALSE;
         }
         annotationView.image = [UIImage imageNamed:@"pin"];
         annotationView.canShowCallout = FALSE;
@@ -480,7 +479,7 @@ SearchTVC *searchTVC;
     
     _selectedAnnotation = view.annotation;
     
-    if (![_selectedAnnotation isEqual: _mapView.userLocation]) {
+    if (![_selectedAnnotation isEqual: _mapView.userLocation] && [_selectedAnnotation isKindOfClass:[Annotation class]]) {
         [self setCustomMapCalloutAttributes:_selectedAnnotation.spotAtAnnotation];
         [self.navigationController setNavigationBarHidden:TRUE];
         [self centerMapOnSelectedAnnotation:_selectedAnnotation];
