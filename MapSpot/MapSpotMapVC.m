@@ -147,7 +147,7 @@ SearchTVC *searchTVC;
     MKPointAnnotation *selectedPlaceAnnotation = [[MKPointAnnotation alloc]init];
     selectedPlaceAnnotation.coordinate = placemark.coordinate;
     [_mapView addAnnotation:selectedPlaceAnnotation];
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(placemark.coordinate, 200.0, 200.0);
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(placemark.coordinate, 500.0, 500.0);
     [_mapView setRegion:region animated:TRUE];
 }
 
