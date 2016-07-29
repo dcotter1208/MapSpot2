@@ -8,6 +8,7 @@
 
 #import "SearchTVC.h"
 
+
 @interface SearchTVC ()
 
 @end
@@ -68,8 +69,11 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     MKMapItem *selectedItem = [_matchingSearchItems objectAtIndex:indexPath.row];
-    NSLog(@"SELECTED ITEM: %f, %f", selectedItem.placemark.coordinate.latitude, selectedItem.placemark.coordinate.latitude);
     [self dismissViewControllerAnimated:TRUE completion:nil];
+    [self.delegate dropPinForSelectedPlace:selectedItem.placemark];
+    
+    NSLog(@"SELECTED ITEM: %f, %f", selectedItem.placemark.coordinate.latitude, selectedItem.placemark.coordinate.latitude);
 }
+
 
 @end

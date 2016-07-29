@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "MapAnnotationCallout.h"
 #import "SearchTVC.h"
-@interface MapSpotMapVC : UIViewController <CustomCalloutDelegate>
+
+@interface MapSpotMapVC : UIViewController <CustomCalloutDelegate, HandleMapSearchDelegate>
+
 
 @end
 

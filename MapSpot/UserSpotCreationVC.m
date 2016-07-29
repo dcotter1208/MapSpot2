@@ -176,7 +176,6 @@
         } else {
             NSLog(@"Permission Denied.");
         }
-        
     }];
 }
 

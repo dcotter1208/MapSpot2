@@ -46,6 +46,7 @@
 @property(nonatomic, strong) NSString *likeToBeRemovedKey;
 @property(nonatomic, strong) NSMutableArray *likeUserIDArray;
 @property(nonatomic, strong) UISearchController *resultSearchController;
+@property(nonatomic, strong) MKPlacemark *selectedPlace;
 
 @end
 SearchTVC *searchTVC;
@@ -69,6 +70,7 @@ SearchTVC *searchTVC;
     searchTVC = [[SearchTVC alloc]init];
     [self istantiateSearchTable];
     [self configureSearchBar];
+        
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -94,8 +96,8 @@ SearchTVC *searchTVC;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     
     SearchTVC *searchTable = (SearchTVC *)[storyboard instantiateViewControllerWithIdentifier:@"SearchTVC"];
+    [searchTable setDelegate:self];
     searchTable.mapView = _mapView;
-    
     _resultSearchController = [[UISearchController alloc] initWithSearchResultsController:searchTable];
     _resultSearchController.searchResultsUpdater = searchTable;
 
@@ -139,6 +141,15 @@ SearchTVC *searchTVC;
 }
 
 #pragma mark Map Actions Help Methods
+
+-(void)dropPinForSelectedPlace:(MKPlacemark *)placemark {
+    _selectedPlace = placemark;
+    MKPointAnnotation *selectedPlaceAnnotation = [[MKPointAnnotation alloc]init];
+    selectedPlaceAnnotation.coordinate = placemark.coordinate;
+    [_mapView addAnnotation:selectedPlaceAnnotation];
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(placemark.coordinate, 200.0, 200.0);
+    [_mapView setRegion:region animated:TRUE];
+}
 
 /*
  Sets longPressGesture's duration and maximum movement
