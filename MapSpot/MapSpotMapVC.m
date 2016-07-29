@@ -107,6 +107,7 @@ SearchTVC *searchTVC;
     UISearchBar *searchBar = _resultSearchController.searchBar;
     [searchBar sizeToFit];
     searchBar.placeholder = @"Search For Places";
+    searchBar.searchBarStyle = UISearchBarStyleMinimal;
     self.navigationItem.titleView = _resultSearchController.searchBar;
     _resultSearchController.hidesNavigationBarDuringPresentation = FALSE;
     _resultSearchController.dimsBackgroundDuringPresentation = TRUE;
