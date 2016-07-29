@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MapAnnotationCallout.h"
-
+#import "SearchTVC.h"
 @interface MapSpotMapVC : UIViewController <CustomCalloutDelegate>
 
 @end

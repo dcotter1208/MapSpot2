@@ -7,6 +7,7 @@
 //
 
 #import "MapSpotMapVC.h"
+#import "SearchTVC.h"
 #import "UserSpotCreationVC.h"
 #import "SpotDetailTVC.h"
 #import "MapAnnotationCallout.h"
@@ -44,9 +45,10 @@
 @property (nonatomic) BOOL spotLikedByCurrentUser;
 @property(nonatomic, strong) NSString *likeToBeRemovedKey;
 @property(nonatomic, strong) NSMutableArray *likeUserIDArray;
+@property(nonatomic, strong) UISearchController *resultSearchController;
 
 @end
-
+SearchTVC *searchTVC;
 
 @implementation MapSpotMapVC
 
@@ -62,9 +64,11 @@
     [self mapSetup];
     [self setUpLongPressGesture];
     
-    
     _likeUserIDArray = [[NSMutableArray alloc]init];
     
+    searchTVC = [[SearchTVC alloc]init];
+    [self istantiateSearchTable];
+    [self configureSearchBar];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -76,34 +80,6 @@
     [super didReceiveMemoryWarning];
 }
 
-
-
-
-
-
-//-(void)queryLikesForSpot:(Spot *)spot withValueFor:(CurrentUser *)currentUser withCompletion:(void(^)(Like *like))completion {
-//    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-//    
-//    FIRDatabaseQuery *query = [[[firebaseOperation.firebaseDatabaseService.ref child:@"likes"]queryOrderedByChild:@"spotReference"] queryEqualToValue:spot.spotReference];
-//    
-//    [query observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-//
-//        if ([snapshot.value[@"userID"] isEqualToString:currentUser.userId]) {
-//            completion(snapshot.value);
-//        }
-//    }];
-//
-//}
-
-
-
-
-
-
-
-
-
-
 #pragma mark Helper Methods
 //Sets up the MKMapView and calls the getUserLocation function.
 -(void)mapSetup {
@@ -113,6 +89,29 @@
     [_mapView setShowsUserLocation:true];
     [self getUserLocation];
 }
+
+-(void)istantiateSearchTable{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    SearchTVC *searchTable = (SearchTVC *)[storyboard instantiateViewControllerWithIdentifier:@"SearchTVC"];
+    searchTable.mapView = _mapView;
+    
+    _resultSearchController = [[UISearchController alloc] initWithSearchResultsController:searchTable];
+    _resultSearchController.searchResultsUpdater = searchTable;
+
+}
+
+-(void)configureSearchBar {
+    UISearchBar *searchBar = _resultSearchController.searchBar;
+    [searchBar sizeToFit];
+    searchBar.placeholder = @"Search For Places";
+    self.navigationItem.titleView = _resultSearchController.searchBar;
+    _resultSearchController.hidesNavigationBarDuringPresentation = FALSE;
+    _resultSearchController.dimsBackgroundDuringPresentation = TRUE;
+    self.definesPresentationContext = TRUE;
+}
+
+
 
 #pragma mark CLLocation Help Methods
 
