@@ -31,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *mapStyleNavBarButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *quickSpotNavBarButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *mapModeBarItemLabel;
 @property (nonatomic, strong) IBOutlet UILongPressGestureRecognizer *longPressGesture;
 
 #pragma mark Properties
@@ -113,7 +114,6 @@ SearchTVC *searchTVC;
     _resultSearchController.dimsBackgroundDuringPresentation = TRUE;
     self.definesPresentationContext = TRUE;
 }
-
 
 
 #pragma mark CLLocation Help Methods
@@ -572,10 +572,12 @@ SearchTVC *searchTVC;
     if (_mapView.mapType == MKMapTypeStandard) {
         [_mapView setMapType:MKMapTypeHybridFlyover];
         [_mapView setShowsCompass:true];
-        _mapStyleNavBarButton.title = @"Standard";
+        _mapStyleNavBarButton.image = [UIImage imageNamed:@"map"];
+        _mapModeBarItemLabel.title = @"";
     } else {
         [_mapView setMapType:MKMapTypeStandard];
-        _mapStyleNavBarButton.title = @"3D";
+        _mapStyleNavBarButton.image = [UIImage imageNamed:@"3DCube"];
+        _mapModeBarItemLabel.title = @"3D";
     }
     
 }
