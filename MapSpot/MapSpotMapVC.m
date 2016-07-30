@@ -151,6 +151,8 @@ SearchTVC *searchTVC;
 }
 
 -(void)dropPinForSelectedPlace:(MKPlacemark *)placemark {
+    [_mapAnnotationCallout removeFromSuperview];
+    [_mapView deselectAnnotation:_selectedAnnotation animated:FALSE];
     _selectedPlace = placemark;
     MKPointAnnotation *selectedPlaceAnnotation = [[MKPointAnnotation alloc]init];
     selectedPlaceAnnotation.coordinate = placemark.coordinate;
