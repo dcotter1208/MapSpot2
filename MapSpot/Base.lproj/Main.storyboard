@@ -190,8 +190,8 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="i7F-Sh-z8L"/>
-                                    <barButtonItem title=" " id="Tlc-XZ-v8k"/>
-                                    <barButtonItem image="map" id="NL3-d9-cBG">
+                                    <barButtonItem title=" 3D" id="Tlc-XZ-v8k"/>
+                                    <barButtonItem image="3DCube" id="NL3-d9-cBG">
                                         <color key="tintColor" red="0.0" green="0.51121367520000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="changeMapStyle:" destination="BYZ-38-t0r" id="VWr-9p-5Vd"/>
@@ -986,10 +986,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="3DCube" width="25" height="25"/>
         <image name="compass_filled" width="25" height="25"/>
         <image name="delete-1" width="370" height="336"/>
         <image name="gender_neutral_user" width="25" height="25"/>
-        <image name="map" width="25" height="25"/>
         <image name="spotMaker" width="24" height="24"/>
     </resources>
 </document>

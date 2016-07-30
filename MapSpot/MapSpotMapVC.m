@@ -88,7 +88,7 @@ SearchTVC *searchTVC;
 -(void)mapSetup {
     [_mapView setDelegate:self];
     [_mapView setShowsPointsOfInterest:false];
-    [_mapView setMapType:MKMapTypeHybridFlyover];
+    [_mapView setMapType:MKMapTypeStandard];
     [_mapView setShowsUserLocation:true];
     [self getUserLocation];
 }
@@ -136,7 +136,7 @@ SearchTVC *searchTVC;
     
     _newestLocation = [locations lastObject];
     
-    _userLocation = MKCoordinateRegionMakeWithDistance(_newestLocation.coordinate, 300.0, 300.0);
+    _userLocation = MKCoordinateRegionMakeWithDistance(_newestLocation.coordinate, 800.0, 800.0);
     [_mapView setRegion:_userLocation animated:YES];
     
 }
@@ -147,8 +147,9 @@ SearchTVC *searchTVC;
     _selectedPlace = placemark;
     MKPointAnnotation *selectedPlaceAnnotation = [[MKPointAnnotation alloc]init];
     selectedPlaceAnnotation.coordinate = placemark.coordinate;
+    selectedPlaceAnnotation.title = placemark.name;
     [_mapView addAnnotation:selectedPlaceAnnotation];
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(placemark.coordinate, 500.0, 500.0);
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(placemark.coordinate, 800.0, 800.0);
     [_mapView setRegion:region animated:TRUE];
 }
 
@@ -472,10 +473,12 @@ SearchTVC *searchTVC;
         MKAnnotationView *searchedLocation = [_mapView dequeueReusableAnnotationViewWithIdentifier:@"searchedLocationAnnotation"];
         searchedLocation = [[MKAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:@"searchedLocationAnnotation"];
         searchedLocation.annotation = annotation;
-        searchedLocation.image = [UIImage imageNamed:@"pin"];
+        searchedLocation.canShowCallout = TRUE;
+        searchedLocation.image = [UIImage imageNamed:@"marker"];
         return searchedLocation;
         
     }
+    
     return nil;
 }
 
