@@ -329,7 +329,6 @@ SearchTVC *searchTVC;
         _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", (unsigned long)_selectedAnnotation.spotAtAnnotation.likes.count];
         // (6)
         if ([_selectedAnnotation.spotAtAnnotation.likes containsObject:[CurrentUser sharedInstance].userId]) {
-            NSLog(@"user likes this. here is the array: %@", _selectedAnnotation.spotAtAnnotation.likes);
             [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
             _spotLikedByCurrentUser = TRUE;
         } else {
@@ -436,7 +435,6 @@ SearchTVC *searchTVC;
     
     for (FIRDataSnapshot *child in snapshot.children) {
         [currentUser updateCurrentUser:child];
-        NSLog(@"Current User PHOTO URLS: %@\n%@", currentUser.profilePhotoDownloadURL, currentUser.backgroundProfilePhotoDownloadURL);
         [self setProfilePhotosForCurrentUser:currentUser];
     }
 }
@@ -500,7 +498,7 @@ SearchTVC *searchTVC;
 
     if (![_selectedAnnotation isEqual: _mapView.userLocation] && [_selectedAnnotation isKindOfClass:[Annotation class]]) {
         [self setCustomMapCalloutAttributes:_selectedAnnotation.spotAtAnnotation];
-        [self.navigationController setNavigationBarHidden:TRUE];
+//        [self.navigationController setNavigationBarHidden:TRUE];
         [self centerMapOnSelectedAnnotation:_selectedAnnotation];
         [self showCustomMapCallout];
     }

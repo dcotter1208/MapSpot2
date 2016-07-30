@@ -17,7 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UITextView *messageTextView;
 @property (weak, nonatomic) IBOutlet UICollectionView *mediaCollectionView;
-@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *username;
 
 @property (nonatomic, strong) NSArray *spotPhotoArray;
 @property (nonatomic, strong) FirebaseOperation *firebaseOperation;
@@ -29,11 +29,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.tableFooterView = nil;
     _firebaseOperation = [[FirebaseOperation alloc]init];
     [self setSpotDetails];
-    
-//    self.tableView.layer.masksToBounds = TRUE;
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -47,9 +45,9 @@
     _profileImageView.layer.cornerRadius = _profileImageView.layer.frame.size.height/2;
     _profileImageView.layer.masksToBounds = TRUE;
     _backgroundProfileImageView.layer.masksToBounds = TRUE;
-    _usernameLabel.layer.borderWidth = 1.0;
-    _usernameLabel.layer.masksToBounds = TRUE;
-    _usernameLabel.layer.cornerRadius = 8.0;
+    _username.layer.borderWidth = 1.0;
+    _username.layer.masksToBounds = TRUE;
+    _username.layer.cornerRadius = 8.0;
 }
 
 //Sets the spot's details.
@@ -60,7 +58,7 @@
     [self downloadSpotUserProfile:^(FIRDataSnapshot *snapshot) {
         
         for (FIRDataSnapshot *child in snapshot.children) {
-            _usernameLabel.text = child.value[@"username"];
+            _username.text = child.value[@"username"];
             [_profileImageView setImageWithURL:[NSURL URLWithString:child.value[@"profilePhotoDownloadURL"]]];
             [_backgroundProfileImageView setImageWithURL:[NSURL URLWithString:child.value[@"backgroundProfilePhotoDownloadURL"]]];
         }

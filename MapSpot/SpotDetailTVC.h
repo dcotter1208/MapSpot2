@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Spot.h"
 
-@interface SpotDetailTVC : UITableViewController
+@interface SpotDetailTVC : UIViewController
 
 @property(nonatomic, strong) Spot *spot;
 
