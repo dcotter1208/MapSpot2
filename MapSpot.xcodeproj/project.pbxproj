@@ -36,6 +36,7 @@
 		43D197CB1D47D67100245C58 /* SpotMediaFullViewCVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197CA1D47D67100245C58 /* SpotMediaFullViewCVC.m */; };
 		43D197CE1D4813FD00245C58 /* FullImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197CD1D4813FD00245C58 /* FullImageVC.m */; };
 		43D197D71D493C7E00245C58 /* Like.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197D61D493C7E00245C58 /* Like.m */; };
+		43D197E01D4A790700245C58 /* SearchTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D197DF1D4A790700245C58 /* SearchTVC.m */; };
 		43D8DEEC1D0104F00060D1BF /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEB1D0104F00060D1BF /* LoginVC.m */; };
 		43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 43D8DEEE1D0105210060D1BF /* SignUpVC.m */; };
 		43F8226A1D43CFDA00C8AA06 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 43F822691D43CFDA00C8AA06 /* Photo.m */; };
@@ -95,6 +96,8 @@
 		43D197CD1D4813FD00245C58 /* FullImageVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullImageVC.m; sourceTree = "<group>"; };
 		43D197D51D493C7E00245C58 /* Like.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Like.h; sourceTree = "<group>"; };
 		43D197D61D493C7E00245C58 /* Like.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Like.m; sourceTree = "<group>"; };
+		43D197DE1D4A790700245C58 /* SearchTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTVC.h; sourceTree = "<group>"; };
+		43D197DF1D4A790700245C58 /* SearchTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTVC.m; sourceTree = "<group>"; };
 		43D8DEEA1D0104F00060D1BF /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
 		43D8DEEB1D0104F00060D1BF /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		43D8DEED1D0105210060D1BF /* SignUpVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpVC.h; sourceTree = "<group>"; };
@@ -204,6 +207,8 @@
 				43D197CA1D47D67100245C58 /* SpotMediaFullViewCVC.m */,
 				43D197CC1D4813FD00245C58 /* FullImageVC.h */,
 				43D197CD1D4813FD00245C58 /* FullImageVC.m */,
+				43D197DE1D4A790700245C58 /* SearchTVC.h */,
+				43D197DF1D4A790700245C58 /* SearchTVC.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -404,6 +409,7 @@
 				43D8DEEF1D0105210060D1BF /* SignUpVC.m in Sources */,
 				43F8226A1D43CFDA00C8AA06 /* Photo.m in Sources */,
 				43D197CB1D47D67100245C58 /* SpotMediaFullViewCVC.m in Sources */,
+				43D197E01D4A790700245C58 /* SearchTVC.m in Sources */,
 				43D197C81D4679F200245C58 /* SpotDetailTVC.m in Sources */,
 				43ACBAEC1D36C5FA0082FE0A /* Schema.m in Sources */,
 				43AB329D1CFACCF300631D92 /* UserSpotCreationVC.m in Sources */,

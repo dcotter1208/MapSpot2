@@ -7,6 +7,8 @@
 //
 
 #import "MapSpotMapVC.h"
+#import "ImageProcessor.h"
+#import "SearchTVC.h"
 #import "UserSpotCreationVC.h"
 #import "SpotDetailTVC.h"
 #import "MapAnnotationCallout.h"
@@ -30,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *mapStyleNavBarButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *quickSpotNavBarButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *mapModeBarItemLabel;
 @property (nonatomic, strong) IBOutlet UILongPressGestureRecognizer *longPressGesture;
 
 #pragma mark Properties
@@ -44,9 +47,11 @@
 @property (nonatomic) BOOL spotLikedByCurrentUser;
 @property(nonatomic, strong) NSString *likeToBeRemovedKey;
 @property(nonatomic, strong) NSMutableArray *likeUserIDArray;
+@property(nonatomic, strong) UISearchController *resultSearchController;
+@property(nonatomic, strong) MKPlacemark *selectedPlace;
 
 @end
-
+SearchTVC *searchTVC;
 
 @implementation MapSpotMapVC
 
@@ -61,10 +66,12 @@
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
-    
+    [self istantiateSearchTable];
+    [self configureSearchBar];
     
     _likeUserIDArray = [[NSMutableArray alloc]init];
-    
+    searchTVC = [[SearchTVC alloc]init];
+        
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -76,43 +83,40 @@
     [super didReceiveMemoryWarning];
 }
 
-
-
-
-
-
-//-(void)queryLikesForSpot:(Spot *)spot withValueFor:(CurrentUser *)currentUser withCompletion:(void(^)(Like *like))completion {
-//    FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
-//    
-//    FIRDatabaseQuery *query = [[[firebaseOperation.firebaseDatabaseService.ref child:@"likes"]queryOrderedByChild:@"spotReference"] queryEqualToValue:spot.spotReference];
-//    
-//    [query observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-//
-//        if ([snapshot.value[@"userID"] isEqualToString:currentUser.userId]) {
-//            completion(snapshot.value);
-//        }
-//    }];
-//
-//}
-
-
-
-
-
-
-
-
-
-
 #pragma mark Helper Methods
 //Sets up the MKMapView and calls the getUserLocation function.
 -(void)mapSetup {
     [_mapView setDelegate:self];
     [_mapView setShowsPointsOfInterest:false];
-    [_mapView setMapType:MKMapTypeHybridFlyover];
+    [_mapView setMapType:MKMapTypeStandard];
     [_mapView setShowsUserLocation:true];
+    
+
     [self getUserLocation];
 }
+
+-(void)istantiateSearchTable{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    SearchTVC *searchTable = (SearchTVC *)[storyboard instantiateViewControllerWithIdentifier:@"SearchTVC"];
+    [searchTable setDelegate:self];
+    searchTable.mapView = _mapView;
+    _resultSearchController = [[UISearchController alloc] initWithSearchResultsController:searchTable];
+    _resultSearchController.searchResultsUpdater = searchTable;
+
+}
+
+-(void)configureSearchBar {
+    UISearchBar *searchBar = _resultSearchController.searchBar;
+    [searchBar sizeToFit];
+    searchBar.placeholder = @"Search For Places";
+    searchBar.searchBarStyle = UISearchBarStyleMinimal;
+    self.navigationItem.titleView = _resultSearchController.searchBar;
+    _resultSearchController.hidesNavigationBarDuringPresentation = FALSE;
+    _resultSearchController.dimsBackgroundDuringPresentation = TRUE;
+    self.definesPresentationContext = TRUE;
+}
+
 
 #pragma mark CLLocation Help Methods
 
@@ -134,12 +138,32 @@
     
     _newestLocation = [locations lastObject];
     
-    _userLocation = MKCoordinateRegionMakeWithDistance(_newestLocation.coordinate, 300.0, 300.0);
+    _userLocation = MKCoordinateRegionMakeWithDistance(_newestLocation.coordinate, 800.0, 800.0);
     [_mapView setRegion:_userLocation animated:YES];
     
 }
 
 #pragma mark Map Actions Help Methods
+
+-(void)setMapViewCamera {
+    MKMapCamera *newCamera = [[_mapView camera] copy];
+        [newCamera setPitch:45.0];
+        [newCamera setAltitude:_mapView.camera.altitude];
+        [_mapView setCamera:newCamera animated:YES];
+}
+
+-(void)dropPinForSelectedPlace:(MKPlacemark *)placemark {
+    _selectedPlace = placemark;
+    MKPointAnnotation *selectedPlaceAnnotation = [[MKPointAnnotation alloc]init];
+    selectedPlaceAnnotation.coordinate = placemark.coordinate;
+    selectedPlaceAnnotation.title = placemark.name;
+    [_mapView addAnnotation:selectedPlaceAnnotation];
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(placemark.coordinate, 500.0, 500.0);
+    [_mapView setRegion:region animated:TRUE];
+    if (_mapView.mapType == MKMapTypeHybridFlyover) {
+        [self setMapViewCamera];
+    }
+}
 
 /*
  Sets longPressGesture's duration and maximum movement
@@ -167,8 +191,6 @@
 */
  -(void)addSpotToMap:(Spot *)spot {
     Annotation *annotation = [Annotation initWithAnnotationSpot:spot coordinate:CLLocationCoordinate2DMake(spot.spotCoordinates.latitude, spot.spotCoordinates.longitude)];
-    annotation.title = spot.userID;
-    annotation.subtitle = [NSString stringWithFormat:@"%@", spot.message];
     [_mapView addAnnotation:annotation];
 }
 
@@ -445,9 +467,7 @@
     
     if ([annotation isKindOfClass:[MKUserLocation class]]) {
         return nil;
-    }
-    
-    if ([annotation isKindOfClass:[Annotation class]]) {
+    } else if ([annotation isKindOfClass:[Annotation class]]) {
 
         static NSString *const identifier = @"customAnnotation";
         MKAnnotationView *annotationView = [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
@@ -461,7 +481,16 @@
         annotationView.canShowCallout = FALSE;
         
         return annotationView;
+    } else {
+        MKAnnotationView *searchedLocation = [_mapView dequeueReusableAnnotationViewWithIdentifier:@"searchedLocationAnnotation"];
+        searchedLocation = [[MKAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:@"searchedLocationAnnotation"];
+        searchedLocation.annotation = annotation;
+        searchedLocation.canShowCallout = TRUE;
+        searchedLocation.image = [UIImage imageNamed:@"marker"];
+        return searchedLocation;
+        
     }
+    
     return nil;
 }
 
@@ -469,7 +498,7 @@
     
     _selectedAnnotation = view.annotation;
     
-    if (![_selectedAnnotation isEqual: _mapView.userLocation]) {
+    if (![_selectedAnnotation isEqual: _mapView.userLocation] && [_selectedAnnotation isKindOfClass:[Annotation class]]) {
         [self setCustomMapCalloutAttributes:_selectedAnnotation.spotAtAnnotation];
         [self.navigationController setNavigationBarHidden:TRUE];
         [self centerMapOnSelectedAnnotation:_selectedAnnotation];
@@ -561,10 +590,16 @@
     if (_mapView.mapType == MKMapTypeStandard) {
         [_mapView setMapType:MKMapTypeHybridFlyover];
         [_mapView setShowsCompass:true];
-        _mapStyleNavBarButton.title = @"Standard";
+        _mapStyleNavBarButton.image = [UIImage imageNamed:@"map"];
+        _mapModeBarItemLabel.title = @"";
+        [self setMapViewCamera];
+
     } else {
         [_mapView setMapType:MKMapTypeStandard];
-        _mapStyleNavBarButton.title = @"3D";
+        _mapStyleNavBarButton.image = [UIImage imageNamed:@"3DCube"];
+        _mapModeBarItemLabel.title = @"3D";
+        [_mapView setShowsBuildings:YES];
+
     }
     
 }
