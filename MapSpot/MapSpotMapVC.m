@@ -454,9 +454,7 @@ SearchTVC *searchTVC;
     
     if ([annotation isKindOfClass:[MKUserLocation class]]) {
         return nil;
-    }
-    
-    if ([annotation isKindOfClass:[Annotation class]]) {
+    } else if ([annotation isKindOfClass:[Annotation class]]) {
 
         static NSString *const identifier = @"customAnnotation";
         MKAnnotationView *annotationView = [_mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
@@ -465,12 +463,18 @@ SearchTVC *searchTVC;
             annotationView.annotation = annotation;
         } else {
             annotationView = [[MKAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:(identifier)];
-            annotationView.canShowCallout = FALSE;
         }
         annotationView.image = [UIImage imageNamed:@"pin"];
         annotationView.canShowCallout = FALSE;
         
         return annotationView;
+    } else {
+        MKAnnotationView *searchedLocation = [_mapView dequeueReusableAnnotationViewWithIdentifier:@"searchedLocationAnnotation"];
+        searchedLocation = [[MKAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:@"searchedLocationAnnotation"];
+        searchedLocation.annotation = annotation;
+        searchedLocation.image = [UIImage imageNamed:@"pin"];
+        return searchedLocation;
+        
     }
     return nil;
 }
