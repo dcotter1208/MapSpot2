@@ -147,9 +147,9 @@ SearchTVC *searchTVC;
 
 -(void)setMapViewCamera {
     MKMapCamera *newCamera = [[_mapView camera] copy];
-    [newCamera setPitch:45.0];
-    [newCamera setAltitude:_mapView.camera.altitude];
-    [_mapView setCamera:newCamera animated:YES];
+        [newCamera setPitch:45.0];
+        [newCamera setAltitude:_mapView.camera.altitude];
+        [_mapView setCamera:newCamera animated:YES];
 }
 
 -(void)dropPinForSelectedPlace:(MKPlacemark *)placemark {

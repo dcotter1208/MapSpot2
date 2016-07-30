@@ -40,15 +40,20 @@
 }
 
 -(NSString *)parseAddress:(MKPlacemark *)selectedItem {
+    
+    NSString *fullAddress;
+    
     NSDictionary *searchDict = [selectedItem addressDictionary];
     NSString *street = [searchDict objectForKey:@"Street"];
     NSString *city = [searchDict objectForKey:@"City"];
     NSString *state = [searchDict objectForKey:@"State"];
     NSString *countryCode = [searchDict objectForKey:@"CountryCode"];
     
-    NSString *fullAddress = [NSString stringWithFormat:@"%@, %@, %@, %@", street, city, state, countryCode];
-    
-    return fullAddress;
+    fullAddress = [NSString stringWithFormat:@"%@, %@, %@, %@", street, city, state, countryCode];
+
+    NSString *formatted = [fullAddress stringByReplacingOccurrencesOfString:@"(null)," withString:@""];
+
+    return formatted;
 }
 
 #pragma mark - Table view data source
