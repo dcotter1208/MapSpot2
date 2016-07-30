@@ -29,7 +29,7 @@
         self.bounds = _view.bounds;
         
         [self addSubview:_view];
-                
+       
     }
     return self;
 }
@@ -39,8 +39,10 @@
     _userProfileImageView.layer.borderWidth = 1.0;
     _userProfileImageView.layer.borderColor = [[UIColor blackColor]CGColor];
     _userProfileImageView.layer.masksToBounds = TRUE;
-    _messageTextView.layer.borderWidth = 1.0;
-    _messageTextView.layer.borderColor = [[UIColor lightGrayColor]CGColor];
+    _mediaCollectionView.layer.borderWidth = 1.0;
+    _mediaCollectionView.layer.borderColor = [[UIColor blackColor]CGColor];
+//    _messageTextView.layer.borderWidth = 1.0;
+//    _messageTextView.layer.borderColor = [[UIColor lightGrayColor]CGColor];
 }
 
 #pragma mark : Collection View Datasource
@@ -65,6 +67,25 @@
     
     return cell;
 }
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    
+    if ([_previewImages count] <= 3) {
+        NSInteger viewWidth = _mediaCollectionView.frame.size.width;
+        NSInteger totalCellWidth = 65 * [_previewImages count];
+        NSInteger totalSpacingWidth = 10 * (_previewImages.count -1);
+        
+        NSInteger leftInset = (viewWidth - (totalCellWidth + totalSpacingWidth)) / 2;
+        NSInteger rightInset = leftInset;
+        
+        return UIEdgeInsetsMake(0, leftInset, 0, rightInset);
+    } else {
+        return UIEdgeInsetsMake(0, 0, 0, 0);
+    }
+    
+
+}
+
 
 - (IBAction)moreButtonPressed:(id)sender {
     [self.delegate moreButtonPressed:self];

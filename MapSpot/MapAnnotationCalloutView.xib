@@ -23,14 +23,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="3iE-5C-Kmn">
-                    <rect key="frame" x="0.0" y="169" width="479" height="61"/>
+                    <rect key="frame" x="0.0" y="70" width="479" height="61"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="61" id="FxZ-yp-D8f"/>
                     </constraints>
                     <string key="text">At Belle Isle today... this place is great! Nice weather and I'm definitely coming back to kayak along with the pups. See you next time Detroit!</string>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="13"/>
+                    <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="11"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ma7-Zg-Cq5">
@@ -50,19 +50,6 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="l0E-zb-O4T">
-                    <rect key="frame" x="8" y="70" width="463" height="91"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="02Q-wk-vRX">
-                        <size key="itemSize" width="80" height="80"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    </collectionViewFlowLayout>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="UAv-PU-zQc"/>
-                        <outlet property="delegate" destination="-1" id="I50-7k-DQi"/>
-                    </connections>
-                </collectionView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u9O-3e-bcA">
                     <rect key="frame" x="102" y="238" width="24" height="24"/>
                     <constraints>
@@ -89,30 +76,43 @@
                         <action selector="moreButtonPressed:" destination="-1" eventType="touchUpInside" id="x6W-pD-0eD"/>
                     </connections>
                 </button>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="l0E-zb-O4T">
+                    <rect key="frame" x="43" y="124" width="393" height="95"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="02Q-wk-vRX">
+                        <size key="itemSize" width="80" height="80"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="UAv-PU-zQc"/>
+                        <outlet property="delegate" destination="-1" id="I50-7k-DQi"/>
+                    </connections>
+                </collectionView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="avz-uG-5NZ" firstAttribute="leading" secondItem="KbY-s1-Ri7" secondAttribute="trailing" constant="8" symbolic="YES" id="3go-0e-M4s"/>
-                <constraint firstAttribute="trailing" secondItem="l0E-zb-O4T" secondAttribute="trailing" constant="8" id="6j1-r9-FhF"/>
+                <constraint firstAttribute="trailing" secondItem="l0E-zb-O4T" secondAttribute="trailing" constant="43" id="6j1-r9-FhF"/>
                 <constraint firstItem="avz-uG-5NZ" firstAttribute="leading" secondItem="u9O-3e-bcA" secondAttribute="trailing" constant="193" id="9E1-6P-RND"/>
                 <constraint firstItem="Tv1-ec-vMc" firstAttribute="leading" secondItem="Ma7-Zg-Cq5" secondAttribute="trailing" constant="8" symbolic="YES" id="9VQ-wx-1wg"/>
-                <constraint firstItem="l0E-zb-O4T" firstAttribute="top" secondItem="Tv1-ec-vMc" secondAttribute="bottom" constant="28" id="AZc-WM-5Mu"/>
+                <constraint firstItem="l0E-zb-O4T" firstAttribute="top" secondItem="Tv1-ec-vMc" secondAttribute="bottom" constant="82" id="AZc-WM-5Mu"/>
                 <constraint firstItem="u9O-3e-bcA" firstAttribute="top" secondItem="avz-uG-5NZ" secondAttribute="top" constant="11" id="BOA-8U-bOL"/>
                 <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="Dwa-qw-hbS"/>
-                <constraint firstItem="KbY-s1-Ri7" firstAttribute="top" secondItem="3iE-5C-Kmn" secondAttribute="bottom" constant="14" id="EmG-SW-2jb"/>
+                <constraint firstItem="KbY-s1-Ri7" firstAttribute="top" secondItem="3iE-5C-Kmn" secondAttribute="bottom" constant="113" id="EmG-SW-2jb"/>
                 <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="17" id="GrB-AL-9YI"/>
                 <constraint firstAttribute="trailing" secondItem="Tv1-ec-vMc" secondAttribute="trailing" constant="78" id="M1o-MM-2Um"/>
                 <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="top" secondItem="Tv1-ec-vMc" secondAttribute="top" id="PAD-Nt-dR9"/>
                 <constraint firstItem="3iE-5C-Kmn" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Vax-Rw-JVe"/>
                 <constraint firstItem="u9O-3e-bcA" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottomMargin" constant="-2" id="bxw-s9-Y6I"/>
-                <constraint firstItem="u9O-3e-bcA" firstAttribute="top" secondItem="l0E-zb-O4T" secondAttribute="bottom" constant="77" id="cBE-YV-46D"/>
+                <constraint firstItem="u9O-3e-bcA" firstAttribute="top" secondItem="l0E-zb-O4T" secondAttribute="bottom" constant="19" id="cBE-YV-46D"/>
                 <constraint firstItem="u9O-3e-bcA" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="102" id="hj5-YS-cCD"/>
-                <constraint firstAttribute="bottom" secondItem="3iE-5C-Kmn" secondAttribute="bottom" constant="42" id="im0-S3-Z4P"/>
-                <constraint firstItem="3iE-5C-Kmn" firstAttribute="top" secondItem="l0E-zb-O4T" secondAttribute="bottom" constant="8" symbolic="YES" id="kNZ-xI-xBd"/>
+                <constraint firstAttribute="bottom" secondItem="3iE-5C-Kmn" secondAttribute="bottom" constant="141" id="im0-S3-Z4P"/>
+                <constraint firstItem="3iE-5C-Kmn" firstAttribute="top" secondItem="l0E-zb-O4T" secondAttribute="bottom" constant="-149" id="kNZ-xI-xBd"/>
                 <constraint firstItem="l0E-zb-O4T" firstAttribute="centerX" secondItem="3iE-5C-Kmn" secondAttribute="centerX" id="ler-vJ-Z3f"/>
-                <constraint firstItem="l0E-zb-O4T" firstAttribute="top" secondItem="Ma7-Zg-Cq5" secondAttribute="bottom" constant="8" id="pDJ-pM-YsZ"/>
+                <constraint firstItem="l0E-zb-O4T" firstAttribute="top" secondItem="Ma7-Zg-Cq5" secondAttribute="bottom" constant="62" id="pDJ-pM-YsZ"/>
                 <constraint firstAttribute="bottom" secondItem="avz-uG-5NZ" secondAttribute="bottom" id="tYb-iM-EA7"/>
-                <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="leading" secondItem="l0E-zb-O4T" secondAttribute="leading" id="wRO-fO-DBB"/>
+                <constraint firstItem="Ma7-Zg-Cq5" firstAttribute="leading" secondItem="l0E-zb-O4T" secondAttribute="leading" constant="-35" id="wRO-fO-DBB"/>
                 <constraint firstItem="KbY-s1-Ri7" firstAttribute="leading" secondItem="u9O-3e-bcA" secondAttribute="trailing" constant="8" symbolic="YES" id="zEw-aa-jqm"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
