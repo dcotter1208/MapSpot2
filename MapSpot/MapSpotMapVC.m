@@ -283,7 +283,6 @@ SearchTVC *searchTVC;
             _mapAnnotationCallout.likeCountLabel.text = @"0 likes";
             [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
             _spotLikedByCurrentUser = FALSE;
-//            _likeToBeRemovedKey = [[NSString alloc]init];
         }
     }];
     // (2)
@@ -310,7 +309,6 @@ SearchTVC *searchTVC;
  */
 -(void)detectLikeAdded:(FirebaseOperation *)firebaseOperation {
     
-    
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
 
         // (1)
@@ -332,8 +330,11 @@ SearchTVC *searchTVC;
         _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _selectedAnnotation.spotAtAnnotation.likes.count];
         // (6)
         if ([_selectedAnnotation.spotAtAnnotation.likes containsObject:[CurrentUser sharedInstance].userId]) {
+            NSLog(@"user likes this. here is the array: %@", _selectedAnnotation.spotAtAnnotation.likes);
             [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
             _spotLikedByCurrentUser = TRUE;
+        } else {
+            [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
         }
     }];
 }
