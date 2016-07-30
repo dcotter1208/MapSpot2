@@ -69,7 +69,6 @@ SearchTVC *searchTVC;
     [self istantiateSearchTable];
     [self configureSearchBar];
     
-    _likeUserIDArray = [[NSMutableArray alloc]init];
     searchTVC = [[SearchTVC alloc]init];
         
 }
@@ -208,7 +207,7 @@ SearchTVC *searchTVC;
 
 //Sets the custom callout's attributes such as the username label, message and collectionView's datasource.
 -(void)setCustomMapCalloutAttributes:(Spot *)spot {
-
+    
     _mapAnnotationCallout.previewImages = [[NSMutableArray alloc]initWithArray:spot.spotImages];
     _mapAnnotationCallout.messageTextView.text = spot.message;
     
@@ -283,6 +282,8 @@ SearchTVC *searchTVC;
         if (!snapshot.exists) {
             _mapAnnotationCallout.likeCountLabel.text = @"0 likes";
             [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
+            _spotLikedByCurrentUser = FALSE;
+//            _likeToBeRemovedKey = [[NSString alloc]init];
         }
     }];
     // (2)
@@ -309,7 +310,9 @@ SearchTVC *searchTVC;
  */
 -(void)detectLikeAdded:(FirebaseOperation *)firebaseOperation {
     
+    
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeChildAdded observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
+
         // (1)
         NSArray *snapshotArray = [NSArray arrayWithObject:snapshot];
         
@@ -317,18 +320,18 @@ SearchTVC *searchTVC;
         for (FIRDataSnapshot *snap in snapshotArray) {
             NSString *userID = snap.value[@"userID"];
             // (3)
-            if (![_likeUserIDArray containsObject:userID]) {
-                [_likeUserIDArray addObject:userID];
+            if (![_selectedAnnotation.spotAtAnnotation.likes containsObject:userID]) {
+                [_selectedAnnotation.spotAtAnnotation.likes addObject:userID];
                 // (4)
                 if ([snap.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
-                    _likeToBeRemovedKey = snap.key;
+                    _selectedAnnotation.spotAtAnnotation.currentUserLikeKey = snap.key;
                 }
             }
         }
         // (5)
-        _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _likeUserIDArray.count];
+        _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _selectedAnnotation.spotAtAnnotation.likes.count];
         // (6)
-        if ([_likeUserIDArray containsObject:[CurrentUser sharedInstance].userId]) {
+        if ([_selectedAnnotation.spotAtAnnotation.likes containsObject:[CurrentUser sharedInstance].userId]) {
             [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
             _spotLikedByCurrentUser = TRUE;
         }
@@ -350,24 +353,20 @@ SearchTVC *searchTVC;
 -(void)detectLikeRemoved:(FirebaseOperation *)firebaseOperation {
     // (1)
     [firebaseOperation queryFirebaseWithConstraintsForChild:@"likes" queryOrderedByChild:@"spotReference" queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference andFIRDataEventType:FIRDataEventTypeChildRemoved observeSingleEventType:FALSE completion:^(FIRDataSnapshot *snapshot) {
+
         // (2)
-        if ([_likeUserIDArray containsObject:snapshot.value[@"userID"]]) {
-            [_likeUserIDArray removeObject:snapshot.value[@"userID"]];
+        if ([_selectedAnnotation.spotAtAnnotation.likes containsObject:snapshot.value[@"userID"]]) {
+            [_selectedAnnotation.spotAtAnnotation.likes removeObject:snapshot.value[@"userID"]];
+
             // (3)
-            _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _likeUserIDArray.count];
+            _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _selectedAnnotation.spotAtAnnotation.likes.count];
             if ([snapshot.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
                 [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
                 _spotLikedByCurrentUser = FALSE;
             }
         }
     }];
-    
-//    FIRDatabaseReference *likesRef = [firebaseOperation.firebaseDatabaseService.ref child:@"likes"];
-//    FIRDatabaseQuery *query = [[likesRef queryOrderedByChild:@"spotReference"]queryEqualToValue:_selectedAnnotation.spotAtAnnotation.spotReference];
-//    // (1)
-//    [query observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
-//
-//    }];
+
 }
 
 /*
@@ -497,7 +496,7 @@ SearchTVC *searchTVC;
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     
     _selectedAnnotation = view.annotation;
-    
+
     if (![_selectedAnnotation isEqual: _mapView.userLocation] && [_selectedAnnotation isKindOfClass:[Annotation class]]) {
         [self setCustomMapCalloutAttributes:_selectedAnnotation.spotAtAnnotation];
         [self.navigationController setNavigationBarHidden:TRUE];
@@ -542,11 +541,14 @@ SearchTVC *searchTVC;
  */
 -(void)likeButtonPressed:(id)sender {
     
+    
+    
     FirebaseOperation *firebaseOperation = [[FirebaseOperation alloc]init];
     
     // (1)
     if (_spotLikedByCurrentUser) {
-        [firebaseOperation removeChildNode:@"likes" nodeChildKey:_likeToBeRemovedKey];
+        
+        [firebaseOperation removeChildNode:@"likes" nodeChildKey:_selectedAnnotation.spotAtAnnotation.currentUserLikeKey];
         // (2)
         [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
         // (3)
