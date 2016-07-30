@@ -39,8 +39,8 @@
     _userProfileImageView.layer.borderWidth = 1.0;
     _userProfileImageView.layer.borderColor = [[UIColor blackColor]CGColor];
     _userProfileImageView.layer.masksToBounds = TRUE;
-    _mediaCollectionView.layer.borderWidth = 1.0;
-    _mediaCollectionView.layer.borderColor = [[UIColor blackColor]CGColor];
+//    _mediaCollectionView.layer.borderWidth = 1.0;
+//    _mediaCollectionView.layer.borderColor = [[UIColor blackColor]CGColor];
 //    _messageTextView.layer.borderWidth = 1.0;
 //    _messageTextView.layer.borderColor = [[UIColor lightGrayColor]CGColor];
 }
