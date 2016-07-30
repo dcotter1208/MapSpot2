@@ -7,6 +7,7 @@
 //
 
 #import "MapSpotMapVC.h"
+#import "ImageProcessor.h"
 #import "SearchTVC.h"
 #import "UserSpotCreationVC.h"
 #import "SpotDetailTVC.h"
@@ -65,12 +66,11 @@ SearchTVC *searchTVC;
     [self querySpotsFromFirebase];
     [self mapSetup];
     [self setUpLongPressGesture];
-    
-    _likeUserIDArray = [[NSMutableArray alloc]init];
-    
-    searchTVC = [[SearchTVC alloc]init];
     [self istantiateSearchTable];
     [self configureSearchBar];
+    
+    _likeUserIDArray = [[NSMutableArray alloc]init];
+    searchTVC = [[SearchTVC alloc]init];
         
 }
 
@@ -90,6 +90,8 @@ SearchTVC *searchTVC;
     [_mapView setShowsPointsOfInterest:false];
     [_mapView setMapType:MKMapTypeStandard];
     [_mapView setShowsUserLocation:true];
+    
+
     [self getUserLocation];
 }
 
@@ -143,14 +145,24 @@ SearchTVC *searchTVC;
 
 #pragma mark Map Actions Help Methods
 
+-(void)setMapViewCamera {
+    MKMapCamera *newCamera = [[_mapView camera] copy];
+    [newCamera setPitch:45.0];
+    [newCamera setAltitude:_mapView.camera.altitude];
+    [_mapView setCamera:newCamera animated:YES];
+}
+
 -(void)dropPinForSelectedPlace:(MKPlacemark *)placemark {
     _selectedPlace = placemark;
     MKPointAnnotation *selectedPlaceAnnotation = [[MKPointAnnotation alloc]init];
     selectedPlaceAnnotation.coordinate = placemark.coordinate;
     selectedPlaceAnnotation.title = placemark.name;
     [_mapView addAnnotation:selectedPlaceAnnotation];
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(placemark.coordinate, 800.0, 800.0);
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(placemark.coordinate, 500.0, 500.0);
     [_mapView setRegion:region animated:TRUE];
+    if (_mapView.mapType == MKMapTypeHybridFlyover) {
+        [self setMapViewCamera];
+    }
 }
 
 /*
@@ -580,10 +592,14 @@ SearchTVC *searchTVC;
         [_mapView setShowsCompass:true];
         _mapStyleNavBarButton.image = [UIImage imageNamed:@"map"];
         _mapModeBarItemLabel.title = @"";
+        [self setMapViewCamera];
+
     } else {
         [_mapView setMapType:MKMapTypeStandard];
         _mapStyleNavBarButton.image = [UIImage imageNamed:@"3DCube"];
         _mapModeBarItemLabel.title = @"3D";
+        [_mapView setShowsBuildings:YES];
+
     }
     
 }
