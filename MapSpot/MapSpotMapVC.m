@@ -46,7 +46,6 @@
 @property (nonnull, strong) NSMutableArray *photoArray;
 @property (nonatomic) BOOL spotLikedByCurrentUser;
 @property(nonatomic, strong) NSString *likeToBeRemovedKey;
-@property(nonatomic, strong) NSMutableArray *likeUserIDArray;
 @property(nonatomic, strong) UISearchController *resultSearchController;
 @property(nonatomic, strong) MKPlacemark *selectedPlace;
 
@@ -269,7 +268,7 @@ SearchTVC *searchTVC;
  ************************************************************
  1) Checks if there are any likes for the spot.
     If there aren't any likes yet (no snapshot) then likes count label
-    is set to "0 likes" the heart is black ('unLike').
+    is set to "0 likes" the heart is black ('unLike'). Then the spotLikedByCurrentUser is set to False;
  2) If a snapshot exists then query the likes (detectLikeAdded).
  3) Call detectLikeRemove to start detecting when likes are removed.
  */
@@ -297,14 +296,14 @@ SearchTVC *searchTVC;
  ****************************************
  1) If a like is added then the whole snapshot is added to an NSArray (snapshotArray).
  2) This array is looped through and a string for the value of userID is created (NSString *userID)
- 3) If a userID is not in the _likeUserIDArray then it is added to the _likeUserIDArray.
+ 3) If a userID is not in the _selectedAnnotation.spotAtAnnotation.likes then it is added to the _selectedAnnotation.spotAtAnnotation.likes.
  4) If the snapshot's value for "userID" is equaled to the current user's userId then the
-    _likeToBeRemovedKey(NSString) is assigned that snapshot's key. The key is referring to the child node key (childByAutoID)
+    _selectedAnnotation.spotAtAnnotation.currentUserLikeKey(NSString) is assigned that snapshot's key. The key is referring to the child node key (childByAutoID)
     and is used to remove the like from Firebase if the current user unlikes that spot.
- 5) The callout's like label is then set to the count of _likeUserIDArray.
- 6) If the _likeUserIDArray contains the current user's userID then the callout's
+ 5) The callout's like label is then set to the count of _selectedAnnotation.spotAtAnnotation.likes.
+ 6) If the _selectedAnnotation.spotAtAnnotation.likes contains the current user's userID then the callout's
     like button (heart) is set to 'like', which is the red heart. Then the BOOL '_spotLikedByCurrentUser' is set to TRUE.
-    This BOOL is determine if a like is removed from Firebase in the 'likeButtonPressed' function.
+    This BOOL is determine if a like is removed from Firebase in the 'likeButtonPressed' function. ELSE set the heart to unLike(black heart).
  
  */
 -(void)detectLikeAdded:(FirebaseOperation *)firebaseOperation {
@@ -327,7 +326,7 @@ SearchTVC *searchTVC;
             }
         }
         // (5)
-        _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _selectedAnnotation.spotAtAnnotation.likes.count];
+        _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", (unsigned long)_selectedAnnotation.spotAtAnnotation.likes.count];
         // (6)
         if ([_selectedAnnotation.spotAtAnnotation.likes containsObject:[CurrentUser sharedInstance].userId]) {
             NSLog(@"user likes this. here is the array: %@", _selectedAnnotation.spotAtAnnotation.likes);
@@ -343,9 +342,9 @@ SearchTVC *searchTVC;
  Detects if a like is removed from Firebase.
  ******************************************
  1) If a like is removed from Firebase it returns the snapshot of the removed like.
- 2) If the _likeUserIDArray contains the snapshot.value[@"userID"],
-    meaning the like that was removed has a userID in that _likeUserIDArray, then remove it from the _likeUserIDArray.
- 3) The callout's like label is then set to the count of _likeUserIDArray.
+ 2) If the _selectedAnnotation.spotAtAnnotation.likes contains the snapshot.value[@"userID"],
+    meaning the like that was removed has a userID in that _selectedAnnotation.spotAtAnnotation.likes, then remove it from the _selectedAnnotation.spotAtAnnotation.likes.
+ 3) The callout's like label is then set to the count of _selectedAnnotation.spotAtAnnotation.likes.
  4) If the the removed like's snapshot's value for userID is equaled to the current user's userID then
     change the like image to 'unLike' (black heart) and then the BOOL '_spotLikeByCurrentUser' is set to FALSE.
     '_spotLikeByCurrentUser' is used to determine if a like is removed from Firebase in the 'likeButtonPressed' function.
@@ -360,7 +359,7 @@ SearchTVC *searchTVC;
             [_selectedAnnotation.spotAtAnnotation.likes removeObject:snapshot.value[@"userID"]];
 
             // (3)
-            _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", _selectedAnnotation.spotAtAnnotation.likes.count];
+            _mapAnnotationCallout.likeCountLabel.text = [NSString stringWithFormat:@"%lu likes", (unsigned long)_selectedAnnotation.spotAtAnnotation.likes.count];
             if ([snapshot.value[@"userID"] isEqualToString:[CurrentUser sharedInstance].userId]) {
                 [_mapAnnotationCallout.likeButton setImage:[UIImage imageNamed:@"unLike"] forState:UIControlStateNormal];
                 _spotLikedByCurrentUser = FALSE;
@@ -437,6 +436,7 @@ SearchTVC *searchTVC;
     
     for (FIRDataSnapshot *child in snapshot.children) {
         [currentUser updateCurrentUser:child];
+        NSLog(@"Current User PHOTO URLS: %@\n%@", currentUser.profilePhotoDownloadURL, currentUser.backgroundProfilePhotoDownloadURL);
         [self setProfilePhotosForCurrentUser:currentUser];
     }
 }
@@ -528,7 +528,7 @@ SearchTVC *searchTVC;
  
  IF:
  1) If the BOOL '_spotLikedByCurrentUser' is TRUE then
-    remove the like from Firebase with the key assigned to _likeToBeRemovedKey (this is the key for the current user's like).
+    remove the like from Firebase with the key assigned to _selectedAnnotation.spotAtAnnotation.currentUserLikeKey (this is the key for the current user's like).
     This is done by calling the FirebaseOperation method 'removeChildNode'.
  2) Set the callout's like button's image to 'unLike'(black heart).
  3) Set the _spotLikeByCurrentUser from TRUE to FALSE - because the spot is no longer liked by the current user.
