@@ -143,13 +143,10 @@ SearchTVC *searchTVC;
 #pragma mark Map Actions Help Methods
 
 -(void)setMapViewCamera {
-    MKCoordinateRegion currentMapRegion = MKCoordinateRegionMakeWithDistance(_mapView.centerCoordinate, _mapView.region.span.latitudeDelta, _mapView.region.span.longitudeDelta);
-    [_mapView setCenterCoordinate:_mapView.centerCoordinate];
-    [_mapView setRegion:currentMapRegion animated:FALSE];
     MKMapCamera *newCamera = [[_mapView camera] copy];
         [newCamera setPitch:45.0];
-        [newCamera setAltitude:_mapView.camera.altitude];
         [_mapView setCamera:newCamera animated:YES];
+
 }
 
 -(void)dropPinForSelectedPlace:(MKPlacemark *)placemark {
