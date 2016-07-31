@@ -76,8 +76,6 @@
     MKMapItem *selectedItem = [_matchingSearchItems objectAtIndex:indexPath.row];
     [self dismissViewControllerAnimated:TRUE completion:nil];
     [self.delegate dropPinForSelectedPlace:selectedItem.placemark];
-    
-    NSLog(@"SELECTED ITEM: %f, %f", selectedItem.placemark.coordinate.latitude, selectedItem.placemark.coordinate.latitude);
 }
 
 

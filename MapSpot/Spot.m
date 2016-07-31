@@ -19,6 +19,7 @@
         _userID = userID;
         _createdAt = createdAt;
         _spotImages = [[NSMutableArray alloc]init];
+        _likes = [[NSMutableArray alloc]init];
     }
     return self;
 }

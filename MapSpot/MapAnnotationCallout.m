@@ -29,7 +29,7 @@
         self.bounds = _view.bounds;
         
         [self addSubview:_view];
-                
+       
     }
     return self;
 }
@@ -41,6 +41,7 @@
     _userProfileImageView.layer.masksToBounds = TRUE;
     _messageTextView.layer.borderWidth = 1.0;
     _messageTextView.layer.borderColor = [[UIColor lightGrayColor]CGColor];
+    _messageTextView.layer.cornerRadius = 10.0;
 }
 
 #pragma mark : Collection View Datasource
@@ -50,21 +51,48 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(65, 65);
+    CGFloat cellHeight = _mediaCollectionView.frame.size.height;
+
+    return CGSizeMake(cellHeight, cellHeight);
 }
 
 - (MediaPreviewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     MediaPreviewCell *cell = [_mediaCollectionView dequeueReusableCellWithReuseIdentifier:@"mediaCell" forIndexPath:indexPath];
-    
+    cell.clipsToBounds = TRUE;
     Photo *photo = _previewImages[indexPath.item];
     
     UIImageView *mediaImageView = (UIImageView *)[cell viewWithTag:100];
+    mediaImageView.layer.masksToBounds = TRUE;
     
     [mediaImageView setImageWithURL:[NSURL URLWithString:photo.downloadURL]];
     
     return cell;
 }
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    
+    if ([_previewImages count] <= 4) {
+        _mediaCollectionView.scrollEnabled = FALSE;
+        NSInteger viewWidth = _mediaCollectionView.frame.size.width;
+        NSInteger totalCellWidth = _mediaCollectionView.frame.size.height * [_previewImages count];
+        NSInteger totalSpacingWidth = 10 * (_previewImages.count -1);
+        NSInteger leftInset = (viewWidth - (totalCellWidth + totalSpacingWidth)) / 2;
+        NSInteger rightInset = leftInset;
+        
+        return UIEdgeInsetsMake(0, leftInset, 0, rightInset);
+    } else {
+        _mediaCollectionView.scrollEnabled = TRUE;
+        return UIEdgeInsetsMake(0, 0, 0, 0);
+    }
+    
+
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.delegate performSegueWithIdentifier];
+}
+
 
 - (IBAction)moreButtonPressed:(id)sender {
     [self.delegate moreButtonPressed:self];
@@ -73,6 +101,7 @@
 - (IBAction)likeButtonPressed:(id)sender {
     [self.delegate likeButtonPressed:self];
 }
+
 
 
 /*

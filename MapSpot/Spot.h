@@ -24,6 +24,8 @@
 @property(nonatomic, strong) NSString *message;
 @property(nonatomic, strong) NSMutableArray *spotImages;
 @property(nonatomic, strong) NSString *spotReference;
+@property(nonatomic, strong) NSMutableArray *likes;
+@property(nonatomic, strong) NSString *currentUserLikeKey;
 
 -(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates userID:(NSString *)userID createdAt:(NSString *)createdAt;
 +(instancetype)initWithSpotCoordinates:(CLLocationCoordinate2D)spotCoordinates userID:(NSString *)userID createdAt:(NSString *)createdAt;

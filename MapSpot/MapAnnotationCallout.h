@@ -13,6 +13,7 @@
 
 -(void)moreButtonPressed:(id)sender;
 -(void)likeButtonPressed:(id)sender;
+-(void)performSegueWithIdentifier;
 
 @end
 
