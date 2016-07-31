@@ -39,10 +39,9 @@
     _userProfileImageView.layer.borderWidth = 1.0;
     _userProfileImageView.layer.borderColor = [[UIColor blackColor]CGColor];
     _userProfileImageView.layer.masksToBounds = TRUE;
-//    _mediaCollectionView.layer.borderWidth = 1.0;
-//    _mediaCollectionView.layer.borderColor = [[UIColor blackColor]CGColor];
-//    _messageTextView.layer.borderWidth = 1.0;
-//    _messageTextView.layer.borderColor = [[UIColor lightGrayColor]CGColor];
+    _messageTextView.layer.borderWidth = 1.0;
+    _messageTextView.layer.borderColor = [[UIColor lightGrayColor]CGColor];
+    _messageTextView.layer.cornerRadius = 10.0;
 }
 
 #pragma mark : Collection View Datasource
@@ -73,7 +72,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     
-    if ([_previewImages count] <= 3) {
+    if ([_previewImages count] <= 4) {
         _mediaCollectionView.scrollEnabled = FALSE;
         NSInteger viewWidth = _mediaCollectionView.frame.size.width;
         NSInteger totalCellWidth = _mediaCollectionView.frame.size.height * [_previewImages count];
@@ -90,6 +89,10 @@
 
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.delegate performSegueWithIdentifier];
+}
+
 
 - (IBAction)moreButtonPressed:(id)sender {
     [self.delegate moreButtonPressed:self];
@@ -98,6 +101,7 @@
 - (IBAction)likeButtonPressed:(id)sender {
     [self.delegate likeButtonPressed:self];
 }
+
 
 
 /*
